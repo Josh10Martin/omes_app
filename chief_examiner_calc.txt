@@ -1,0 +1,36 @@
+SELECT DISTINCT(ex.nrc) AS nrc, ex.title AS title, CONCAT(ex.first_name," ",ex.last_name) AS full_name, SUM(a.script_no) AS script_no,
+        ex.account_no AS account_no, CASE WHEN ex.role = "5" THEN mr.chief_examiner ELSE mr.deputy_c_examiner END AS paper_rate, SUM(a.script_no) * (CASE WHEN ex.role = "5" THEN mr.chief_examiner ELSE mr.deputy_c_examiner END) / SELECT COUNT(*) FROM examiner WHERE subject_code = 101 AND paper_no = 2 AND marking_centre = 'MC-70'AND province = '09' AND role IN ("1","3") AS amount_claimed,a.belt_no AS belt_no,
+                               b.name AS bank,br.name AS branch
+                               FROM bankbranch br INNER JOIN bank b ON (br.bank_id = b.id)
+                               INNER JOIN examiner ex ON (b.id = ex.bank)
+                               INNER JOIN marking_rates mr ON (ex.subject_code = mr.subject_code)
+                               RIGHT OUTER JOIN apportionment a ON (mr.subject_code = a.subject)
+                               WHERE ex.subject_code = a.subject
+                               AND ex.paper_no = a.paper
+                               AND ex.branch = br.id
+                               AND ex.paper_no = mr.paper_no
+                               AND a.paper = mr.paper_no
+                               AND ex.province = a.province
+                               AND ex.marking_centre = a.marking_centre
+                               AND ex.attendance = "1"
+                               AND a.subject =101
+                               AND a.paper =2
+                               AND ex.role IN ("4","5")
+                               AND a.province = '09'
+                               AND a.marking_centre ='MC-70'
+                               GROUP BY ex.title,ex.first_name,ex.last_name,mr.chief_examiner,ex.role,mr.deputy_c_examiner,ex.nrc,ex.account_no,b.name,br.name,a.belt_no;
+
+
+
+SELECT ex.belt_no, COUNT(distinct(ex.nrc)) as no_of_examiners, sum(distinct(a.script_no)) no_of_scripts
+FROM examiner ex inner join apportionment a on (ex.subject_code = a.subject)
+WHERE ex.subject_code = 101 AND ex.paper_no = 2 AND ex.marking_centre = 'MC-70'AND ex.province = '09' AND role IN ("1","3") and ex.paper_no = a.paper and ex.marking_centre = a.marking_centre and ex.province = a.province and ex.belt_no = a.belt_no
+group by ex.belt_no
+order by no_of_scripts desc limit 1;
+
+
+
+system admin
+
+SELECT SUM(DISTINCT(a.script_no)) AS no_of_scripts, COUNT(DISTINCT(ex.nrc)) AS no_of_examiners FROM examiner ex INNER JOIN apportionment a ON (ex.subject_code = a.subject) WHERE ex.marking_centre ='MC-43' AND ex.province ='05' AND ex.role IN ("1","3") AND ex.paper_no = a.paper AND ex.belt_no = a.belt_no AND ex.marking_centre = a.marking_centre AND ex.province = a.province GROUP BY a.subject,a.paper,a.belt_no
+ORDER BY no_of_scripts DESC LIMIT 1;

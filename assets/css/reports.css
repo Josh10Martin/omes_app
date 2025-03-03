@@ -1,0 +1,38 @@
+/* body{
+    font-size: 14px;
+} */
+table.center {
+    margin-left: auto; 
+    margin-right: auto;
+  }
+
+table.bodered, 
+table.bodered th,
+table.bodered td{
+    border: 1px solid black; 
+    border-collapse: collapse;
+}
+
+.w80{
+    width: 80%;
+}
+.w100{
+    width: 100%;
+}
+
+table.foot{
+    bottom: 0;
+}
+table.data th,
+table.data td{
+ padding:1px 3px;
+}
+
+
+th {
+    text-align: inherit;
+}
+p{
+    margin: 7px;
+}
+  

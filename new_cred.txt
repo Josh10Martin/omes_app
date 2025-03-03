@@ -1,0 +1,370 @@
+admin:
+
+username: jombewe
+password: b499e
+
+Junior
+
+SEO:
+username: jmbewe
+password: 46e4d
+
+data entry operator:
+username:  : mmbewe 
+password: 249e9
+grade 9 centres API
+https://omes.exams-council.org.zm/g9/api/g9_centres.php?centre_type=
+
+grade 12 / gce API
+https://omes.exams-council.org.zm/g12/api/g12_gce_centres.php?centre_type=
+
+
+G9/ GCE ECZ Admin
+username: eczuser
+password: 21310
+
+marking rates
+https://omes.exams-council.org.zm/omes/examiner/php/import_marking_rates.php
+Parameters
+-subject_code
+- paper_no
+- chief_examiner
+- deputy_chief_examiner
+- team_leader
+- examiner
+- checker
+- data_entry_officer
+
+insert examiner
+POST URL
+https://omes.exams-council.org.zm/omes/examiner/php/insert_examiners.php
+Parameters
+- examiner_number
+- nrc
+- tpin
+- first_name
+- last_name
+- email
+- address
+- gender 
+- role
+- no_of_days
+- marking_centre_name
+- bank
+- branch
+- sortcode
+- account_no
+ - session_id
+- subject_code
+- paper_number
+
+update examiner
+POST URL
+https://omes.exams-council.org.zm/omes/examiner/php/update_examiner.php
+Parameters
+- examiner_number
+- nrc
+- tpin
+- first_name
+- last_name
+- email
+- address
+- phone_number
+- gender 
+- role
+- no_of_days
+- marking_centre_name
+- bank
+- branch
+- sortcode
+- account_no
+- subject_code
+- paper_number
+
+update examiner attendance
+POST URL
+https://omes.exams-council.org.zm/omes/examiner/php/update_attendance.php
+
+Parameter
+- examiner number
+- attendance [1 = present, 0 = not present]
+
+
+update session
+POST URL
+https://omes.exams-council.org.zm/omes/examiner/php/update_session.php
+
+Parameters
+
+- session_id
+- session_name
+- level
+-type [E for GCE. I for school certificate]
+- year 
+-
+marking centres
+POST URL
+https://omes.exams-council.org.zm/omes/examiner/php/update_marking_centres.php
+Parameters
+- marking_centre_code
+- marking_centre_name
+- centre_type
+- subject_code
+- paper_no
+
+payment schedule
+https://omes.exams-council.org.zm/omes/examiner/php/payment_schedule.php
+
+
+sample examiner json
+[{
+  "examiner_number" : "51403/0001",
+  "nrc": "123455/10/1",
+  "tpin": "1012365441",
+  "first_name": "joseph",
+  "last_name": "mulenga",
+  "email":"jm@gmail.com",
+  "address": "long acres",
+  "gender": "MALE",
+  "role": "TEAM LEADER",
+  "marking_centre_code": "MC-11",
+  "subject_code": "1121",
+  "paper_number": "2",
+  "no_of_days": "5",
+  "bank": "absa",
+  "branch": "Long acres",
+  "session_id": "2023",
+  "phone_number": "0211455210",
+  "sortcode": "012235",
+  "account_no": "0111125411111"
+  
+},
+{
+  "examiner_number" : "5124/2/0001",
+  "nrc": "963455/10/1",
+  "tpin": "1012310241",
+  "first_name": "james",
+  "last_name": "mulenga",
+  "email":"jmase@gmail.com",
+  "address": "long acres",
+  "gender": "MALE",
+  "role": "TEAM LEADER",
+  "marking_centre_code": "MC-11",
+  "subject_code": "5090",
+  "paper_number": "2",
+  "no_of_days": "5",
+  "bank": "absa",
+  "branch": "Long acres",
+  "session_id": "2023",
+  "phone_number": "0211455210",
+  "sortcode": "012235",
+  "account_no": "0111166511111"
+  
+}]
+
+
+
+EMS CREDENTIALS 
+
+ECZ
+eadadmin3: YU2}(Yne
+
+ADMIN
+centertest: vz=L08h!
+
+DEO
+2011/100154: cKaula,1
+
+
+#import examiners
+https://ems.exams-council.org.zm:8080/api/examiners/
+
+#import session
+https://ems.exams-council.org.zm:8080/api/session/current-session
+
+#Login API
+https://ems.exams-council.org.zm:8080/api/auth-user/api-ems/
+
+#import marking centres
+https://ems.exams-council.org.zm:8080/api/marking-centers/api-ems/
+
+#CREDENTIALS
+DEO:
+  2167/109904
+  DEOtest,01
+  
+1121/102300 - KELLY CHIPAKO
+
+  2167/109903
+  DEOtest,1234
+
+
+EAD:
+  eadtest3
+  EADtest,01
+
+CEMTER:
+  centertest
+  CENTERtest,01
+
+
+  Username: testfad
+Password: s7rpxjv3
+
+
+
+DEO
+4024/201054, 4024/201046
+Test,1234
+
+CHIEF MATH2
+4024/208877
+
+
+4024/200510
+
+
+
+
+Grade 12 / gce payment schedule
+
+examiners/team leaders/checkers
+http://localhost:8080/omes/examiner/php/payment_schedule/examiners.php
+https://omes.exams-council.org.zm/omes/examiner/php/payment_schedule/examiners.php
+
+chief and deputy examiners
+http://localhost:8080/omes/examiner/php/payment_schedule/chief_deputy.php
+https://omes.exams-council.org.zm/omes/examiner/php/payment_schedule/chief_deputy.php
+
+data entry officers
+http://localhost:8080/omes/examiner/php/payment_schedule/data_entry.php
+https://omes.exams-council.org.zm//omes/examiner/php/payment_schedule/data_entry.php
+
+
+Grade 9 payment schedule
+
+Chief, deputy chief examiners and examiners
+http://localhost:8080/omes_2024/junior/php/payment_schedule/examiners.php
+
+System administrators
+http://localhost:8080/omes_2024/junior/php/payment_schedule/system_admin.php
+
+Data entry officers
+http://localhost:8080/omes_2024/junior/php/payment_schedule/data_entry.php
+payment shedule link
+rxsminers
+http://localhost:8080/omes2024/junior/submitted_examiners_claim.php
+sys admins
+sys adminhttp://localhost:8080/omes2024/junior/submitted_system_admin_claim.php
+
+data entry
+http://localhost:8080/omes2024/junior/submitted_data_entry_claim.php
+
+
+grade 12 / GCE payment shedule
+
+examiners
+http://localhost:8080/omes2024/examiner/submitted_examiners_claim.php
+
+data entry
+http://localhost:8080/omes2024/examiner/submitted_data_entry_claim.php
+
+Teacher education
+examiners
+http://localhost:8080/omes_2024/ted/submitted_examiners_claim.php
+
+data entry 
+http://localhost:8080/omes_2024/ted/submitted_data_entry_claim.php
+
+ted urls
+groups
+http://localhost:8080/omes_2024/ted/php/api/groups.php
+
+
+pdf claim forms g9
+examiners
+https://omes.exams-council.org.zm/omes/junior/php/get_all_marking_centres.php
+Parameters
+marking_centre (which is the value in the select box ie The option value which is the marking centre code / centre code)
+centre_name - the marking centre name
+
+subjects
+https://omes.exams-council.org.zm/omes/junior/php/get_subject.php
+Parameters
+subject - the subject code
+subject_name - the subject name
+
+paper_no
+https://omes.exams-council.org.zm/omes/junior/php/get_paper.php
+parameter
+subject_code - from previous.
+api displays subject_code and paper_no
+
+belt number
+https://omes.exams-council.org.zm/omes/junior/php/get_apportioned_belts.php
+parameter
+subject_code - subject_code from previouse
+paper - paper number
+
+ for data entry
+  https://omes.exams-council.org.zm/omes/junior/php/get_data_entry_user.php
+  Parameters
+  marking_centre_code
+
+  name of select field is deo
+
+    url to claim
+   https://omes.exams-council.org.zm/omes/junior/reports/data_entry_claim.php
+
+     url to claim (system admin)
+   https://omes.exams-council.org.zm/omes/examiner/reports/system_admin_claim.php
+
+grade 12 / gce
+https://omes.exams-council.org.zm/omes/examiner/php/get_marking_centres.php
+Parameters
+marking_centre_code (which is the value in the select box (option field) ie The option value which is the marking centre code / centre code)
+centre_name - the marking centre name
+
+The name of the select field is marking_centre
+
+subjects
+https://omes.exams-council.org.zm/omes/examiner/php/get_subject.php
+Parameters
+marking_centre_code - from previous
+
+the name of the select field is subject
+ 
+ paper number
+ https://omes.exams-council.org.zm/omes/examiner/php/get_paper.php
+ Parameters
+ marking_centre_code - from previous
+ subject_code - from previous
+
+ the name of the select field is paper
+
+ belt number
+ https://omes.exams-council.org.zm/omes/examiner/php/get_apportioned_belts.php
+ Parameters
+ subject_code
+ paper
+ marking_centre_code
+
+ the name of the select field is app_belt_no
+
+ url to claim 
+ https://omes.exams-council.org.zm/omes/examiner/reports/examiners_claim_report.php
+
+
+ for data entry
+  https://omes.exams-council.org.zm/omes/examiner/php/get_data_entry_user.php
+  Parameters
+  marking_centre_code
+
+  name of select field is deo
+
+  url to claim
+   https://omes.exams-council.org.zm/omes/examiner/reports/data_entry_claim.php
+
+
+
+

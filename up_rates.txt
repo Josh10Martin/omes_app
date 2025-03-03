@@ -1,0 +1,1 @@
+update marking_rates set chief_examiner = chief_examiner * (100/85),  deputy_c_examiner = deputy_c_examiner * (100/85), t_leader = t_leader *(100/85), examiner = examiner * (100/85), checker = checker * (100/85), sys_admin = sys_admin * (100/85), data_entry = data_entry * (100/85), transcriber = transcriber * (100/85)

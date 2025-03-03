@@ -1,0 +1,21 @@
+[{
+  "examiner_number":"0000/1/09876",
+        "nrc":"429173/74/1",
+        "tpin":"1234567891",
+        "first_name":"test ",
+        "last_name":"Examiner",
+        "email":"test@gmain.com",
+        "phone_number":"0975236782",
+        "address":"test address 1",
+        "gender":"MALE",
+        "role":"CHIEF EXAMINER",
+        "no_of_days":"10",
+        "marking_centre_code":"MC-10",
+        "bank":"ZANACO",
+        "branch":"LUSAKA",
+        "sortcode":"100921",
+        "account_no":"2102365410254",
+        "session_id":"2023",
+        "subject_code":"1121",
+        "paper_number":"1"
+}]

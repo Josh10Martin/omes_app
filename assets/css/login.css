@@ -1,0 +1,28 @@
+.logo{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 10rem;
+}
+.header-login{
+    background-color:rgba(29, 157, 117, 0.164) ;
+    padding: 0.5rem;
+    margin-bottom: 2px;
+}
+.account-wrapper{
+    padding-top: 0px;
+}
+
+.footer{
+    background-color:rgba(29, 157, 117, 0.164) 
+}
+
+.bg_white{
+    background-color: white;
+}
+.loading{
+    transform:scale(.7);
+    right:50%;
+    transform:translateX(100%);
+    display:none;
+}

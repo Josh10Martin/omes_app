@@ -1,0 +1,559 @@
+1,Lusaka,000001,01
+2,Ndola,000102,01
+3,Acacia Park Branch,010086,02
+4,Cairo Business Centre,010040,02
+6,Chingola,010349,02
+8,Chinsali Branch,011707,02
+10,Chipata,011160,02
+12,Chirundu,013582,02
+13,Chisamba,014508,02
+15,Choma,011259,02
+17,Debt Recovery,010055,02
+19,Digital,010093,02
+21,Government Business Centre,010050,02
+23,Government Complex,010084,02
+25,Head Office,010001,02
+27,Head Office Processing Centre,010016,02
+29,Human Resources,010007,02
+31,International Banking,010002,02
+35,Kabwe,010946,02
+38,Itezhi-Tezhi,014779,02
+39,Kapiri Mposhi,012461,02
+41,Kasama,010862,02
+42,Kafue,013458,02
+43,Kawambwa,012104,02
+45,Kitwe Clearing Centre,010217,02
+47,Kitwe Industrial,010256,02
+49,Kitwe Obote,010245,02
+51,Livingstone,011044,02
+53,Luanshya,010763,02
+55,Lundazi,012571,02
+57,Lusaka Business Centre,010003,02
+59,Lusaka Centre,010052,02
+61,Lusaka City Market,010074,02
+63,Lusaka Civic Centre,010067,02
+65,Lusaka Kwacha,010053,02
+67,Lusaka North end,010041,02
+69,Lusaka Premium House,010066,02
+73,Manda Hill,010078,02
+75,Mansa,011948,02
+76,Maamba,014070,02
+77,Mazabuka,013647,02
+81,Mkushi,012309,02
+84,Mfuwe,012606,02
+86,Monze,013757,02
+87,Mongu,013151,02
+88,Mpika,011865,02
+90,Mufulira,010543,02
+92,Mukuba branch,010298,02
+94,Nakonde,011596,02
+98,Ndola Business Centre,010142,02
+99,Namwala,013372,02
+100,Ndola Industrial,010164,02
+102,Ndola West,010154,02
+104,North mead,010075,02
+108,Senanga,015181,02
+109,Petauke,014305,02
+110,Siavonga,013869,02
+112,Solwezi,012868,02
+114,Treasury,010018,02
+116,Twin Palms Mall,010073,02
+118,Waterfalls,010099,02
+120,Woodlands,010085,02
+122,Xapit,010083,02
+125,Chambishi,025247,03
+126,Chilenje,020018,03
+127,Chililabombwe,020453,03
+128,Chingola & Chingola Prestige,020303,03
+129,Chipata,021104,03
+130,Chirundu,023542,03
+131,Choma,021205,03
+132,Chongwe,024637,03
+133,Elunda Premium Banking Centre,020055,03
+134,Head Office,020001,03
+135,Head Office -Elunda,020002,03
+136,Kabwata,020043,03
+137,Kabwe,020906,03
+138,Kafue,023407,03
+139,Kalomo,024127,03
+140,Kalulushi,020648,03
+141,Kapiri Mposhi,022411,03
+142,Kasama,020832,03
+143,Katete,024928,03
+144,Kitwe Business Centre,020209,03
+145,Kitwe Chimwemwe,020210,03
+146,Kitwe Operations Processing Centre,020252,03
+147,Kitwe Parklands Center,020241,03
+148,Livingstone & Livingstone Prestige,021012,03
+149,Luanshya,020713,03
+150,Lundazi,022531,03
+151,Lusaka - Chawama,020044,03
+152,Lusaka - Industrial,020019,03
+153,Lusaka - Kamwala,020008,03
+154,Lusaka - Matero,020015,03
+155,Lusaka - Soweto,020033,03
+156,Lusaka Business Centre,020016,03
+157,Lusaka Chelston &  Airport Agency,020036,03
+158,Lusaka Kabelenga,020054,03
+159,Lusaka Longacres & Prestige,020017,03
+160,Lusaka Northend,020014,03
+161,Lusaka Operations Processing Centre,020050,03
+162,Manda Hill,020049,03
+163,Mansa,021920,03
+164,Mazabuka,023621,03
+165,Mbala,021451,03
+166,Mfuwe,022622,03
+167,Mkushi,022338,03
+168,Mongu,023135,03
+169,Monze,023724,03
+170,Mpika,021845,03
+171,Mufulira,020523,03
+172,Mumbwa,025334,03
+173,Nakonde,021540,03
+174,Ndola - Masala,020146,03
+175,Ndola Business Centre,020125,03
+176,Ndola Operations Processing Centre,020139,03
+177,Petauke,024330,03
+178,Solwezi,022829,03
+179,University of Zambia Lusaka,020026,03
+180,Chililabobwe,030469,04
+181,Chingola,030366,04
+182,Chingola,030965,04
+183,Chipata,031149,04
+184,Choma,031264,04
+185,Kapiri Mposhi,032487,04
+186,Kasama,030846,04
+187,Kitwe,030238,04
+188,Livingstone,031050,04
+189,Luanshya,030767,04
+190,Lusaka,030001,04
+191,Mansa,031970,04
+192,Mazabuka,033673,04
+193,MCommerce,030003,04
+194,Mongu,033172,04
+195,Mpika,031874,04
+196,Mufulira,030568,04
+197,Natsave,030007,04
+198,Ndola,030102,04
+199,Ndola Branch,030137,04
+200,Nyimba,035434,04
+201,Permanent House,030031,04
+202,Society House,030032,04
+203,Solwezi,032871,04
+204,Soweto Agency,030033,04
+205,ZNBS Branch,030008,04
+206,Arcades,040010,05
+208,Chingola,040309,05
+209,Chipata,041116,05
+210,Chisokone,040224,05
+211,Choma,041218,05
+212,Cosmopolitan Mall,040093,05
+213,East Park Mall,040094,05
+214,Head Office,040000,05
+215,Kabulonga,040029,05
+216,Kabwata,040026,05
+217,Kabwe,040922,05
+218,Kafubu Mall,040195,05
+219,Kafue Branch,043419,05
+220,Kitwe,040206,05
+221,Livingstone,041017,05
+222,Lumwana,044821,05
+223,Lusaka,040002,05
+224,Lusaka Industrial,040007,05
+225,Matero,040011,05
+226,Mazabuka,043613,05
+227,Mkushi,042308,05
+228,Mufulira,040514,05
+229,Mukuba Mall,040296,05
+230,Mulungushi,040015,05
+231,Ndola Main,040103,05
+232,Ndola South,040105,05
+233,Operations Shared Services,040104,05
+234,Private Banking,040027,05
+235,Solwezi,042812,05
+236,Soweto,040023,05
+237,Waterfall,040039,05
+238,Woodlands,040030,05
+239,Chandwe Musonda,090016,07
+240,Chawama,090013,07
+241,Chilanga,090003,07
+242,Chilenje Branch,090028,07
+243,Chingola,090309,07
+244,Chinsali,091721,07
+245,Chipata,091112,07
+246,Choma Branch,091218,07
+247,Copperhill,090225,07
+248,Crossroads,090023,07
+249,Head Office,090000,07
+250,Jacaranda Mall,090122,07
+251,Kabwe,090906,07
+252,Kafue Branch,093427,07
+253,Kamwala,090004,07
+254,Kasama,090820,07
+255,Kasumbalesa Branch,090417,07
+256,Kitwe,090208,07
+257,Livingstone,091010,07
+258,Lundazi Agency,092531,07
+259,Lusaka Industrial,090011,07
+260,Lusaka Main,090001,07
+261,Manda Hill Branch,090014,07
+262,Mansa,091924,07
+263,Mongu,093126,07
+264,Mungwi Agency,095632,07
+265,Ndola,090107,07
+266,North end,090005,07
+267,Nyimba Branch,095415,07
+268,Serenje Branch,092230,07
+269,Solwezi,092819,07
+270,Zimba Branch,094229,07
+271,Buteko,060171,06
+272,Chililabombwe,060444,06
+273,Chingola,060336,06
+274,Choma,061237,06
+275,Cross Roads,060015,06
+276,Customer Services Centre,060002,06
+277,Financial Control,060011,06
+278,Jacaranda Mall Branch,060120,06
+279,Kabulonga,060014,06
+280,Kasama,060813,06
+281,Levy Park Branch,060021,06
+282,Livingstone,061018,06
+283,Luanshya,060732,06
+284,Lusaka Main,060017,06
+285,Manda Hill,060030,06
+286,Mazabuka,063619,06
+287,Mongu,063148,06
+288,North end,060043,06
+289,Solwezi,062816,06
+290,Zambia Way,060228,06
+291,Agriculture Center,260040,08
+292,Branchless Banking,260025,08
+293,Cairo Road Branch,260050,08
+294,Cash centre,260048,08
+295,Chilenje Branch,260046,08
+296,Chingola,260322,08
+297,Chipata,261121,08
+298,Choma Branch,261238,08
+299,CIB (Corporate),260029,08
+300,Commercial Suite Lusaka,260001,08
+301,Corporate Investment Banking,260042,08
+302,Electronic Banking Branch,260006,08
+303,Electronic Wallet,260027,08
+304,FNB Operations,260004,08
+305,Government and Public Sector,260036,08
+306,Head Office Lusaka,260005,08
+307,Homes Loans,260020,08
+308,Industrial  Branch,260002,08
+309,Jacaranda Mall,260118,08
+310,Kabulonga Branch,260072,08
+311,Kabwe Branch,260937,08
+312,Kalumbila Branch,262827,08
+313,Kitwe,260212,08
+314,Kitwe Industrial,260247,08
+315,Kitwe Private Suite,260261,08
+316,Livingstone Branch,261061,08
+317,Luanshya,260741,08
+318,Lusaka Private Suite,260061,08
+319,Makeni Mall,260016,08
+320,Manda Hill,260014,08
+321,Mazabuka,263613,08
+322,Mkushi,262319,08
+323,Mufulira Branch,260544,08
+324,Mukuba Mall Branch,260243,08
+325,Ndola Branch,260103,08
+326,PHI Branch,260049,08
+327,POS ? FNB,260033,08
+328,POS ? MasterCard,260032,08
+329,POS-Visa,260031,08
+330,Premier Banking,260039,08
+331,Solwezi,262823,08
+332,Treasury Branch,260011,08
+333,Vehicle and Asset Finance,260015,08
+334,Kitwe,190202,13
+335,Lusaka,190001,13
+336,Arcades,200009,14
+337,Arcades,200046,14
+338,Chililabombwe,200443,14
+339,Chingola,200315,14
+340,Chinsali,201728,14
+341,Chipata,201108,14
+342,Chirundu,203514,14
+343,Choma,201205,14
+344,Chongwe,204638,14
+345,Down Town,200032,14
+346,East Park Mall,200050,14
+347,Head Office,200000,14
+348,Industrial,200033,14
+349,Isoka,201627,14
+350,Kabompo,202919,14
+351,Kabwe,200925,14
+352,Kafubu Mall,200149,14
+353,Kalomo,204110,14
+354,Kamwala,200007,14
+355,Kaoma,204430,14
+356,Kasama,200804,14
+357,Kasumbalesa,200434,14
+358,Katete,201116,14
+359,Kitwe,200203,14
+360,Livingstone,201023,14
+361,Livonia,200054,14
+362,Longacres,200006,14
+363,Luanshya,200731,14
+364,Lundazi,202541,14
+365,Lusaka Main,200001,14
+366,Mansa,201942,14
+367,Mbala,201421,14
+368,Mongu,203145,14
+369,Monze,203724,14
+370,Mpika,201826,14
+371,Mpulungu,201329,14
+372,Mufulira,200513,14
+373,Mukuba Mall,200251,14
+374,Mumbwa,205339,14
+375,Mwinilunga,202718,14
+376,Nakonde,201520,14
+377,Ndola,200102,14
+378,Nyumba Yanga,200036,14
+379,Pyramid Plaza,200044,14
+380,Samfya,202012,14
+381,Serenje,202211,14
+382,Sesheke,203217,14
+383,Sinazeze,201247,14
+384,Solwezi,202822,14
+385,Tenga,200053,14
+386,UTH,200052,14
+387,Zambezi,203056,14
+388,Cairo Road Branch,210001,15
+389,Chelston Branch,210005,15
+390,Chilenje Branch,210002,15
+391,Garden Branch,210006,15
+392,Head Office,210000,15
+393,Kalingalinga Branch,210004,15
+394,Kitwe,210207,15
+395,Matero,210003,15
+396,Ndola,210108,15
+397,Agriculture Center,260040,16
+398,Branchless Banking,260025,16
+399,Cairo Road Branch,260050,16
+400,Cash centre,260048,16
+401,Chilenje Branch,260046,16
+402,Chingola,260322,16
+403,Chipata,261121,16
+404,Choma Branch,261238,16
+405,CIB (Corporate),260029,16
+406,Commercial Suite Lusaka,260001,16
+407,Corporate Investment Banking,260042,16
+408,Electronic Banking Branch,260006,16
+409,Electronic Wallet,260027,16
+410,FNB Operations,260004,16
+411,Government and Public Sector,260036,16
+412,Head Office Lusaka,260005,16
+413,Homes Loans,260020,16
+414,Industrial  Branch,260002,16
+415,Jacaranda Mall,260118,16
+416,Kabulonga Branch,260072,16
+417,Kabwe Branch,260937,16
+418,Kalumbila Branch,262827,16
+419,Kitwe,260212,16
+420,Kitwe Industrial,260247,16
+421,Kitwe Private Suite,260261,16
+422,Livingstone Branch,261061,16
+423,Luanshya,260741,16
+424,Lusaka Private Suite,260061,16
+425,Makeni Mall,260016,16
+426,Manda Hill,260014,16
+427,Mazabuka,263613,16
+428,Mkushi,262319,16
+429,Mufulira Branch,260544,16
+430,Mukuba Mall Branch,260243,16
+431,Ndola Branch,260103,16
+432,PHI Branch,260049,16
+433,POS - FNB,260033,16
+434,POS - MasterCard,260032,16
+435,POS-Visa,260031,16
+436,Premier Banking,260039,16
+437,Solwezi,262823,16
+438,Treasury Branch,260011,16
+439,Vehicle and Asset Finance,260015,16
+440,Cairo Branch,280002,17
+441,Head Office,280000,17
+442,Industrial Branch,280001,17
+443,Kamwala Branch,280006,17
+444,Kitwe Branch,280207,17
+445,Lusaka Main,280003,17
+446,Makeni Branch,280004,17
+447,Ndola Branch,280105,17
+448,East Park Branch,340007,18
+449,Industrial Branch,340006,18
+450,Kitwe,340204,18
+451,Lusaka Head Office,340005,18
+452,Lusaka Main,340001,18
+453,Ndola,340103,18
+454,Acacia,350003,19
+455,Cairo Road,350001,19
+456,Chililabombwe,350409,19
+457,Chingola,350310,19
+458,Chipata,351611,19
+459,Garden,350012,19
+460,Head Office,350000,19
+461,Kalingalinga,350013,19
+462,Kasama,350814,19
+463,Kitwe,350205,19
+464,Longacres,350002,19
+465,Lusaka Square,350008,19
+466,Makeni,350006,19
+467,Mansa,351915,19
+468,Mbala,351416,19
+469,Mufumbwe,352817,19
+470,Ndola,350104,19
+471,Solwezi,352807,19
+472,Tazara,350018,19
+473,Cairo Road,360003,20
+474,Chibombo,365506,20
+475,Copperbelt University,360208,20
+476,Head Office,360001,20
+477,Industrial Branch,360007,20
+478,Kitwe,360205,20
+479,Lumumba Branch,360010,20
+480,Mazabuka Branch,363611,20
+481,Ndola Branch,360109,20
+482,Thabo Mbeki,360002,20
+483,Woodlands,360004,20
+484,Cairo,370003,23
+485,Head Office,370099,23
+486,Head Office  Branch,370001,23
+487,Kamwala,370002,23
+488,Kitwe,370204,23
+489,Lewanika Branch,370006,23
+490,Ndola,370105,23
+491,Banking Society Business Park,510019,24
+492,Chililabombwe,510468,24
+493,Chingola,510366,24
+494,Chipata,511136,24
+495,Choma,511235,24
+496,Cosmopolitan,510042,24
+497,Kabwe,510963,24
+498,Kapiri Mposhi,512439,24
+499,Kasama,510869,24
+500,Kitwe,510264,24
+501,Livingstone,511037,24
+502,Luanshya,510767,24
+503,Mansa,511970,24
+504,Mazabuka,513638,24
+505,Mongu,513134,24
+506,Mpika,511872,24
+507,Mufulira,510565,24
+508,Ndola,510162,24
+509,Nyimba,515441,24
+510,Permanent House,510032,24
+511,Society House,510031,24
+512,Solwezi,512871,24
+513,Soweto,510040,24
+514,Chingola,550307,25
+515,Chipata,551112,25
+516,Head Office,550099,25
+517,Heroes,550003,25
+518,Kabwe,550911,25
+519,Kafue,553416,25
+520,Kasama,550817,25
+521,Kitwe Branch,550202,25
+522,Konkola,550309,25
+523,Livingstone,551019,25
+524,Luanshya,550706,25
+525,Lusaka Business Centre,550001,25
+526,Mansa,551913,25
+527,Mazabuka,553618,25
+528,Mongu,553114,25
+529,Mpika,551815,25
+530,Mufulira,550508,25
+531,Ndola,550105,25
+532,Solwezi,552810,25
+533,UTH,550004,25
+534,Chama,585903,26
+535,Chavuma,587740,26
+536,Chilenje,580009,26
+537,Chilubi,587033,26
+538,Chimwemwe,580220,26
+539,Chinsali,581739,26
+540,Chipata,581104,26
+541,Choma,581219,26
+542,Chongwe,584605,26
+543,Cosmopolitan,580008,26
+544,Credit Centre,580002,26
+545,Head Office,580001,26
+546,Kabwe,580906,26
+547,Kalabo,584817,26
+548,Kaputa,586721,26
+549,Kasama,580822,26
+550,Kasempa,587223,26
+551,Kazungula,587518,26
+552,Kitwe,580224,26
+553,Livingstone,581007,26
+554,Luanshya,580725,26
+555,Lufwanyama,585435,26
+556,Lukulu,585116,26
+557,Lumwana,582836,26
+558,Lusaka Main,580010,26
+559,Luwingu,586926,26
+560,Mansa,581927,26
+561,Matero,580011,26
+562,Mongu,583113,26
+563,Mpika,581837,26
+564,Mpongwe,585634,26
+565,Mporokoso,587128,26
+566,Mumbwa,585214,26
+567,Mwense,586338,26
+568,Nchelenge,586529,26
+569,Ndola,580130,26
+570,Northernd,580012,26
+571,Petauke,584315,26
+572,Solwezi,582831,26
+573,Zambezi,583032,26
+574,Head Office,200000,27
+575,Lusaka Main,200001,27
+576,Ndola,200102,27
+577,Kitwe,200203,27
+578,Kasama,200804,27
+579,Choma,201205,27
+580,Longacres,200006,27
+581,Kamwala,200007,27
+582,Chipata,201108,27
+583,Arcades,200009,27
+584,Kalomo,204110,27
+585,Serenje,202211,27
+586,Samfya,202012,27
+587,Mufulira,200513,27
+588,Chirundu,203514,27
+589,Chingola,200315,27
+590,Katete,201116,27
+591,Sesheke,203217,27
+592,Mwinilunga,202718,27
+593,Kabompo,202919,27
+594,Nakonde,201520,27
+595,Mbala,201421,27
+596,Solwezi,202822,27
+597,Livingstone,201023,27
+598,Monze,203724,27
+599,Kabwe,200925,27
+600,Mpika,201826,27
+601,Isoka,201627,27
+602,Chinsali,201728,27
+603,Mpulungu,201329,27
+604,Kaoma,204430,27
+605,Luanshya,200731,27
+606,Down Town,200032,27
+607,Industrial,200033,27
+608,Kasumbalesa,200434,27
+609,Nyumba Yanga,200036,27
+610,Chongwe,204638,27
+611,Mumbwa,205339,27
+612,Lundazi,202541,27
+613,Mansa Branch,201942,27
+614,Chililabombwe,200443,27
+615,Pyramid Plaza,200044,27
+616,Mongu,203145,27
+617,Sinazeze,201247,27
+618,Kafubu Mall,200149,27
+619,East Park Mall,200050,27
+620,Mukuba Mall,200251,27
+621,UTH,200052,27
