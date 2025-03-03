@@ -215,8 +215,9 @@ if($usertype  == 'SESO'){
             var district = [];
             $('input:checkbox[name=district]:checked').each(function(){
             district.push($(this).val());
+            get_centres_per_district(district);
         });
-            get_centres_per_subjects(district);
+            // get_centres_per_subjects(district);
         }else{
             location.reload();
         }
