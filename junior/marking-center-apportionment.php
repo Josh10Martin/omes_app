@@ -251,18 +251,34 @@ if($usertype  == 'SESO'){
         
      
     });
-    $("#select_all_subjects").click(function(){
-        $('.subject-check').not(this).prop('checked', this.checked);
-        var subject_code = [];
-        $('input:checkbox[name=subject_schools]:checked').each(function(){
-           
-           subject_code.push($(this).val());
-        //    subject_code.splice($.inArray('undefined',subject_code),1);
-           // alert($(this).val());
-       });
-    //    get_centres_per_subjects2(subject_code);
 
+    $("#select_all_subjects").click(function () {
+    $('.subject-check').prop('checked', this.checked);
+
+    setTimeout(function () { // Ensure checkboxes are updated before reading values
+        var subject_code = [];
+
+        $('input:checkbox[name=subject_code]:checked').each(function () {
+            subject_code.push($(this).val());
+        });
+
+        console.log("Calling get_centres_per_district with:", subject_code);
+        get_centres_per_district(subject_code);
+    }, 10);
+
+});
+
+$(document).on('change', 'input:checkbox[name=subject_code]', function () {
+    var subject_code = [];
+
+    $('input:checkbox[name=subject_code]:checked').each(function () {
+        subject_code.push($(this).val());
     });
+
+    console.log("Individual checkbox clicked:", subject_code);
+    get_centres_per_district(subject_code);
+});
+
     $("#select_all").click(function(){
         $('.centre-check').not(this).prop('checked', this.checked);
     });
@@ -316,7 +332,7 @@ $(document).on('keyup', '#search_input_subject', function() {
 
             });
             $('table.table_districts tbody tr.undefined').remove();
-            district_and_subject_choice();
+            // district_and_subject_choice();
 
         }else{
             $('table.table_districts tbody td').text('NO Districts Available');
@@ -340,7 +356,7 @@ $('input[type=checkbox][name=district]').change(function(){
             subject_code.push($(this).val());
         });
         
-        get_centres_per_district(district,subject_code);
+        // get_centres_per_district(district,subject_code);
     }
        
     });
@@ -452,56 +468,56 @@ function get_all_subjects(){
     });
   }
 
-  function get_centres_per_district(){
-    
-        // alert('hi');
-        // $('input:checkbox[name=subject_schools]').not(this).prop('checked', false);
-        var district = [];
-        var subject_code = [];
-        $(document).on('change','input:checkbox[name=subject_code]',function(){
-           
-       
-        if( $('input:checkbox[name=subject_code]').is(':checked')){
-          
-        $('input:checkbox[name=district]:checked').not(':checked[value=undefined]').each(function(){
-           
-            district.push($(this).val());
-        });
-        $('input:checkbox[name=subject_code]:checked').not(':checked[value=undefined]').each(function(){
-           
+  function get_centres_per_district(subject_code = []) {
+    var district = [];
+
+    // If subject codes are passed manually, do not re-collect them
+    if (subject_code.length === 0) {
+        subject_code = [];
+        $('input:checkbox[name=subject_code]:checked').each(function () {
             subject_code.push($(this).val());
         });
-        $.ajax({
-            url: 'php/get_centres_per_subjects_per_district.php',
-            method: 'POST',
-            data:{district:district,subject_code:subject_code},
-            dataType: 'json',
-            success:function(data){
-
-                if (data){
-                    $("#select_all_div").removeClass('d-none')
-                    console.log("data!!")
-                }
-                $('table.table_centre tbody tr.null').remove();
-                    $('table.table_centre tbody tr').remove();
-                    
-                    $.each(data,function(){
-                        $('table.table_centre tbody').append('<tr class="'+this["centre_code"]+'">'+
-                        '<td>'+
-                            '<div class="d-flex justify-content-center align-items-center mb-2">'+
-                                '<label for="'+this["centre_code"]+'" class="text-center border-bottom border-primary" style="cursor:pointer;">'+this["centre_code"]+' - '+this["centre_name"]+'</label>'+
-                                '<span class="px-2"><input style="cursor:pointer;" type="checkbox" class="form-check centre-check" name="centre" id="'+this["centre_code"]+'" value="'+this["centre_code"]+'"></span>'+
-                            '</div>'+
-                        '</td>'+
-                        '</tr>');
-                        
-                    });
-                    $('table.table_centre tbody tr.undefined').remove();
-            }
-        });
     }
-});
-  }
+
+    // Collect selected districts
+    $('input:checkbox[name=district]:checked').each(function () {
+        district.push($(this).val());
+    });
+
+    // Debugging output
+    console.log("Districts:", district);
+    console.log("Subject Codes:", subject_code);
+
+    $.ajax({
+        url: 'php/get_centres_per_subjects_per_district.php',
+        method: 'POST',
+        data: { district: district, subject_code: subject_code },
+        dataType: 'json',
+        success: function (data) {
+            if (data) {
+                $("#select_all_div").removeClass('d-none');
+                console.log("Data received from server!", data);
+            }
+
+            $('table.table_centre tbody tr.null').remove();
+            $('table.table_centre tbody tr').remove();
+
+            $.each(data, function () {
+                $('table.table_centre tbody').append('<tr class="' + this["centre_code"] + '">' +
+                    '<td>' +
+                    '<div class="d-flex justify-content-center align-items-center mb-2">' +
+                    '<label for="' + this["centre_code"] + '" class="text-center border-bottom border-primary" style="cursor:pointer;">' + this["centre_code"] + ' - ' + this["centre_name"] + '</label>' +
+                    '<span class="px-2"><input style="cursor:pointer;" type="checkbox" class="form-check centre-check" name="centre" id="' + this["centre_code"] + '" value="' + this["centre_code"] + '"></span>' +
+                    '</div>' +
+                    '</td>' +
+                    '</tr>');
+            });
+
+            $('table.table_centre tbody tr.undefined').remove();
+        }
+    });
+}
+
 
 function subject_apportionment(){
     $('#apportion_subjects').submit(function(e){

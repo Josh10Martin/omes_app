@@ -44,14 +44,14 @@ if($_SESSION['session_type']=='I'){
                 $data_array['response_msg'] = 'District parameters not set';
         }
 }else{
-        if(isset($_POST['district']) && isset($_POST['subject_cod'])){
+        if(isset($_POST['district']) && isset($_POST['subject_code'])){
                 $_POST=filter_var_array($_POST);
                 $districts = $_POST['district'];
-                $subject_cpdes = $_POST['subject_cpde'];
-                if(is_array($districts) && is_array($subject_cpdes)){
+                $subject_codes = $_POST['subject_code'];
+                if(is_array($districts) && is_array($subject_codes)){
                 
                         $in_districts = implode(', ', $districts);
-                        $in_subjects = implode(', ', $subject_cpdes);
+                        $in_subjects = implode(', ', $subject_codes);
                         $province = $_SESSION['province_code'];
                 
                         $sql = $db_9->prepare("SELECT DISTINCT centre_code AS centre_code, centre_name AS centre_name FROM school  
@@ -79,7 +79,7 @@ if($_SESSION['session_type']=='I'){
 
         }else{
                 $data_array['status'] = '400';
-                $data_array['response_msg'] = 'District parameters not set';
+                $data_array['response_msg'] = 'District and subject parameters not set';
         }
 }
 
