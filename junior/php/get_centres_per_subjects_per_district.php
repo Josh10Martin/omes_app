@@ -44,17 +44,19 @@ if($_SESSION['session_type']=='I'){
                 $data_array['response_msg'] = 'District parameters not set';
         }
 }else{
-        if(isset($_POST['district'])){
+        if(isset($_POST['district']) && isset($_POST['subject_cod'])){
                 $_POST=filter_var_array($_POST);
                 $districts = $_POST['district'];
-                if(is_array($districts)){
+                $subject_cpdes = $_POST['subject_cpde'];
+                if(is_array($districts) && is_array($subject_cpdes)){
                 
                         $in_districts = implode(', ', $districts);
+                        $in_subjects = implode(', ', $subject_cpdes);
                         $province = $_SESSION['province_code'];
                 
                         $sql = $db_9->prepare("SELECT DISTINCT centre_code AS centre_code, centre_name AS centre_name FROM school  
                         WHERE province = ? AND district IN (".$in_districts.")
-                        AND centre_code NOT IN (SELECT centre_code FROM marking_centre_centres)
+                        AND centre_code NOT IN (SELECT centre_code FROM marking_centre_centres WHERE subject_code IN (".$in_subjects."))
                         AND centre_type = ?
                         ORDER BY centre_code ASC");
                 $sql->execute([$province,$_SESSION['session_type']]);

@@ -35,7 +35,7 @@ if($usertype  == 'SESO'){
     <div class="content">
         <div class="row justify-content-between px-2">
             <div class="col-sm-6">
-                <h4 class="page-title">SUBJECT APPORTIONMENT</h4>
+                <h4 class="page-title">CENTRE APPORTIONMENT</h4>
             </div>
            
         </div>
@@ -84,6 +84,30 @@ if($usertype  == 'SESO'){
                 
                 
                 <div class="col-md-4 bg-light">
+                <!--  -->
+                  <div>
+                    
+                   <p class="text-center">SUBJECTS</p>
+                   <span class="row px-2 justify-content-between">
+                        <input type="text" class="form-control col-md-6" placeholder="Search Subject" id="search_input_subject">
+                        <div class="col-4 p-0" >Select All <input type="checkbox" name="" id="select_all_subjects"> </div>
+                    </span>
+
+                  
+                    <div class="tableFixHead table-hover p-1">
+                        <table class="table_subject mb-0" id="beltTable">
+                            <tbody>
+                                
+
+                            </tbody>
+                        </table>
+
+                        </div>
+                  </div>
+                  <!--  -->
+                </div>
+                <!--  -->
+                <div class="col-md-4">
                     <!--  -->
                     <p class="text-center">CENTRES</p>
                     <span class="row px-2 justify-content-between">
@@ -111,6 +135,8 @@ if($usertype  == 'SESO'){
                 </div>
                 <!--  -->
             </div>
+            </div>
+            
     </form>
         </div>
 
@@ -131,6 +157,7 @@ if($usertype  == 'SESO'){
     get_districts();
     subject_apportionment();
     get_centres_per_district();
+    get_all_subjects();
     $('.dialog').dialog({
         title: 'REQUEST RESPONSE',
         width: '450',
@@ -215,7 +242,7 @@ if($usertype  == 'SESO'){
             var district = [];
             $('input:checkbox[name=district]:checked').each(function(){
             district.push($(this).val());
-            get_centres_per_district(district);
+            // get_centres_per_district(district);
         });
             // get_centres_per_subjects(district);
         }else{
@@ -233,7 +260,7 @@ if($usertype  == 'SESO'){
         //    subject_code.splice($.inArray('undefined',subject_code),1);
            // alert($(this).val());
        });
-       get_centres_per_subjects2(subject_code);
+    //    get_centres_per_subjects2(subject_code);
 
     });
     $("#select_all").click(function(){
@@ -259,7 +286,14 @@ $(document).on('keyup', '#search_input_district', function() {
     });
 });
 
-
+$(document).on('keyup', '#search_input_subject', function() {
+    var value = $(this).val().toLowerCase();
+    $(".table_subject tr").filter(function() {
+        var text = $(this).find("label").text().toLowerCase();
+        var isVisible = text.indexOf(value) > -1;
+        $(this).toggle(isVisible);
+    });
+});
 
   function get_districts(){
     $.ajax({
@@ -282,7 +316,7 @@ $(document).on('keyup', '#search_input_district', function() {
 
             });
             $('table.table_districts tbody tr.undefined').remove();
-            district_choice();
+            district_and_subject_choice();
 
         }else{
             $('table.table_districts tbody td').text('NO Districts Available');
@@ -291,18 +325,22 @@ $(document).on('keyup', '#search_input_district', function() {
     });
   }
 
-function district_choice(){
+function district_and_subject_choice(){
 $('input[type=checkbox][name=district]').change(function(){
     
    //alert('hi');
     var district =[];
-    if($('input:checkbox[name=district]').is(':checked')){
+    var subject_code =[];
+    if($('input:checkbox[name=district]').is(':checked') && $('input:checkbox[name=subject_code]').is(':checked')){
        
         $('input:checkbox[name=district]:checked').each(function(){
             district.push($(this).val());
         });
+        $('input:checkbox[name=subject_code]:checked').each(function(){
+            subject_code.push($(this).val());
+        });
         
-        get_centres_per_district(district);
+        get_centres_per_district(district,subject_code);
     }
        
     });
@@ -384,29 +422,59 @@ $('input[type=checkbox][name=district]').change(function(){
 
     
 //   }
+function get_all_subjects(){
+    
+    $.ajax({
+        url:'php/get_all_subjects.php',
+        method: 'POST',
+        dataType: 'json',
+        success: function(data){
+            $('table.table_subject tbody tr').remove();
+            if(data.status == '400'){
+                $('table.table_subject tbody').append('<tr class = "null">'+
+                    '<td>No subjects available</td>'+
+                '<tr>');
+            }else{
+            $.each(data,function(){
+                $('table.table_subject tbody').append('<tr class="'+this["subject_code"]+'">'+
+                    '<td>'+
+                        '<div class="d-flex justify-content-left align-items-center mb-2">'+
+                        '<span class="px-2"><input style="cursor:pointer;" type="checkbox" class="form-check subject-check" name="subject_code" id="'+this["subject_code"]+'" value="'+this["subject_code"]+'"></span>'+
+                            '<label style="cursor:pointer;" for="'+this["subject_code"]+'" class="text-center border-bottom border-primary">'+this["subject_code"]+' - '+this["subject_name"]+'</label>'+
+                            
+                        '</div>'+
+                    '</td>'+
+                '</tr>');
+            });
+            $('table.table_subject tbody tr.undefined').remove();
+        }
+    }
+    });
+  }
 
-  function get_centres_per_district(district){
+  function get_centres_per_district(){
     
         // alert('hi');
         // $('input:checkbox[name=subject_schools]').not(this).prop('checked', false);
         var district = [];
-        if($('input:checkbox[name=district]').is(':checked')){
+        var subject_code = [];
+        $(document).on('change','input:checkbox[name=subject_code]',function(){
            
+       
+        if( $('input:checkbox[name=subject_code]').is(':checked')){
+          
         $('input:checkbox[name=district]:checked').not(':checked[value=undefined]').each(function(){
            
             district.push($(this).val());
-            // district.filter(function(e){
-            //     return e != 'undefined';
-            // })
-               
-            
-            // district.splice($.inArray('undefined',district), 1);
-            // alert($(this).val());
+        });
+        $('input:checkbox[name=subject_code]:checked').not(':checked[value=undefined]').each(function(){
+           
+            subject_code.push($(this).val());
         });
         $.ajax({
             url: 'php/get_centres_per_subjects_per_district.php',
             method: 'POST',
-            data:{district:district},
+            data:{district:district,subject_code:subject_code},
             dataType: 'json',
             success:function(data){
 
@@ -432,22 +500,26 @@ $('input[type=checkbox][name=district]').change(function(){
             }
         });
     }
-  
+});
   }
 
 function subject_apportionment(){
     $('#apportion_subjects').submit(function(e){
         e.preventDefault();
         var marking_centre_code = $('input[type=hidden][name=marking_centre_code]').val(),
-            centre_code =[]
-        if($('input[type=checkbox][name=centre]:checked').length > 0){
+            centre_code =[],
+            subject_code =[];
+        if($('input[type=checkbox][name=centre]:checked').length > 0 && $('input[type=checkbox][name=subject_code]:checked').length > 0){
                 $('input[type=checkbox][name=centre]:checked').each(function(){
                 centre_code.push($(this).val());
+            });
+                $('input[type=checkbox][name=subject_code]:checked').each(function(){
+                subject_code.push($(this).val());
             });
             $.ajax({
                 url: 'php/submit_subject_apportionment.php',
                 method: 'POST',
-                data: {marking_centre_code:marking_centre_code,centre_code:centre_code},
+                data: {marking_centre_code:marking_centre_code,centre_code:centre_code, subject_code:subject_code},
                 dataType: 'json',
                 beforeSend:function(){
                     $('button[type=submit]').attr('disabled',true);
@@ -474,7 +546,7 @@ function subject_apportionment(){
                 }
             });
         }else{
-            $('.dialog1').text('You need to choose the examination centre(s)').dialog('open');
+            $('.dialog1').text('You need to choose the examination centre and subjects').dialog('open');
         }
     });
 }

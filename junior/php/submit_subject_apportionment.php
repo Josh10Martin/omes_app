@@ -84,28 +84,32 @@ if($_SESSION['session_type']=='I'){
         
 }else{
 
-        if(isset($_POST['marking_centre_code']) && isset($_POST['centre_code'])){
+        if(isset($_POST['marking_centre_code']) && isset($_POST['centre_code']) && isset($_POST['subject_code'])){
                 $marking_centre_code = $_POST['marking_centre_code'];
                 $centre_codes = $_POST['centre_code'];
+                $subject_codes = $_POST['subject_code'];
                 $sen = isset($_POST['sen']) ? '1' : '0';
                 $apportion_id = apportionment_value_external($db_9,$_SESSION['province_code']);
                 $_SESSION['apportion_id'] = $apportion_id;
                 // $apportion_ids = $_SESSION['province_code'].'_'.$apportion_id;
-                if(count($centre_codes) > 0 ){
+                if(count($centre_codes) > 0 && count($subject_codes) > 0){
                         
                 try{
                         $i=0;
                         foreach($centre_codes as $centre_code){
-                                $sql = $db_9->prepare('INSERT IGNORE INTO marking_centre_centres (apportion_id,centre_code,sen,marking_centre,province) VALUES(:apportion_id,:centre_code,:sen,:marking_centre_code,:province_code)');
+                                foreach($subject_codes as $subject_code){
+                                $sql = $db_9->prepare('INSERT IGNORE INTO marking_centre_centres (apportion_id,centre_code,subject_code,sen,marking_centre,province) VALUES(:apportion_id,:centre_code,:subject_code,:sen,:marking_centre_code,:province_code)');
                                 $sql->execute(array(
                                         ':apportion_id'=>$_SESSION['apportion_id'],
                                         ':centre_code'=>$centre_code,
+                                        ':subject_code'=>$subject_code,
                                         ':sen'=>$sen,
                                         ':marking_centre_code'=>$marking_centre_code,
                                         ':province_code'=>$_SESSION['province_code']
                                 ));
                         
                       $i++;
+                        }
                 }
                         
 
@@ -121,7 +125,7 @@ if($_SESSION['session_type']=='I'){
                 }
                 }else{
                         $data_array['status'] ='400';
-                        $data_array['response_msg'] ='Centres must be chosen';
+                        $data_array['response_msg'] ='Centres and subjects must be chosen';
                 }
         }else{
                 $data_array['status'] ='400';
