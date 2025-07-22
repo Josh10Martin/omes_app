@@ -44,12 +44,19 @@ if($_SESSION['user_type'] == 'ECZ' || $_SESSION['user_type'] == 'ADMIN' || $_SES
           <?php
 if($_SESSION['user_type'] == 'ADMIN'){
           ?>
+            <div class="col-md-6">
+                        <div class="export_load"style="position:fixed;background-color:black; width:100%;height:100%;left:0;top:0;z-index:999999; display:none">
+                          <img src="../images/loading.gif" style="position:absolute;left:50%;top:50%; transform: translate(-50%,-50%);" alt="">  
+                          <h5 class="feedback" style="color:white;position:absolute;left:50%;top:70%; transform: translate(-50%,-50%);">loading</h5>                  
+                        </div>
                 <div class="row px-3">
                   <div class="col-md-6 ">
                     <h5 class="blue-ecz"><i class="fa fa-th-large" aria-hidden="true"></i> CENTRES REPORT:</h5>
                   </div>
+                
 
                 </div>
+                
                 
                 <div class="row px-5">
                         <div class="col-md-6">
@@ -58,6 +65,7 @@ if($_SESSION['user_type'] == 'ADMIN'){
                         <!-- <div class="col-md-6">
                                <a href="javascript:void(0)" data-toggle="modal" data-target="#change-session-modal"><div>change active session</div></a> 
                         </div> -->
+                        
                 </div>
                 <?php
                     }
@@ -204,8 +212,17 @@ if($_SESSION['user_type'] == 'ADMIN'){
                         <div class="col-md-6">
                                <a href="javascript:void(0)" data-toggle="modal" data-target="#examiner_attendance"><div> Examiner Attendance</div></a> 
                         </div>
+                        
 
                 </div>
+                <div class="row" style="margin-top: 20px;">
+                <div class="col-md-6">
+                        
+                        <button class="btn btn-primary" id="consolidated_claims_btn">EXPORT CONSOLIDATED CLAIMS TO EMS</button>
+                        </div>
+                </div>
+                <div id="export1"></div>
+                          <div id="export2"></div>
                     <?php
                 }
                     ?>
@@ -1007,6 +1024,73 @@ $('.dataclaim2').dialog({
         ]
     });
 
+    $('#export1').dialog({
+        title: 'REQUEST RESPONSE',
+        width: '450',
+        height: '150',
+        modal: true,
+        draggable: false,
+        resizable: false,
+        // appendTo: '#consolidated_claims',
+        closeOnEscape: false,
+        autoOpen: false,
+        create: function(e){
+            $(e.target).parent().css({
+                'position':'fixed'
+            }); 
+            
+        },
+        buttons: [
+            {
+                text: 'NO',
+                click: function(){
+                  $(this).dialog('close');
+                }
+            },
+            {
+                text: 'YES',
+                click: function(){
+                  submit_consolidated_claims();
+                  $(this).dialog('close');
+                    
+                }
+            }
+        ]
+    });
+$('#export2').dialog({
+        title: 'REQUEST RESPONSE',
+        width: '450',
+        height: '150',
+        modal: true,
+        draggable: false,
+        resizable: false,
+        // appendTo: '#consolidated_claims',
+        closeOnEscape: false,
+        autoOpen: false,
+        create: function(e){
+            $(e.target).parent().css({
+                'position':'fixed'
+            }); 
+            
+        },
+        buttons: [
+            // {
+            //     text: 'NO',
+            //     click: function(){
+            //       $(this).dialog('close');
+            //     }
+            // },
+            {
+                text: 'OK',
+                click: function(){
+                   
+                location.reload();
+                    $(this).dialog('close');
+                }
+            }
+        ]
+    });
+
 
   get_subjects();
   // get_paper();
@@ -1022,6 +1106,7 @@ $('.dataclaim2').dialog({
   get_apportioned_belts();
   get_group_apportioned_belts();
   get_belt();
+  cnsolidated_claims();
 
   function get_subjects(){
     $.ajax({
@@ -1386,6 +1471,61 @@ $('.dataclaim2').dialog({
           }
         }
       });
+  }
+  function cnsolidated_claims(){
+    $('#consolidated_claims_btn').click(function(){
+      $('#export1').text('Submit ALL submitted claims to EMS?').dialog('open');
+
+    });
+  }
+
+  function submit_consolidated_claims(){
+    $.ajax({
+      url: 'php/consolidated_claims.php',
+      method: 'POST',
+      dataType: 'json',
+      beforeSend:function(){
+       
+        $('.export_load').css('display','block');
+        $('h5.feedback').text('Generating claims. Please wait...');
+      },
+      success:function(data){
+        if(data.status != '400' && data.status != '401'){
+          console.log(data);
+         
+            var json_data = JSON.stringify(data);
+            $.ajax({
+              // url: 'http://192.9.200.206:8000//api/archive-claims/api-ems/',
+              url: 'https://ems.exams-council.org.zm:8080/api/archive-claims/api-ems/',
+              method:'POST',
+              data: json_data,
+              dataType: 'json',
+              contentType: 'application/json; charset=utf-8',
+              beforeSend:function(){
+              $('h5.feedback').text('Exporting claims to Exaaminer Management System. Please wait..');
+               },
+               success:function(data){
+                if(data.status == '200'){
+                  $('.export_load').css('display','none');
+               
+                  $('h5.feedback').text('');
+                  $('#export1').text('"YES" to resubmit, "NO" to decline').dialog('open');
+                  $('#export2').text('Claims successfully submitted').dialog('open');
+                }else{
+                  $('#export2').text('There was a problem submitting claims. ['+data.error+']').dialog('open');
+                }
+               }
+
+            });
+        
+
+        }else{
+          $('.export_load').css('display','none');
+          $('h5.feedback').text('');
+          $('#export2').text('Confirm that all claims are submitted').dialog('open');
+        }
+      }
+    });
   }
 });
 </script>

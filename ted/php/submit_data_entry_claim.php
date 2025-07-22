@@ -8,13 +8,13 @@ $rate_value = 100/85;
 $tax = 15/100;
 if(isset($_SESSION['user_type'])){
         try{
-                $sql = $db_ted->prepare('REPLACE INTO data_entry_claims (marking_centre_code,marking_centre_name,examiner_number,nrc,tpin,full_name,phone_number,address,station,district,province,position,no_of_scripts,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,bank,branch,belt_no,date_claimed,session,session_name)
+                $sql = $db_ted->prepare('REPLACE INTO data_entry_claims (marking_centre_code,marking_centre_name,examiner_number,nrc,tpin,full_name,phone_number,address,station,district,province,position,no_of_scripts,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,bank,branch,belt_no,date_claimed,session,session_name,session_level,session_year)
                                                 SELECT :marking_centre_code AS marking_centre_code, :marking_centre_name AS marking_centre_name,ex.examiner_number AS examiner_number,ex.nrc AS nrc, ex.tpin AS tpin,CONCAT(ex.first_name," ",ex.last_name) AS full_name, 
                                                          ex.phone_number,ex.address AS address,ex.station AS station, ex.district AS district, ex.province AS province, ex.role AS position,SUM(m.status <> "L") AS no_of_scripts,ex.sortcode AS sortcode,ex.account_no AS account_no, mr.data_entry AS net_rate, mr.data_entry * :rate_value AS grossed_up_rate,
                                                          SUM(m.status <> "L") * (mr.data_entry * :rate_value) AS gross_pay,
                                                          (SUM(m.status <> "L") * (mr.data_entry * :rate_value)) * :tax AS 15_wht, 
                                                          (SUM(m.status <> "L") * (mr.data_entry * :rate_value)) - ((SUM(m.status <> "L") * (mr.data_entry * :rate_value)) * :tax) AS net_pay,
-                                                        ex.bank AS bank, ex.branch AS branch, "D/E",DATE(NOW()),ex.session, CONCAT(:session," ",:session_name) AS session_name
+                                                        ex.bank AS bank, ex.branch AS branch, "D/E",DATE(NOW()),ex.session, CONCAT(:session_year," ",:session_name) AS session_name, :session_level AS session_level, :session_year AS session_year
                                                         
                                                         FROM  examiner ex INNER JOIN marks m ON (ex.marking_centre = m.marking_centre)                            
                                                         CROSS JOIN marking_rates mr 
@@ -34,7 +34,8 @@ if(isset($_SESSION['user_type'])){
                         ':tax'=>$tax,
                         ':marking_centre_code'=>$_SESSION['marking_centre_code'],
                         ':username'=>$_SESSION['username'].' - '.$_SESSION['first_name'].' '.$_SESSION['last_name'],
-                        ':session'=>$_SESSION['session_year'],
+                        ':session_year'=>$_SESSION['session_year'],
+                        ':session_level'=>$_SESSION['session_level'],
                         ':session_name'=>$_SESSION['session_name'],
                         ':marking_centre_name'=>$_SESSION['marking_centre']
                 ));

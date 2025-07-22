@@ -5,7 +5,7 @@ header("Access-Control-Allow-Origin: *");
 include '../../../../config.php';
 $data_array = array();
 if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'DEO'){
-$sql = $db_ted->prepare('SELECT id,marking_centre_code, marking_centre_name,nrc,tpin,address,station,district,province,full_name,position,no_of_scripts,bank,branch,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,belt_no,session,session_name
+$sql = $db_ted->prepare('SELECT id,marking_centre_code, marking_centre_name,nrc,tpin,address,station,district,province,full_name,position,no_of_scripts,bank,branch,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,belt_no,session_year,session_name
                                 FROM data_entry_claims WHERE marking_centre_code =:marking_centre_code AND examiner_number =:username
                        ');
 $sql->execute(array(
@@ -13,7 +13,7 @@ $sql->execute(array(
         ':marking_centre_code'=>$_SESSION['marking_centre_code']
 ));
 }else{
-        $sql = $db_ted->prepare('SELECT id,marking_centre_code, marking_centre_name,nrc,tpin,address,station,district,province,full_name,position,no_of_scripts,bank,branch,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,belt_no,session, session_name
+        $sql = $db_ted->prepare('SELECT id,marking_centre_code, marking_centre_name,nrc,tpin,address,station,district,province,full_name,position,no_of_scripts,bank,branch,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,belt_no,session_year, session_name
         FROM data_entry_claims 
 ');
 $sql->execute();
@@ -45,7 +45,7 @@ if($sql->rowCount() > 0){
                 $data_array[$i]['course_code'] =  '';
                 $data_array[$i]['course_name'] = '';
                 $data_array[$i]['belt_no'] = $row['belt_no'] ?? '';
-                $data_array[$i]['session'] = $row['session'] ?? '';
+                $data_array[$i]['session_year'] = $row['session_year'] ?? '';
                 $data_array[$i]['session_name'] = $row['session_name'] ?? '';
                 $i++;
         }

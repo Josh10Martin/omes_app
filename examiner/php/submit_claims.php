@@ -13,7 +13,7 @@ if(isset($_POST['subject']) && isset($_POST['paper'])){
         $subject_name = explode(':',$_POST['subject'])[1];
         $paper_no = $_POST['paper'];
         try{
-        $sql = $db_12_gce->prepare(' REPLACE INTO examiner_claim (marking_centre_code,marking_centre_name,nrc,examiner_number,tpin,full_name,address,province,district,position,no_of_scripts,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,bank,branch,subject_code,subject_name,paper_no,belt_no,session_name)
+        $sql = $db_12_gce->prepare(' REPLACE INTO examiner_claim (marking_centre_code,marking_centre_name,nrc,examiner_number,tpin,full_name,address,province,district,position,no_of_scripts,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,bank,branch,subject_code,subject_name,paper_no,belt_no,session_name,session_level,session_year)
         WITH highest_claim AS(
                 SELECT COUNT(ex.examiner_number) AS no_of_examiners, ga.no_of_scripts AS no_of_scripts,ga.belt_no AS belt_no FROM group_apportion ga
                 INNER JOIN examiner ex ON (ga.subject = ex.subject_code)
@@ -62,7 +62,7 @@ if(isset($_POST['subject']) && isset($_POST['paper'])){
                                 ) * :tax
                         ) AS net_pay,
 
-                        ex.bank AS bank,ex.branch AS branch,:subject_code AS subject_code,:subject_name AS subject_name,:paper_no AS paper_no,ex.belt_no AS belt_no,CONCAT(:session_year," ",:session_name) AS session_name
+                        ex.bank AS bank,ex.branch AS branch,:subject_code AS subject_code,:subject_name AS subject_name,:paper_no AS paper_no,ex.belt_no AS belt_no,:session_name AS session_name, :session_level AS session_level,:session_year AS session_year
                         FROM examiner ex INNER JOIN marking_rates mr ON (ex.subject_code = mr.subject_code)
                         RIGHT OUTER JOIN group_apportion ga ON (mr.subject_code = ga.subject)
                         WHERE ex.subject_code = ga.subject
@@ -91,7 +91,7 @@ if(isset($_POST['subject']) && isset($_POST['paper'])){
                         ((CASE WHEN ga.no_of_scripts = 0 THEN 0 WHEN ga.no_of_scripts < 100 THEN 100 ELSE ga.no_of_scripts END) * (CASE WHEN ex.role = "TEAM LEADER" THEN mr.t_leader * :rate_value  WHEN ex.role = "CHECKER" THEN mr.checker * :rate_value ELSE mr.examiner * :rate_value END) / (SELECT COUNT(*) FROM examiner WHERE subject_code =:subject_code AND paper_no =:paper_no AND belt_no = ex.belt_no AND marking_centre =:marking_centre_code AND attendance = 1 AND role IN ("EXAMINER","TEAM LEADER")) * :tax) AS 15_wht, 
                         ((CASE WHEN ga.no_of_scripts = 0 THEN 0 WHEN ga.no_of_scripts < 100 THEN 100 ELSE ga.no_of_scripts END) * (CASE WHEN ex.role = "TEAM LEADER" THEN mr.t_leader * :rate_value  WHEN ex.role = "CHECKER" THEN mr.checker * :rate_value ELSE mr.examiner * :rate_value END) / (SELECT COUNT(*) FROM examiner WHERE subject_code =:subject_code AND paper_no =:paper_no AND belt_no = ex.belt_no AND marking_centre =:marking_centre_code AND attendance = 1 AND role IN ("EXAMINER","TEAM LEADER")) - ((CASE WHEN ga.no_of_scripts = 0 THEN 0 WHEN ga.no_of_scripts < 100 THEN 100 ELSE ga.no_of_scripts END) * (CASE WHEN ex.role = "TEAM LEADER" THEN mr.t_leader * :rate_value  WHEN ex.role = "CHECKER" THEN mr.checker * :rate_value ELSE mr.examiner * :rate_value END) / (SELECT COUNT(*) FROM examiner WHERE subject_code =:subject_code AND paper_no =:paper_no AND belt_no = ex.belt_no AND marking_centre =:marking_centre_code AND attendance = 1 AND role IN ("EXAMINER","TEAM LEADER"))) * :tax) AS net_pay,
 
-                        ex.bank AS bank, ex.branch AS branch, :subject_code AS subject_code, :subject_name AS subject_name, :paper_no AS paper_no,ex.belt_no AS belt_number,CONCAT(:session_year," ",:session_name) AS session_name
+                        ex.bank AS bank, ex.branch AS branch, :subject_code AS subject_code, :subject_name AS subject_name, :paper_no AS paper_no,ex.belt_no AS belt_number,CONCAT(:session_year," ",:session_name) AS session_name, :session_level AS session_level,:session_year AS session_year
                         FROM examiner ex INNER JOIN group_apportion ga ON (ex.subject_code = ga.subject)
                         INNER JOIN marking_rates mr ON (ga.subject = mr.subject_code)
                         WHERE ex.paper_no = ga.paper
@@ -115,6 +115,7 @@ $sql->execute(array(
         ':rate_value'=>$rate_value,
         ':tax'=>$tax,
         ':session_year'=>$_SESSION['session_year'],
+        ':session_level'=>$_SESSION['session_level'],
         ':session_name'=>$_SESSION['session_name'],
         ':marking_centre_code'=>$_SESSION['marking_centre_code'],
         ':marking_centre_name'=>$_SESSION['marking_centre']

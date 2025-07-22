@@ -130,77 +130,13 @@ if($_SESSION['user_type'] == 'ADMIN' || $_SESSION['user_type'] == 'ECZ' || $_SES
 <div class="dialog2"></div>
 <div class="dialog13"></div>
 
-	<?php
-		if(account_not_provided($db_ted,'ADMIN',$_SESSION['username']) == 'true'){
-?>
+	
 
-	<div class="row justify-content-center align-items-center" style="height:100vh;position:fixed;z-index:1040;width:100%;background-color: rgba(0,0,0,0.5);top:0;left:0; ">
-		<div class="col-md-6 ">
-		<div class=" opacity-100">
-		<div class="card border border-primary ">
-			<div class="card-header bg-light">
-				SYSTEM ADMIN DETAILS UPDATE
-			</div>
-			<div class="card-body">
-			<form action="" method="" id="update_admin_form">
-			<div class="row">
-				<div class="col-md-6">
-					<p>NRC:
-					<input type="text" minlength="11" name="nrc" id="nrc" class="form-control" required>
-					</p>
-				</div>
-				<div class="col-md-6">
-					<p>TPIN:
-					<input type="text" pattern="[0-9]+" maxlength="10" name="tpin" id="tpin" class="form-control" required>
-					</p>
-				</div>
-				<div class="col-md-6">
-					<p>PHONE NUMBER.:
-					<input type="text" maxlength="10" name="phone" id="phone" class="form-control" required>
-					</p>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<p>BANK:
-					<select name="bank" id="" class="select" required>
-				
-					</select>
-					</p>
-				</div>
-				<div class="col-md-12">
-					<p>BRANCH:
-					<select name="branch" id="" class="select" required>
-						
-					</select>
-					</p>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<p>ACCOUNT No.:
-					<!-- <input type="text" name="account_no" maxlength="15" id="account_number" class="form-control" required> -->
-
-					<input type="text" pattern="[0-9]+" name="account_no" maxlength="15" id="account_number" class="form-control" required>
-
-					</p>
-				</div>
-				
-			</div>
-			<img class="loading" src="../images/loading.gif" style="transform: translateX(100%); display:none;"/>
-			<button type="submit" class=" d-flex btn btn-sm btn-primary mx-auto">SAVE</button>
-			
-		</form>
-			</div>
-		</div>
-	</div>
-
-		</div>
-	</div>
+	
 	
 
 <?php
-	}
+	
 	
 }
 ?>

@@ -943,6 +943,24 @@ function claims_exist_gcge_g12($db,$marking_centre_code){
         }
 }
 
+function claims_exist_ted($db,$marking_centre_code){
+        $sql1 = $db->prepare('SELECT *
+        FROM examiner_claim WHERE marking_centre_code =:marking_centre_code');
+        $sql1->execute(array(
+                ':marking_centre_code'=>$marking_centre_code
+        ));
+        $sql2 = $db->prepare('SELECT *
+        FROM data_entry_claims WHERE marking_centre_code =:marking_centre_code');
+          $sql2->execute(array(
+                ':marking_centre_code'=>$marking_centre_code
+        ));
+        if($sql1->rowCount() == 0 || $sql2->rowCount() == 0){
+                return 'false';
+        }else{
+                return 'true';
+        }
+}
+
 function append_0($db){
         $sql = $db->prepare('UPDATE marks SET centre_code = CONCAT(0,centre_code) WHERE LENGTH(centre_code) = 5');
         $sql->execute();

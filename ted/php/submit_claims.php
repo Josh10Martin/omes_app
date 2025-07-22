@@ -10,7 +10,7 @@ if(isset($_SESSION['marking_centre_code'])){
 
        
         try{
-        $sql = $db_ted->prepare('  REPLACE INTO examiner_claim (marking_centre_code,marking_centre_name,nrc,tpin,examiner_number,full_name,address,station,district,province,position,no_of_scripts,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,bank,branch,group_code,group_name,course_code,course_name,belt_no,session,session_name)
+        $sql = $db_ted->prepare('  REPLACE INTO examiner_claim (marking_centre_code,marking_centre_name,nrc,tpin,examiner_number,full_name,address,station,district,province,position,no_of_scripts,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,bank,branch,group_code,group_name,course_code,course_name,belt_no,session,session_name.session_level,session_year)
         WITH examiners_claim AS (
     SELECT 
     COUNT(ex.nrc) AS no_of_examiners, 
@@ -118,7 +118,7 @@ SELECT
     co.course_name AS course_name,
     ex.belt_no AS belt_number,
     ex.session AS session,
-    CONCAT (:session," ",:session_name) AS session_name
+    CONCAT (:session_year," ",:session_name) AS session_name, :session_level AS session_level, :session_year AS session_year
 
 FROM 
     centre ce
@@ -157,7 +157,8 @@ $sql->execute(array(
         ':rate_value'=>$rate_value,
         ':tax'=>$tax,
         ':session_name'=>$_SESSION['session_name'],
-        ':session'=>$_SESSION['session_year']
+        ':session_level'=>$_SESSION['session_level'],
+        ':session_year'=>$_SESSION['session_year']
 ));
 if($sql->rowCount() > 0){
         $data_array['status'] = '200';

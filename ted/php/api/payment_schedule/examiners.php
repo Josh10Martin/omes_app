@@ -5,7 +5,7 @@ header("Access-Control-Allow-Origin: *");
 include '../../../../config.php';
 $data_array = array();
 if(isset($_SESSION['user_type'] ) && $_SESSION['user_type'] == 'ADMIN'){
-        $sql = $db_ted->prepare('SELECT id,marking_centre_code,marking_centre_name,nrc,tpin,examiner_number,full_name,address,station,district,province,position,no_of_scripts,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,bank,branch,group_code,group_name,course_code,course_name,belt_no,session,session_name
+        $sql = $db_ted->prepare('SELECT id,marking_centre_code,marking_centre_name,nrc,tpin,examiner_number,full_name,address,station,district,province,position,no_of_scripts,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,bank,branch,group_code,group_name,course_code,course_name,belt_no,session_year,session_name
                                 FROM examiner_claim WHERE marking_centre_code =:marking_centre_code AND session =:session
                        ');
 $sql->execute(array(
@@ -13,7 +13,7 @@ $sql->execute(array(
         ':marking_centre_code'=>$_SESSION['marking_centre_code']
 ));
 }else{
-$sql = $db_ted->prepare('SELECT id,marking_centre_code,marking_centre_name,nrc,tpin,examiner_number,full_name,address,station,district,province,position,no_of_scripts,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,bank,branch,group_code,group_name,course_code,course_name,belt_no,session,session_name
+$sql = $db_ted->prepare('SELECT id,marking_centre_code,marking_centre_name,nrc,tpin,examiner_number,full_name,address,station,district,province,position,no_of_scripts,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,bank,branch,group_code,group_name,course_code,course_name,belt_no,session_year,session_name
                                 FROM examiner_claim
                        ');
 $sql->execute();
@@ -48,7 +48,7 @@ if($sql->rowCount() > 0){
                 $data_array[$i]['course_name'] = $row['course_name'] ?? '';
                 $data_array[$i]['no_of_scripts'] = $row['no_of_scripts'] ?? '';
                 $data_array[$i]['belt_no'] = $row['belt_no'] ?? '';
-                $data_array[$i]['session'] = $row['session'] ?? '';
+                $data_array[$i]['session_year'] = $row['session_year'] ?? '';
                 $data_array[$i]['session_name'] = $row['session_name'] ?? '';
                 $i++;
         }

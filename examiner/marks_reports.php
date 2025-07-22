@@ -1075,7 +1075,7 @@ $('#export2').dialog({
                 text: 'OK',
                 click: function(){
                    
-                
+                location.reload();
                     $(this).dialog('close');
                 }
             }
