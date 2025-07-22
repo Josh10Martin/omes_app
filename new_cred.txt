@@ -365,6 +365,9 @@ the name of the select field is subject
   url to claim
    https://omes.exams-council.org.zm/omes/examiner/reports/data_entry_claim.php
 
+grade 9 CREDENTIALS
+ecz admin: username: eczadmin
+            password: 21310
 
 
 
