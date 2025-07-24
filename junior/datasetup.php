@@ -696,7 +696,7 @@ function align_sen_external(){
     success:function(data){
       if(data.status == '200'){
         $('.feedback2').text(data.response_msg);
-        find_null();
+        finalise();
       }else{
         $('.feedback1').text(' ');
         $('.feedback1').text(' ');

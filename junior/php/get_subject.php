@@ -8,10 +8,12 @@ if(isset($_SESSION['user_type']) && ($_SESSION['user_type'] == 'ADMIN' || $_SESS
         if($_SESSION['session_type'] == 'E'){
 
       
-$sql= $db_9->prepare('SELECT s.subject_code AS subject_code,s.subject_name AS subject_name FROM subjects s
-                        INNER JOIN marking_centre mc ON (s.subject_code = mc.subject)
-                        WHERE mc.province =:province_code
-                        AND mc.centre_code =:marking_centre_code');
+$sql= $db_9->prepare('SELECT DISTINCT s.subject_code AS subject_code,s.subject_name AS subject_name FROM subjects s
+                        INNER JOIN marking_centre_centres mcc ON (s.subject_code = mcc.subject_code)
+                        WHERE mcc.province =:province_code
+                        AND mcc.marking_centre =:marking_centre_code
+                        ORDER BY s.subject_code
+                        ');
 $sql->execute(array(
         ':province_code'=>$_SESSION['province_code'],
         ':marking_centre_code'=>$_SESSION['marking_centre_code']
