@@ -47,6 +47,8 @@ if (isset($_FILES['myFile']['name']) && isset($_POST['group_id']) && isset($_POS
             fclose($handle);
             $data_array['status'] = '200';
             $data_array['response_msg'] = 'Successfully uploaded data. Note that all duplicate data will be discarded';
+
+            add_0($db_9);
         } else {
             $data_array['status'] = '400';
             $data_array['response_msg'] = 'There was a problem opening the CSV file';

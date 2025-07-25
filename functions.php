@@ -966,6 +966,11 @@ function append_0($db){
         $sql->execute();
 }
 
+function add_0($db){
+        $sql = $db->prepare('UPDATE apportionment SET school = CONCAT(0,school) WHERE LENGTH(school) = 5');
+        $sql->execute();
+}
+
 function remove_subject_paper_from_marksheet_not_belong($db){
         $sql = $db->prepare('DELETE FROM marks WHERE (subject_code,paper_no) NOT IN (SELECT subject_code,paper_no FROM paper)');
         $sql->execute();

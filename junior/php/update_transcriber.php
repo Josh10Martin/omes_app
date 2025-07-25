@@ -66,7 +66,7 @@ if(isset($_POST['id'])){
         ));
         if($sql0->rowCount() > 0){
             $data_array['status'] = '200';
-            $data_array['response_msg'] = 'SUccessfully updated transcriber details';
+            $data_array['response_msg'] = 'Successfully updated transcriber details';
          }else{
             $data_array['status'] = '400';
             $data_array['response_msg'] = 'Could not update transcriber. Try again';

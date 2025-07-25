@@ -477,7 +477,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
 
             function transcriber(){
                 $('#transcriber_claim').click(function(){
-                    $('.transcriber1').text('SUbmit transcriber claim?').dialog('open');
+                    $('.transcriber1').text('Submit transcriber claim?').dialog('open');
                 });
             }
             function submit_transcriber_claim(){

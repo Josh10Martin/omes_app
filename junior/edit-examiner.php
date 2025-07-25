@@ -436,8 +436,11 @@ function get_apportioned_belts() {
                     '<option value="0">0</option>'
                   );
                   $.each(data, function() {
+
+                    var belt_no = '<?php echo $belt_no; ?>';
+                  var selected = this["belt_no"] == belt_no ? 'selected' : '';
                     $('select[name=belt_no]').append(
-                      '<option value="' + this["belt_no"] + '">' + this["belt_no"] + '</option>'
+                      '<option value="' + this["belt_no"] + '" '+selected+'>' + this["belt_no"] + '</option>'
                     );
                   });
                   $('select[name=belt_no] option[value=undefined]').remove();
