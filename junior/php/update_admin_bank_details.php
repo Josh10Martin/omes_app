@@ -30,9 +30,8 @@ if(isset($_POST['bank'])){
               $data_array['status'] = '400';
               $data_array['response_msg'] = 'Enter 13 digit bank account number';
         }else{
-        $sql = $db_9->prepare('UPDATE users SET nrc =:nrc,tpin =:tpin,phone =:phone, bank =:bank,branch =:branch,account_no =:account_no WHERE username =:username AND user_type = "ADMIN"');
+        $sql = $db_9->prepare('UPDATE users SET nrc =:nrc,tpin =:tpin,phone =:phone,branch =:branch,account_no =:account_no WHERE username =:username AND user_type = "ADMIN"');
         $sql->execute(array(
-                ':bank'=>$bank,
                 ':branch'=>$branch,
                 ':account_no'=>$account_number,
                 ':nrc'=>$nrc,

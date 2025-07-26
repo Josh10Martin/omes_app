@@ -152,7 +152,7 @@ if($_SESSION['user_type'] == 'ADMIN'){
           <a href="#" id="submit_system_admin_claim" class="btn btn-white"><i class="fa fa-check"
               aria-hidden="true"></i> Submit Claim (Yours)</a>
               
-              <a href="submitted_system_admin_claim.php" target="_blank" class="btn btn-white"><i class="fa fa-check"
+              <a href="submitted_system_admin_claim.php" class="btn btn-white"><i class="fa fa-check"
                 aria-hidden="true"></i> Submitted Claim</a>
 
           <div class="dataclaim1"></div>
@@ -188,7 +188,7 @@ if($_SESSION['user_type'] == 'ADMIN'){
         <div class="col-md-6">
           <a href="#" id="submit_data_entry_claim" class="btn btn-white"><i class="fa fa-check" aria-hidden="true"></i>
             Submit Claim</a>
-            <a href="submitted_data_entry_claim.php" target ="_blank" class="btn btn-white"><i class="fa fa-check" aria-hidden="true"></i>
+            <a href="submitted_data_entry_claim.php" class="btn btn-white"><i class="fa fa-check" aria-hidden="true"></i>
             Submitted Claim</a>
           <div class="dataclaim0"></div>
           <!-- <div class="dataclaim1"></div> -->

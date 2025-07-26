@@ -153,7 +153,7 @@ if($_SESSION['user_type']  == 'SESO'){
                 <th>SEN</th>
                 <th><span class="one">CENTRES</span> </th>
                 <?php if($_SESSION['session_type'] == 'E'){ ?>
-                <th class="text-center">ACTION</th>
+                <!-- <th class="text-center">ACTION</th> -->
               <?php } ?>
             </thead>
             <tbody>
@@ -451,10 +451,10 @@ if($_SESSION['user_type']  == 'SESO'){
                             
                             ' <a href="subject_apportionment_internal.php?marking_centre_code='+this["centre_code"]+'&marking_centre_name='+this["centre_name"]+'" style="display: '+display+';"  class="more"><i class="fa fa-pencil-square-o blue-ecz " aria-hidden="true"></i> Update</a> </span>'+
                             '</td>'+
-                            '<td class="text-center not_one_centre" style="display: '+visibility+';">'+
-                                '<button id="'+this["centre_code"]+'" data-id="'+this["centre_code"]+'" class="btn '+this["activation_status"]+'" style="background-color:'+bgColor+'; color:'+color+';" '+disabled+'>'+active_status+' </button>'+
+                            // '<td class="text-center not_one_centre" style="display: '+visibility+';">'+
+                            //     '<button id="'+this["centre_code"]+'" data-id="'+this["centre_code"]+'" class="btn '+this["activation_status"]+'" style="background-color:'+bgColor+'; color:'+color+';" '+disabled+'>'+active_status+' </button>'+
                         
-                            '</td>'+
+                            // '</td>'+
                             '</tr>');
                         });
                         $('table.table tbody tr.undefined').remove();
