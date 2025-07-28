@@ -4,7 +4,27 @@ header('COntent-Type: application/json;charset=utf-8');
 include '../../config.php';
 $data_array = array();
 
-        $sql = $db_12_gce->prepare('SELECT DISTINCT centre_code, centre_name FROM school WHERE centre_type =:session_type 
+        if($_SESSION['user_type'] == 'ECZ'){
+
+                $sql = $db_12_gce->prepare('SELECT DISTINCT centre_code, centre_name FROM school WHERE centre_type =:session_type 
+                                        AND centre_code IN (SELECT centre_code FROM marks)');
+        $sql->execute(array(
+                ':session_type'=>$_SESSION['session_type']
+        ));
+        if($sql->rowCount() > 0){
+                $data_array['status'] = '200';
+                $i=0;
+                while($row = $sql->fetch(PDO::FETCH_ASSOC)){
+                    $data_array[$i]['centre_code'] = $row['centre_code'];
+                    $data_array[$i]['centre_name'] = $row['centre_name'];
+                    $i++;
+                }
+               
+        }else{
+                $data_array['status'] = '400';
+        }
+        }else{
+                $sql = $db_12_gce->prepare('SELECT DISTINCT centre_code, centre_name FROM school WHERE centre_type =:session_type 
                                         AND centre_code IN (SELECT centre_code FROM marks WHERE marking_centre =:marking_centre_code)');
         $sql->execute(array(
                 ':session_type'=>$_SESSION['session_type'],
@@ -22,5 +42,9 @@ $data_array = array();
         }else{
                 $data_array['status'] = '400';
         }
+
+        }
+
+        
 echo json_encode($data_array);
 ?>

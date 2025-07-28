@@ -109,6 +109,9 @@ if($_SESSION['user_type'] == 'ECZ'){
                                 <div class="col-md-6">
                                      <a href="marking-centers.php"><div><i class="fa fa-eye" aria-hidden="true"></i> VIEW MARKING CENTRES:</div></a>   
                                 </div>
+                                <div class="col-md-6">
+                                     <a href="#" data-toggle="modal" data-target="#SearchApportionment"><div><i class="fa fa-search" aria-hidden="true"></i> SEARCH APPORTIONMENTS:</div></a>   
+                                </div>
                                 <!-- <div class="col-md-6">
                                        <a href="javascript:void(0)"><div><i class="fa fa-plus" aria-hidden="true"></i> Add marking Center</div></a> 
                                 </div> -->
@@ -577,6 +580,76 @@ if($_SESSION['user_type'] == 'ECZ'){
       </div>
 
 
+      <!-- search apportionment modal -->
+       <div class="modal fade" id="SearchApportionment" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header p-2 bg-success">
+                                <div class="modal-title text-white h5 text-center">Search Apportionment</div>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="dialog4"></div>
+                                <div class="dialog5"></div>
+                                <form action="" method="" id="search_apportionment">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group mx-2">
+                                            <label>Centre / School:</label>
+                                            <select class="select" name="centre" required>
+                                            </select>
+                                             <!-- <input type="text" name="centre_code" placeholder="Centre Code" class="form-control"> -->
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label>Subject:</label>
+                                            <select class="select" name="subject" required>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label>Paper:</label>
+                                            <select class="select" name="paper" required>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto mx-auto mb-2">
+                                            <button id="save" type="submit" class="btn btn-primary mx-auto"><i class="fa fa-search" aria-hidden="true"></i> Search </button>
+                                        </div>
+                                    </div>
+
+                                
+
+                                    <img class="loading" src="../images/loading.gif" style="transform: translateX(100%); display:none;" />
+                                       
+                                            <table class="search_apportionment" style ="display:none;border: 1px solid black;">
+                                                <thead style="font-size: 12px;  border-bottom:1px solid black;">
+                                                <th>CENTRE NAME</th>
+                                                <th>BELT NO.</th>
+                                                <th>SEN</th>
+                                                <th>SCRIPT NO.</th>
+                                                <th>CREATED BY</th>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                                
+                                            </table>
+                                             
+                                   
+                                    <div class="feedback"></div>
+
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+      <!-- search apportionment modal end -->
+
+
 <!-- import centres -->
       <div class="modal fade" id="import-ocrs-centers-modal" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -624,6 +697,8 @@ $(document).ready(function(){
   upload_examiners();
   get_province();
   get_schools_from_marksheet();
+  get_schools_in_marking_centre();
+  search_in_belt();
   get_marking_centre();
   get_subjects();
   disable_enable();
@@ -1077,6 +1152,74 @@ function make_question_numbers(){
     }
   });
 }
+
+ function get_schools_in_marking_centre(){
+		$.ajax({
+                url: 'php/get_schools_in_marking_centre.php',
+                method: 'POST',
+                dataType: 'json',
+                success: function(data){
+                    
+                    if(data.status == '200'){
+						$('select[name=centre] option').remove();
+						$('select[name=centre]').append(
+							'<option value ="" selected disabled>Select Centre</option>'
+						);
+						$.each(data,function(){
+							$('select[name=centre]').append(
+							'<option value ="'+this["centre_code"]+'">'+this["centre_code"]+' - '+this["centre_name"]+'</option>'
+						);
+						});
+                        $('select[name=centre]').select2({
+							data:data
+						});
+                    }
+                }
+            });
+	 }
+
+    function search_in_belt(){
+                $('#search_apportionment').submit(function(e){
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: 'php/search_in_belt.php',
+                        method: 'POST',
+                        dataType: 'json',
+                        data: $(this).serialize(),
+                        beforeSend: function(){
+                            $('img.loading').css('display','block');
+                            
+                        },
+                        success:function(data){
+                            $('img.loading').css('display','none');
+                            $('table.search_apportionment tbody tr').remove();
+                            if(data.status != '400'){
+                                // $('.footer').css('display','block');
+                               
+                                $('table.search_apportionment').css('display','block');
+                                $.each(data,function(){
+                                $('table.search_apportionment tbody').append('<tr style ="border-bottom:solid 1px black;">'+
+                                        '<td>'+this["centre_name"]+'</td>'+
+                                        '<td>'+this["belt_no"]+'</td>'+
+                                        '<td>'+this["sen"]+'</td>'+
+                                        '<td>'+this["script_no"]+'</td>'+
+                                        '<td>'+this["created_by"]+'</td>'+
+                                '</tr>');
+                                });
+                                // $.each(data,function(){
+                                //     $('span.c_name').text(this["centre_name"]);
+                                //     $('span.b_no').text(this["belt_no"]);
+                                //     $('span.no_scripts').text(this["script_no"]);
+                                //     $('span.user_created').text(this["created_by"]);
+                                // });
+                            }else{
+                                $('.feedback').text(data.response_msg);
+                            }
+                        }
+                    });
+                });
+            }
 
 function insert_into_new_marks(){
   $.getJSON('php/make_question_numbers.php',function(response){
