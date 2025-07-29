@@ -963,18 +963,22 @@ function claims_exist_ted($db,$marking_centre_code){
 
 function append_0($db){
         $sql = $db->prepare('UPDATE marks SET centre_code = CONCAT(0,centre_code) WHERE LENGTH(centre_code) = 5');
-        $sql->execute();
+       return $sql->execute();
 }
 
 function add_0($db){
         $sql = $db->prepare('UPDATE apportionment SET school = CONCAT(0,school) WHERE LENGTH(school) = 5');
-        $sql->execute();
+        return $sql->execute();
 }
 
 function remove_subject_paper_from_marksheet_not_belong($db){
         $sql = $db->prepare('DELETE FROM marks WHERE (subject_code,paper_no) NOT IN (SELECT subject_code,paper_no FROM paper)');
         $sql->execute();
         return $sql->rowCount();
+}
+function remove_from_sen_exam_no($db){
+        $sql = $db->prepare('DELETE FROM sen_exam_no');
+       return $sql->execute();
 }
 //  function absa_account_length($db,$accout_no_length){
 //         $sql = $db->prepare('SELECT LENGTH(account_no)');
