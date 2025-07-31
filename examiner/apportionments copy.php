@@ -33,7 +33,9 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                         <div class="col-sm-4 col-4 text-right m-b-20">
                             <a href="#" data-toggle="modal" data-target="#confirmApportionment" class="btn btn-white"><i class="fa fa-check" aria-hidden="true"></i> Submit Examiner Claims</a>
                             <a href="submitted_examiners_claim.php" class="btn btn-white"><i class="fa fa-check" aria-hidden="true"></i> Submitted Claims</a>
+
                         </div>
+                      
                         <div class="col-sm-4 col-4 text-right m-b-20">
                             <!-- <a href="#" data-toggle="modal" data-target="#addApportionment" class="btn btn-white"><i class="fa fa-plus"></i> Add Belt</a> -->
                         </div>
@@ -41,6 +43,11 @@ if ($_SESSION['user_type']  == 'ADMIN') {
 
                     <div class="row">
                         <div class="col-lg-12">
+
+                          <div class="view_apportionment">
+                            <a class="dropdown-item table-icon" href="belts.php"><i class="fa fa-pencil m-r-5" style="color:blue"></i> View apportionment details</a>
+                        </div>
+
                             <div class="table-responsive">
                                 <table class="table table-border table-striped custom-table mb-0">
                                     <thead>
@@ -50,7 +57,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                             <th>Paper </th>
                                             <th>Centres</th>
                                             <th>NO. Scripts</th>
-                                            <th class="text-right">Action</th>
+                                            <!-- <th class="text-right">Action</th> -->
 
                                         </tr>
                                     </thead>
@@ -668,7 +675,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                     '<div class="dropdown dropdown-action">' +
                                     '<a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>' +
                                     '<div class="dropdown-menu dropdown-menu-right">' +
-                                    '<a class="dropdown-item table-icon" href="belts.php?belt_no=' + this["belt_no"] + '&subject_code=' + this["subject_code"] + '&subject_name=' + encodeURIComponent(this["subject_name"]) + '&paper_no=' + this["paper"] + '&id=' + this["id"] + '"><i class="fa fa-pencil m-r-5" style="color:blue"></i> View</a>' +
+                                   // '<a class="dropdown-item table-icon" href="belts.php"><i class="fa fa-pencil m-r-5" style="color:blue"></i> View</a>' +
                                    // '<a data-id="' + this["id"] + '" class="dropdown-item delete_group_apportion" href="#" data-toggle="modal" data-target="#delete_examiner"><i class="fa fa-trash-o m-r-5" style="color:lightcoral"></i> Delete</a>' +
                                     '</div>' +
                                     '</div>' +

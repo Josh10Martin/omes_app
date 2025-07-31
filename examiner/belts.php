@@ -12,12 +12,7 @@ include 'includes/header.php';
 
 if ($_SESSION['user_type']  == 'ADMIN') {
 
-    if (isset($_GET['belt_no']) && isset($_GET['subject_name']) && isset($_GET['paper_no']) && isset($_GET['subject_code']) && isset($_GET['id'])) {
-        $belt_no = $_GET['belt_no'];
-        $subject_code = $_GET['subject_code'];
-        $subject_name = $_GET['subject_name'];
-        $paper_no = $_GET['paper_no'];
-        $id = $_GET['id'];
+   
 
 
 
@@ -431,9 +426,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
 
             });
         </script>
-<?php } else {
-        header('location: apportionments.php');
-    }
+<?php 
 } else {
     header('location:../');
 }
