@@ -26,6 +26,8 @@ $pdf = new Dompdf($options);
         // $examiners = array();
         $sql = $db_12_gce->prepare('SELECT marking_centre_name,full_name, position,grossed_up_rate,no_of_scripts, gross_pay, 15_wht, net_pay,account_no ,bank, branch,session_name
                                 FROM examiner_claim WHERE marking_centre_code =:marking_centre_code AND subject_code =:subject_code AND paper_no =:paper_no AND belt_no =:belt_no
+                                AND (marking_centre_code,nrc,examiner_number,tpin,position,belt_no) IN
+                                (SELECT marking_centre,nrc,examiner_number,tpin,role,belt_no FROM examiner WHERE marking_centre =:marking_centre_code)
                                ');
         $sql->execute(array(
             ':subject_code'=>$subject_code,
@@ -34,6 +36,9 @@ $pdf = new Dompdf($options);
             ':marking_centre_code'=>$marking_centre_code
             
         ));
+        $row = $sql->fetch(PDO::FETCH_ASSOC);
+           $marking_centre_name = $row['marking_centre_name'] ?? '';
+           $session_name = $row['session_name'] ?? '';
 
       
 ?>
@@ -169,7 +174,7 @@ p{
             <?php
            
                 while($row = $sql->fetch(PDO::FETCH_ASSOC)){
-                    $marking_centre_name = $row['marking_centre_name'] ?? '';
+                 
                     $full_name = $row['full_name'] ?? '';
                     $position = $row['position'] ?? '';
                     $rate = $row['grossed_up_rate'] ?? '';
@@ -179,7 +184,7 @@ p{
                     $account_no = $row['account_no'] ?? '';
                     $bank = $row['bank'] ?? '';
                     $branch = $row['branch'] ?? '';
-                    $session_name = $row['session_name'] ?? '';
+                    
                     $no_of_scripts = $row['no_of_scripts'] ?? '';
             ?>
             <tr>

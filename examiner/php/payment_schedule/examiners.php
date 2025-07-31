@@ -7,6 +7,8 @@ $data_array = array();
 if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'ADMIN'){
         $sql = $db_12_gce->prepare('SELECT marking_centre_name,examiner_number,nrc,tpin,full_name,address,province,district,position,no_of_scripts,bank,branch,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,subject_code,subject_name,paper_no,belt_no,session_name
                                 FROM examiner_claim WHERE marking_centre_code =:marking_centre_code
+                                AND (marking_centre_code,nrc,examiner_number,tpin,position,belt_no) IN
+                                (SELECT marking_centre,nrc,examiner_number,tpin,role,belt_no FROM examiner WHERE marking_centre =:marking_centre_code)
                        ');
 $sql->execute(array(
         ':marking_centre_code'=>$_SESSION['marking_centre_code']
@@ -47,6 +49,8 @@ if($sql->rowCount() > 0){
 }else{
 $sql = $db_12_gce->prepare('SELECT marking_centre_name,examiner_number,nrc,tpin,full_name,address,province,district,position,no_of_scripts,bank,branch,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,subject_code,subject_name,paper_no,belt_no,session_name
                                 FROM examiner_claim
+                                WHERE (marking_centre_code,nrc,examiner_number,tpin,position,belt_no) IN
+                                (SELECT marking_centre,nrc,examiner_number,tpin,role,belt_no FROM examiner)
                        ');
 $sql->execute();
 if($sql->rowCount() > 0){
