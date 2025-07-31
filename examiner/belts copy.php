@@ -53,280 +53,281 @@ if ($_SESSION['user_type']  == 'ADMIN') {
 
                         <div class="row">
                             <div class="col-sm-12">
-                                <!-- <h4 class="page-title ">Belt <?php echo $belt_no; ?> Centres and scripts</h4> -->
+                                <h4 class="page-title">Belt <?php echo $belt_no; ?> Centres and scripts</h4>
                             </div>
 
                         </div>
-                        <div class="row d-flex justify-content-center ">
-                        
-                        <form class="col-md-6 bg-white p-3 m-3 rounded" method="post" id="search_apportionment">
-                            <div class="row d-flex justify-content-center">
-                               <div class="form-group col-md-6">
-                                    <label>Subject:</label>
-                                    <select class="select" name="subject" required>
-                                    </select>
+                        <div class="row p-2">
+
+                            <div class="col-lg-6 border border-dark p-2">
+                                <div class="row border-bottom py-2 mx-1">
+                                    <div class="col-md-6">
+                                        <div class="h4 text-success px-4" id="box-title"> New Apportionment</div>
+                                    </div>
+                                    <div class="col-md-6">
+
+                                        <form action="" enctype="multipart/form-data" id="upload_apportionment">
+                                            <!-- <label for="formFileSm" class="form-label">Upload apportionment from file</label> -->
+                                            <div class="d-flex">
+                                                <!-- <input class="form-control form-control-sm mx-1" id="formFileSm" required type="file" name="myFile" accept=".csv"> -->
+                                                <img src="../images/loading.gif" alt="Loading..." class="ml-auto mr-auto load_apportionment_file" style="display: none; position: absolute; top: 50%; left: 50%; transform: translateX(50%);">
+                                                <input type="hidden" name="group_id" value="<?php echo $id; ?>">
+                                                <input type="hidden" name="subject_code" value="<?php echo $subject_code; ?>">
+                                                <input type="hidden" name="paper_no" value="<?php echo $paper_no; ?>">
+                                                <input type="hidden" name="belt_no" value="<?php echo $belt_no; ?>">
+                                                <!-- <button type="submit" id="upload" class="btn btn-sm btn-primary py-0 my-0" ><i class="fa fa-upload" aria-hidden="true"></i></button> -->
+                                            </div>
+                                        </form>
+                                        <div id="file_path"></div>
+                                        <!-- <div id="download_temp" style="font-weight: 900;"><a href="documents/template.csv" download>Download Template for uploading</a></div> -->
+
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label>Paper:</label>
-                                    <select class="select" name="paper" required>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="">Belt No.:</label>
-                                    <select class="select" name="belt_no" id="belt_no"></select>
-                                </div>
-                               
-                               
+                                <div class="dialog"></div>
+                                <div class="dialog1"></div>
+                                <div class="dialog2"></div>
+                                <div class="dialog3"></div>
+
+                                <form action="" method="post" id="add_scripts" autocomplete="off">
+
+                                    <div class="row mt-1 pt-1">
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>Subject:</label>
+                                                <select class="select" name="subject">
+                                                    <option value="<?php echo $subject_code; ?>:<?php echo $subject_name; ?>" selected><?php echo $subject_name; ?></option>
+                                                    <!-- <option value="1">Enlish Language</option>
+                                    <option value="2">Mathermatics</option>
+                                    <option value="3">Science</option> -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group">
+                                                <label>Paper:</label>
+                                                <select class="select" name="paper">
+                                                    <option value="<?php echo $paper_no; ?>" selected><?php echo $paper_no; ?></option>
+                                                    <!-- <option value="1">Paper 1</option>
+                                    <option value="2">Paper 2</option> -->
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- centre and script no -->
+
+                                    <div class="row p-2">
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                            <div class="form-group">
+                                <label >Center:</label>
+                                <input type="text" name="centre_code" class="form-control" id="ceter_number" placeholder="Enter centre code" required autofocus>
+                                <div class="school_name" style="text-align:center;font-weight:bold;text-transform:uppercase;"></div>
+                                <input type="hidden" name="sen">
                             </div>
-                             <div class="d-flex justify-content-center">
-                                <span class=" mx-auto mb-2">
-                                    <button id="getApportionment" type="submit" class="btn btn-primary mx-auto"><i class="fa fa-search" aria-hidden="true"></i> Search </button>
-                                </span>
-                             </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6">
+                        <div class="form-group">
+                                <label>NO. of Scripts:</label>
+                                <input type="number" id="number_of_scripts" name="script_no" required class="form-control" required>
+                            </div>
                            
-                                
-                        </form>
-                    </div>
-                     <div class="row">
-                        <div class="col-lg-12">
-                            <div class="table-responsive">
-                                <table class="table table-border table-striped custom-table mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Code</th>
-                                            <th>Center Name </th>
-                                            <th>NO. Scripts</th>
-                                            <!-- <th>Paper </th> -->
-                                            <!-- <th>Centres</th> -->
-                                            <th class="text-right">Belt</th>
-                                            <th class="text-right"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-
-
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
-                      
+                    <!--end  centre and script no -->
+
+                                    <div class="row p-2">
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="row">
+                                                <div class="col-xs-10 col-md-10">
+                                                    <div class="form-group">
+                                                        <!-- <label >Centre:</label>
+                                        <input type="text" name="centre_code" class="form-control" id="ceter_number" placeholder="Enter centre code" required autofocus>
+                                        <div class="school_name" style="text-align:center;font-weight:bold;text-transform:uppercase;"></div>
+                                         -->
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xs-2 col-md-2 align-self-center p-0 m-0">
+                                                    <div class="form-check">
+                                                        <!-- <input class="form-check-input" type="radio" name="flexRadioDefault" id="text-check" <?php if (isset($_SESSION['school']) && !empty($_SESSION['school'])) {
+                                                                                                                                                        echo 'checked';
+                                                                                                                                                    } ?> <?php if ((!isset($_SESSION['school']) || empty($_SESSION['school'])) || !isset($_SESSION['school2']) || empty($_SESSION['school2'])) {
+                                                                                                                                                                echo 'checked';
+                                                                                                                                                            } ?>> -->
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-10 col-md-10">
+                                                    <div class="form-group  check">
+                                                        <!-- <label >Centre:</label> -->
+                                                        <!-- <select name="centre_code" id="" class="select" required >
+                                        </select> -->
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-2 col-md-2 p-0 m-0">
+                                                    <div class="form-check">
+                                                        <!-- <input class="form-check-input" type="radio" name="flexRadioDefault" id="select-check" <?php if (isset($_SESSION['school2']) && !empty($_SESSION['school2'])) {
+                                                                                                                                                        echo 'checked';
+                                                                                                                                                    } ?>> -->
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xs-12 col-sm-6 col-md-6">
+                                            <div class="form-group">
+
+                                                <!-- <label>NO. of Scripts:</label>
+                                <input type="number" id="number_of_scripts" name="script_no" required class="form-control" required> -->
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="row p-2 justify-content-around">
+                                      
+                                        <div id="updatediv" class="d-none">
+                                        <p>Do this if neccessary</p>
+                                            <span class="mr-auto ml-auto">
+                                                <button id="update" type="button" class="btn btn-info">UPDATE</button>
+                                            </span>
+
+                                            <span class="mr-auto ml-auto ">
+                                                <!-- <button id="delete" type="button" class="btn btn-danger">DELETE</button> -->
+                                            </span>
+
+                                            <span class="mr-auto ml-auto ">
+                                                <!-- <button type="btn" class="btn bg-light border-secondary">CANCEL</button> -->
+                                                <span class="btn bg-light border-secondary" id="cancel">CANCEL</span>
+                                            </span>
+                                        </div>
+                                        <div id="savediv">
+                                            <span class="mr-auto ml-auto">
+                                                <img class="loading" src="../images/loading.gif" style="transform: translateX(100%); display:none;" />
+
+                                                <!-- <button type="submit" class="btn btn-primary">SAVE</button> -->
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="belt_no" value="<?php echo $belt_no; ?>">
+                                    <input type="hidden" name="id" value="<?php echo $id; ?>">
+                                </form>
+                            </div>
+                            <div class="col-lg-6 border border-dark p-2 tableC0ntent">
+                                <div class="row mb-1 def-row">
+                                    <div class="col-md-6 search-col">
+                                        <input type="text" name="" id="search" placeholder="Search" class="form-control mb-1">
+                                    </div>
+                                    <div class="col-md-6 align-self-center">
+                                        <button class="btn btn-info btn-sm mb-1" id="move-btn"><i class="fa fa-arrows" aria-hidden="true"></i> Move Script(s)</button>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-1 move-row d-none" id="id-move-row">
+                                    <div class="col-md-3 align-self-center">
+                                        <button class="btn btn-danger btn-sm mb-1" id="move-cancel-btn"><i class="fa fa-times" aria-hidden="true"></i> Cancel</button>
+                                    </div>
+                                    <div class="col-md-6 to-belt-col">
+                                        <div class="d-flex">
+                                            <div class="h5 px-3 pt-2">Move to </div>
+                                            <div class="">
+                                                <form action="" id="move_script">
+                                                    <select name="belt_no_not" required id="" class="select">
+                                                    </select>
+                                            </div>
+                                            <input type="hidden" name="subject_code" value="<?php echo $subject_code; ?>">
+                                            <input type="hidden" name="paper_no" value="<?php echo $paper_no; ?>">
+                                            <input type="hidden" name="belt_no" value="<?php echo $belt_no; ?>">
+                                            <div>
+
+                                                <input type="hidden" name="group_id" value="<?php echo $id; ?>">
+                                                <img src="../images/loading.gif" alt="Loading..." class="ml-auto mr-auto move_script_load" style="display: none; position: absolute; top: 50%; left: 50%; transform: translateX(50%);">
+                                                <button type="submit" id="move" class="btn btn-sm btn-primary mx-2"><i class="fa fa-arrows" aria-hidden="true"></i> Move</button>
+                                            </div>
+                                            </form>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-3 align-self-center">
+                                        <input type="text" name="" id="search" placeholder="Search" class="form-control mb-1">
+                                    </div>
+                                </div>
+
+                                <div class="tableFixHead table-hover ">
+                                    <table class="table mb-0" id="beltTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Subject</th>
+                                                <th>Paper</th>
+                                                <th>sEN</th>
+                                                <th>Belt</th>
+                                                <th>Centre</th>
+                                                <th>No. Scripts</th>
+                                                <th class="move-check d-none" id="move-check"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- <tr >
+												<td>English Language</td>
+												<td>1</td>
+												<td>1</td>
+                                                <td>3021</td>
+												<td>800</td>
+											</tr>
+											<tr>
+												<td>English Language</td>
+												<td>1</td>
+												<td>1</td>
+                                                <td>3022</td>
+												<td>150</td>
+											</tr>
+											<tr>
+												<td>English Language</td>
+												<td>1</td>
+												<td>1</td>
+                                                <td>3032</td>
+												<td>550</td>
+											</tr>
+                                            <tr>
+												<td>English Language</td>
+												<td>1</td>
+												<td>1</td>
+                                                <td>3022</td>
+												<td>850</td>
+											</tr>
+											<tr>
+												<td>English Language</td>
+												<td>1</td>
+												<td>1</td>
+                                                <td>3032</td>
+												<td>950</td>
+											</tr>
+                                            <tr>
+												<td>English Language</td>
+												<td>1</td>
+												<td>1</td>
+                                                <td>3022</td>
+												<td>190</td>
+											</tr>
+											<tr>
+												<td>English Language</td>
+												<td>1</td>
+												<td>1</td>
+                                                <td>3032</td>
+												<td>990</td>
+											</tr> -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
 
 
                         <?php include 'includes/notifications.php' ?>
