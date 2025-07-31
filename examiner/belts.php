@@ -68,12 +68,15 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Paper:</label>
-                                    <select class="select" name="paper" required>
+                                    <select class="select" required name="paper" required>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="">Belt No.:</label>
-                                    <select class="select" name="belt_no" id="belt_no"></select>
+                                    <select class="select"  name="belt_no" id="belt_no">
+                                        <option value="" selected>select belt  </option>
+                                        <option value="1">Belt 1</option>
+                                    </select>
                                 </div>
                                
                                
@@ -87,7 +90,10 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                 
                         </form>
                     </div>
-                     <div class="row">
+                     <div class="row d-none" id="apportionment_results">
+                        <div class="col-md-12">
+                            <span class="text-success h4"> 1121 - SUBJECT ENGLISH LAMGUAGE:  PAPER: 1 BELT: 1</span>
+                        </div>
                         <div class="col-lg-12">
                             <div class="table-responsive">
                                 <table class="table table-border table-striped custom-table mb-0">
@@ -343,7 +349,86 @@ if ($_SESSION['user_type']  == 'ADMIN') {
         </body>
         <script>
             $(document).ready(function() {
-             
+              get_subjects();
+              get_paper();
+              get_belts();
+
+                $('#search_apportionment').submit(function(e) {
+                    e.preventDefault();
+                 $('#search_apportionment').addClass('d-none')
+                 $('#apportionment_results').removeClass('d-none')
+                });
+
+               function get_subjects() {
+                $.ajax({
+                    url: 'php/get_subject.php',
+                    method: 'POST',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('select[name=subject]').append(
+                            '<option value="" selected>Select Subject</option>'
+                        );
+                        $.each(data, function() {
+                            $('select[name=subject]').append(
+                                '<option value="' + this["subject_code"] + ':'+this["subject_name"]+'">' + this["subject_code"] + ' - ' + this["subject_name"] + '</option>'
+                            );
+                        });
+                        $('select[name=subject]').select2({
+                            data: data
+                        });
+                    }
+                });
+            }
+             function get_paper() {
+                $('select[name=subject]').change(function() {
+                    var subject = $(this).val().split(':'),
+                        subject_code = subject[0],
+                        subject_name = subject[1];
+                    if (subject_code != '') {
+                        $.ajax({
+                            url: 'php/get_paper.php',
+                            method: 'POST',
+                            data: {
+                                subject_code: subject_code
+                            },
+                            dataType: 'json',
+                            success: function(data) {
+                                $('select[name=paper] option').remove();
+                                $('select[name=paper]').append(
+                                    '<option value="" selected>Select Paper Number</option>'
+                                );
+                                $.each(data, function() {
+                                    $('select[name=paper]').append(
+                                        '<option value="' + this["paper_no"] + '">' + this["paper_no"] + '</option>'
+                                    );
+                                });
+                            }
+                        });
+                    } else {
+                        $('select[name=paper] option[value=""]').change();
+                    }
+                });
+            }
+
+            function get_belts() {
+                $.ajax({
+                    url: 'php/get_belts.php',
+                    method: 'POST',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('select[name=belt_no] option').remove();
+                        $('select[name=belt_no]').append(
+                            '<option value="" selected>Select Belt</option>'
+                        );
+                        $.each(data, function() {
+                            $('select[name=belt_no]').append(
+                                '<option value="' + this["belt_no"] + '">' + this["belt_no"] + '</option>'
+                            );
+                        });
+                    }
+                });
+            }
+
             });
         </script>
 <?php } else {
