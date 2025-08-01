@@ -44,9 +44,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                     <div class="row">
                         <div class="col-lg-12">
 
-                          <div class="view_apportionment">
-                            <a class="dropdown-item table-icon" href="belts.php"><i class="fa fa-pencil m-r-5" style="color:blue"></i> View apportionment details</a>
-                        </div>
+                        
 
                             <div class="table-responsive">
                                 <table class="table table-border table-striped custom-table mb-0">

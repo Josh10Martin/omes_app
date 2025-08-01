@@ -20,7 +20,7 @@ if(isset($_POST['subject_code']) && isset($_POST['paper'])){
                 ':marking_centre_code'=>$marking_centre_code
         ));
         if($sql->rowCount() > 0){
-                $data_array['status'] = '200';
+                // $data_array['status'] = '200';
                 // $row = $sql->fetch(PDO::FETCH_ASSOC);
                 // $data_array[0]['belt_no'] = $row['belt_no'] ?? '';
                 $i=0;

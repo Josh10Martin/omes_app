@@ -48,13 +48,13 @@ if ($_SESSION['user_type']  == 'ADMIN') {
 
                         <div class="row">
                             <div class="col-sm-12">
-                                <!-- <h4 class="page-title ">Belt <?php echo $belt_no; ?> Centres and scripts</h4> -->
+                                <h4 class="page-title "> Centres and scripts</h4>
                             </div>
 
                         </div>
                         <div class="row d-flex justify-content-center ">
                         
-                        <form class="col-md-6 bg-white p-3 m-3 rounded" method="post" id="search_apportionment">
+                        <form class="w-100 bg-white p-3 m-3 rounded" method="post" id="search_apportionment">
                             <div class="row d-flex justify-content-center">
                                <div class="form-group col-md-6">
                                     <label>Subject:</label>
@@ -68,9 +68,9 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="">Belt No.:</label>
-                                    <select class="select"  name="belt_no" id="belt_no">
-                                        <option value="" selected>select belt  </option>
-                                        <option value="1">Belt 1</option>
+                                    <select class="select"  name="apportioned_belt" id="belt_no">
+                                       
+                                       
                                     </select>
                                 </div>
                                
@@ -87,239 +87,25 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                     </div>
                      <div class="row d-none" id="apportionment_results">
                         <div class="col-md-12">
-                            <span class="text-success h4"> 1121 - SUBJECT ENGLISH LAMGUAGE:  PAPER: 1 BELT: 1</span>
+                            <span class="text-success h4"> <span class="cubject_code"></span> - SUBJECT: <span class="subject_name"></span>:  PAPER: <span class="paper_no"></span> BELT: <span class="belt_no"></span></span>
                         </div>
                         <div class="col-lg-12">
                             <div class="table-responsive">
-                                <table class="table table-border table-striped custom-table mb-0">
+                                <table class="table table-border table-striped custom-table mb-0 beltTable">
                                     <thead>
                                         <tr>
                                             <th>Code</th>
                                             <th>Center Name </th>
                                             <th>NO. Scripts</th>
-                                            <!-- <th>Paper </th> -->
+                                            <th class="text-right">SEN</th>
+                                            <th>Person Responsible </th>
                                             <!-- <th>Centres</th> -->
-                                            <th class="text-right">Belt</th>
-                                            <th class="text-right"></th>
+                                            
+                                            <th class="text-right">Move Belt</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>101</td>
-                                            <td>Center Name</td>
-                                            <td>2</td>
-                                            <!-- <td>2</td> -->
-                                            <!-- <td>2</td> -->
-                                            <td class="text-right">1</td>
-                                            <td class="text-center" style="width: 150px;">
-                                                <select name="to_belt" id="to_belt" class="select">
-                                                    <option value="0" selected dissabled>move to</option>
-                                                    <option value="1">Belt 1</option>
-                                                    <option value="2">Belt 2</option>
-                                                    <option value="3">Belt 3</option>
-                                                    <option value="4">Belt 4</option>
-                                                    <option value="5">Belt 5</option>
-                                                </select>
-                                            </td>
-                                        </tr>
+                                       
 
 
                                     </tbody>
@@ -346,13 +132,10 @@ if ($_SESSION['user_type']  == 'ADMIN') {
             $(document).ready(function() {
               get_subjects();
               get_paper();
-              get_belts();
+            //   get_belts();
+              get_apportionments();
 
-                $('#search_apportionment').submit(function(e) {
-                    e.preventDefault();
-                 $('#search_apportionment').addClass('d-none')
-                 $('#apportionment_results').removeClass('d-none')
-                });
+           
 
                function get_subjects() {
                 $.ajax({
@@ -397,6 +180,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                         '<option value="' + this["paper_no"] + '">' + this["paper_no"] + '</option>'
                                     );
                                 });
+                                get_apportioned_belts(subject_code);
                             }
                         });
                     } else {
@@ -405,24 +189,125 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                 });
             }
 
-            function get_belts() {
+            function get_apportioned_belts(subject_code) {
+                $('select[name=paper]').change(function(){
+                    var paper_no = $(this).val();
+                
                 $.ajax({
-                    url: 'php/get_belts.php',
+                    url: 'php/get_apportioned_belts.php',
                     method: 'POST',
+                    data: {subject_code:subject_code,paper:paper_no},
                     dataType: 'json',
                     success: function(data) {
-                        $('select[name=belt_no] option').remove();
-                        $('select[name=belt_no]').append(
-                            '<option value="" selected>Select Belt</option>'
+                        $('select[name=apportioned_belt] option').remove();
+                        $('select[name=apportioned_belt]').append(
+                            '<option value="" selected disabled>Select Belt</option>'
                         );
+
+                      
                         $.each(data, function() {
-                            $('select[name=belt_no]').append(
-                                '<option value="' + this["belt_no"] + '">' + this["belt_no"] + '</option>'
+                            $('select[name=apportioned_belt]').append(
+                                '<option value="' + this["belt_no"] + '">BELT ' + this["belt_no"] + '</option>'
                             );
                         });
                     }
                 });
+                });
             }
+
+             function get_apportionments() {
+                     $('#search_apportionment').submit(function(e) {
+                    e.preventDefault();
+                         var subject_code = $('select[name=subject]').val(),
+                         paper_no = $('select[name=paper]').val(),
+                         belt_no = $('select[name=apportioned_belt]').val();
+
+                          $.ajax({
+                        url: 'php/get_apportionments.php',
+                        method: 'POST',
+                        data: {
+                            subject_code: subject_code,
+                            paper_no: paper_no,
+                            belt_no: belt_no
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            //   $('#search_apportionment').addClass('d-none');
+                         $('#apportionment_results').removeClass('d-none');
+
+                         $('span.cubject_code').text(data[0].subject_code);
+                         $('span.subject_name').text(data[0].subject_name);
+                         $('span.paper_no').text(data[0].paper_no);
+                         $('span.belt_no').text(data[0].belt_no);
+                            belt_no_not(data[0].subject_code, data[0].paper_no,data[0].belt_no);
+                                $.each(data, function() {
+                                    $('.table.beltTable tbody').append('<tr>' +
+                                     
+                                         '<td>' + this["centre_code"] + '</td>' +
+                                        '<td>' + this["centre_name"] + '</td>' +
+                                        '<td>' + this["script_no"] + '</td>' +
+                                        '<td>' + this["sen"] + '</td>' +
+                                        '<td>' + this["user"] + '</td>' +
+                                        '<td class="text-center" style="width: 150px;">' +
+                                        '<form class="move_scripts" > ' +
+                                            '<select name="belt_no_not" id="to_belt" class="select">' +
+                                               
+                                            '</select>' +
+                                            '<input type="hidden" name="centre_code" value="'+this["centre_code"]+'" > ' +
+                                            '<input type="hidden" name="subject_code" value="'+this["subject_code"]+'" > ' +
+                                            '<input type="hidden" name="paper_no" value="'+this["paper_no"]+'" > ' +
+                                            '<input type="hidden" name="sen" value="'+this["sen"]+'" > ' +
+                                            '<input type="hidden" name="current_belt" value="'+this["belt_no"]+'" > ' +
+                                            '<button class="btn btn-primary" type="submit"> Move Script(s) </button>'+
+                                            ' </form> '+
+                                        '</td>' +
+                                        
+                                       
+                                        '</tr>');
+                                });
+                             
+
+                                // clickable_td();
+
+
+                            
+                        }
+                    });
+                });
+                   
+                       
+                   
+                }
+
+                function belt_no_not(subject_code,paper_no,belt_no) {
+                   
+                    $.ajax({
+                        url: 'php/get_belt_no_not.php',
+                        method: 'POST',
+                        data: {
+                            current_belt: belt_no,
+                            subject_code: subject_code,
+                            paper_no: paper_no
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            $('select[name=belt_no_not] option').remove();
+                          
+                                $('select[name=belt_no_not]').append(
+                                    '<option value="" selected disabled>Choose belt</option>'
+                                );
+                                $.each(data, function() {
+                                    $('select[name=belt_no_not]').append(
+                                        '<option value="' + this["belt_no"] + '">BELT ' + this["belt_no"] + '</option>'
+                                    );
+                                });
+                                $('select[name=belt_no_not] option[value=undefined]').remove();
+                            
+                        }
+
+
+                    });
+                }
 
             });
         </script>

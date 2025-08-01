@@ -38,6 +38,9 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                             <!-- <a href="#" data-toggle="modal" data-target="#addApportionment" class="btn btn-white"><i class="fa fa-plus"></i> Add Belt</a> -->
                         </div>
                     </div>
+                      <!-- <div class="view_apportionment">
+                            <a class="dropdown-item table-icon" href="belts.php"><i class="fa fa-pencil m-r-5" style="color:blue"></i> View apportionment details</a>
+                        </div> -->
 
                     <div class="row">
                         <div class="col-lg-12">
@@ -50,7 +53,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                             <th>Paper </th>
                                             <th>Centres</th>
                                             <th>NO. Scripts</th>
-                                            <th class=""></th>
+                                            <th class=""><a class="dropdown-item table-icon" href="belts.php"><i class="fa fa-pencil m-r-5" style="color:blue"></i> View apportionment details</a></th>
 
                                         </tr>
                                     </thead>
@@ -668,7 +671,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                    
                                    
 
-                                    '<a class="dropdown-item table-icon" href="belts.php?belt_no=' + this["belt_no"] + '&subject_code=' + this["subject_code"] + '&subject_name=' + encodeURIComponent(this["subject_name"]) + '&paper_no=' + this["paper"] + '&id=' + this["id"] + '"><i class="fa fa-pencil m-r-5" style="color:blue"></i> View</a>' +
+                                    // '<a class="dropdown-item table-icon" href="belts.php?belt_no=' + this["belt_no"] + '&subject_code=' + this["subject_code"] + '&subject_name=' + encodeURIComponent(this["subject_name"]) + '&paper_no=' + this["paper"] + '&id=' + this["id"] + '"><i class="fa fa-pencil m-r-5" style="color:blue"></i> View</a>' +
                                   
                                    
                                     '</td>' +
