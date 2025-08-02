@@ -9,7 +9,9 @@ if(isset($_POST['current_belt']) && isset($_POST['subject_code']) && isset($_POS
     $paper_no = $_POST['paper_no'];
 
     $sql = $db_12_gce->prepare('SELECT DISTINCT belt_no from group_apportion WHERE subject =:subject_code AND paper =:paper_no
-                            AND belt_no <>:belt_no AND marking_centre =:marking_centre_code');
+                            AND belt_no <>:belt_no AND marking_centre =:marking_centre_code
+                            ORDER BY belt_no ASC
+                            ');
     $sql->execute(array(
         ':belt_no'=>$current_belt,
         ':subject_code'=>$subject_code,

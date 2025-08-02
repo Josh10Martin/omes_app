@@ -8,7 +8,7 @@ if(isset($_POST['subject_code']) && isset($_POST['paper_no']) && isset($_POST['b
         $paper = $_POST['paper_no'];
         $belt_no = $_POST['belt_no'];
 
-        $sql = $db_12_gce->prepare('SELECT su.subject_code AS subject_code, su.subject_name AS subject_name, pa.paper_no AS paper,CASE WHEN a.sen = 1 THEN "YES" ELSE "NO" END AS sen, a.belt_no AS belt_no,s.centre_code AS centre_code, s.centre_name AS centre_name, a.script_no AS script_no, a.username AS user
+        $sql = $db_12_gce->prepare('SELECT su.subject_code AS subject_code, su.subject_name AS subject_name, pa.paper_no AS paper,id,CASE WHEN a.sen = 1 THEN "YES" ELSE "NO" END AS sen, a.belt_no AS belt_no,s.centre_code AS centre_code, s.centre_name AS centre_name, a.script_no AS script_no, a.username AS user
                         FROM apportionment a INNER JOIN school s ON (a.school = s.centre_code)
                         INNER JOIN subjects su ON (a.subject = su.subject_code)
                         INNER JOIN paper pa ON (su.subject_code = pa.subject_code)
@@ -18,7 +18,7 @@ if(isset($_POST['subject_code']) && isset($_POST['paper_no']) && isset($_POST['b
                         AND a.belt_no =:belt_no
                         AND a.marking_centre =:marking_centre_code
                         -- AND a.username =:username
-                        ORDER BY a.date_apportioned DESC');
+                        ORDER BY a.school ASC, a.date_apportioned DESC');
         $sql->execute(array(
                 ':subject_code'=>$subject_code,
                 ':paper'=>$paper,
@@ -30,6 +30,7 @@ if(isset($_POST['subject_code']) && isset($_POST['paper_no']) && isset($_POST['b
               
                 $i=0;
                 while($row = $sql->fetch(PDO::FETCH_ASSOC)){
+                        $data_array[$i]['id'] = $row['id'] ?? '';
                         $data_array[$i]['subject_code'] = $row['subject_code'] ?? '';
                         $data_array[$i]['subject_name'] = $row['subject_name'] ?? '';
                         $data_array[$i]['paper_no'] = $row['paper'] ?? '';

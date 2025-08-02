@@ -36,6 +36,9 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                     z-index: 1;
                     background-color: #1d9d74;
                 }
+                    input[type="checkbox"] {
+                        cursor: pointer;
+                        }
             </style>
             <div class="main-wrapper">
 
@@ -91,6 +94,8 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                         </div>
                         <div class="col-lg-12">
                             <div class="table-responsive">
+                                <div class="dialog"></div>
+                                <div class="dialog1"></div>
                                 <table class="table table-border table-striped custom-table mb-0 beltTable">
                                     <thead>
                                         <tr>
@@ -101,7 +106,16 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                             <th>Person Responsible </th>
                                             <!-- <th>Centres</th> -->
                                             
-                                            <th class="text-right">Move Belt</th>
+                                            <th class="text-right">
+                                                <div class="mb-3">
+                                                    <label for="exampleSelect" class="form-label">Move Script(s)</label>
+                                                    <select class="form-select" id="exampleSelect" name="belt_no_not">
+                                                       
+                                                    </select>
+                                                    <button class="btm btm-primary" id="move_scripts">Move Script(s)</button>
+                                                    </div>
+                                        
+                                        </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -134,8 +148,42 @@ if ($_SESSION['user_type']  == 'ADMIN') {
               get_paper();
             //   get_belts();
               get_apportionments();
+              move_scripts();
 
-           
+               
+
+                $('.dialog').dialog({
+                    title: 'REQUEST RESPONSE',
+                    width: '450',
+                    height: '150',
+                    modal: true,
+                    draggable: false,
+                    resizable: false,
+                    closeOnEscape: false,
+                    // appendTo: '#add_scripts',
+                    autoOpen: false,
+                    create: function(e) {
+                        $(e.target).parent().css({
+                            'position': 'fixed'
+                        });
+
+                    },
+                    buttons: [
+                        // {
+                        //     text: 'NO',
+                        //     click: function(){
+                        //         $(this).dialog('close');
+                        //     }
+                        // },
+                        {
+                            text: 'OK',
+                            click: function() {
+                                $(this).dialog('close');
+                                
+                            }
+                        }
+                    ]
+                });
 
                function get_subjects() {
                 $.ajax({
@@ -239,8 +287,11 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                          $('span.subject_name').text(data[0].subject_name);
                          $('span.paper_no').text(data[0].paper_no);
                          $('span.belt_no').text(data[0].belt_no);
+
                             belt_no_not(data[0].subject_code, data[0].paper_no,data[0].belt_no);
+                            
                                 $.each(data, function() {
+                                    var sen_value = this["sen"] == 'NO' ? 0 : 1;
                                     $('.table.beltTable tbody').append('<tr>' +
                                      
                                          '<td>' + this["centre_code"] + '</td>' +
@@ -250,15 +301,11 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                         '<td>' + this["user"] + '</td>' +
                                         '<td class="text-center" style="width: 150px;">' +
                                         '<form class="move_scripts" > ' +
-                                            '<select name="belt_no_not" id="to_belt" class="select">' +
+                                           '<div class="form-check">' +
+                                               ' <input class="form-check-input cursor-pointer" name="id_group" type="checkbox" value="'+this["id"]+'" >' +
                                                
-                                            '</select>' +
-                                            '<input type="hidden" name="centre_code" value="'+this["centre_code"]+'" > ' +
-                                            '<input type="hidden" name="subject_code" value="'+this["subject_code"]+'" > ' +
-                                            '<input type="hidden" name="paper_no" value="'+this["paper_no"]+'" > ' +
-                                            '<input type="hidden" name="sen" value="'+this["sen"]+'" > ' +
-                                            '<input type="hidden" name="current_belt" value="'+this["belt_no"]+'" > ' +
-                                            '<button class="btn btn-primary" type="submit"> Move Script(s) </button>'+
+                                               ' </div>' +
+                                           
                                             ' </form> '+
                                         '</td>' +
                                         
@@ -301,12 +348,41 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                         '<option value="' + this["belt_no"] + '">BELT ' + this["belt_no"] + '</option>'
                                     );
                                 });
-                                $('select[name=belt_no_not] option[value=undefined]').remove();
+                              
                             
                         }
 
 
                     });
+                }
+
+                function move_scripts(){
+                   $(document).on('click','button#move_scripts', function(){
+                     if ($('input:checkbox[name=id_group]:checked').length > 0) {
+                            var id = [],
+                                selected_belt = $('select[name=belt_no_not]').val();
+                            $('input:checkbox[name=id_group]:checked').each(function() {
+                                id.push($(this).val());
+                            });
+                   
+                    $.ajax({
+                        url: 'php/move_scripts.php',
+                        method: 'POST',
+                        data: {id:id, selected_belt:selected_belt},
+                        dataType: 'json',
+                        success:function(data){
+                            $('.dialog').text(data.response_msg).dialog('open');	
+                            if(data.status == '200'){
+                               $.each(data.id_group, function(idex, group_id){
+                               $('input[type="checkbox"][value="' + group_id + '"]').closest('tr').remove();
+                               });
+                            }else{}
+                        }
+                    });
+                }else{
+                     $('.dialog').text('Choose scripts to move').dialog('open');
+                }
+                   });
                 }
 
             });
