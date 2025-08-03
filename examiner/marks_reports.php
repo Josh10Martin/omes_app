@@ -1075,8 +1075,9 @@ $('#export2').dialog({
                 text: 'OK',
                 click: function(){
                    
-                location.reload();
+               
                     $(this).dialog('close');
+                     location.reload();
                 }
             }
         ]
@@ -1148,7 +1149,7 @@ $('#export2').dialog({
 			dataType: 'json',
 			success:function(data){
 				$('select[name=app_belt_no] option').remove();
-				if(data.status == '200'){
+				
 			
 					$.each(data,function(){
 						$('select[name=app_belt_no]').append(
@@ -1156,8 +1157,7 @@ $('#export2').dialog({
 				);
 					});
 
-					$('select[name=app_belt_no] option[value=undefined]').remove();
-				}
+					
 			}
 		});
 		});
@@ -1370,7 +1370,7 @@ $('#export2').dialog({
                   $('.export_load').css('display','none');
                
                   $('h5.feedback').text('');
-                  $('#export1').text('"YES" to resubmit, "NO" to decline').dialog('open');
+                
                   $('#export2').text('Claims successfully submitted').dialog('open');
                 }else{
                   $('#export2').text('There was a problem submitting claims. ['+data.error+']').dialog('open');

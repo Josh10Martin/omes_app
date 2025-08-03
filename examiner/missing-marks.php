@@ -564,7 +564,7 @@ $(document).ready(function(){
 			dataType: 'json',
 			success:function(data){
 				$('select[name=app_belt_no] option').remove();
-				if(data.status == '200'){
+		
 			
 					$.each(data,function(){
 						$('select[name=app_belt_no]').append(
@@ -572,8 +572,7 @@ $(document).ready(function(){
 				);
 					});
 
-					$('select[name=app_belt_no] option[value=undefined]').remove();
-				}
+				
 			}
 		});
 		});

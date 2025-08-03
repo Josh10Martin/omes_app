@@ -10,11 +10,11 @@ $data_array = array();
 if(claims_exist_gcge_g12($db_12_gce,$_SESSION['marking_centre_code']) == 'false'){
     $data_array['status'] = '401';
 }else{
-$sql = $db_12_gce->prepare('SELECT marking_centre_name,examiner_number,nrc,tpin,full_name,address,province,district,position,no_of_scripts,bank,branch,sortcode,account_no,gross_pay,15_wht,net_pay,subject_code,subject_name,paper_no,belt_no,:session_name AS session_name,session_level,session_year
+$sql = $db_12_gce->prepare('SELECT marking_centre_name,examiner_number,nrc,tpin,full_name,address,province,district,position,no_of_scripts,bank,branch,sortcode,account_no,gross_pay,15_wht,net_pay,subject_code,subject_name,paper_no,belt_no,session, session_name
                                 FROM examiner_claim WHERE marking_centre_code =:marking_centre_code
 
                                 UNION
-                                SELECT marking_centre_name,examiner_number,nrc,tpin,full_name,address,province,district,position,no_of_scripts,bank,branch,sortcode,account_no,gross_pay,15_wht,net_pay,subject_code,subject_name,paper_no,belt_no, :session_name AS session_name,session_level,session_year
+                                SELECT marking_centre_name,examiner_number,nrc,tpin,full_name,address,province,district,position,no_of_scripts,bank,branch,sortcode,account_no,gross_pay,15_wht,net_pay,subject_code,subject_name,paper_no,belt_no,session, session_name
                                 FROM data_entry_claims WHERE marking_centre_code =:marking_centre_code
                        ');
 $sql->execute(array(
@@ -47,8 +47,8 @@ if($sql->rowCount() > 0){
                 $data_array[$i]['no_of_scripts'] = $row['no_of_scripts'] ?? '';
                 $data_array[$i]['belt_no'] = $row['belt_no'] ?? '';
                 $data_array[$i]['session_name'] = $row['session_name'] ?? '';
-                $data_array[$i]['session_level'] = $row['session_level'] ?? '';
-                $data_array[$i]['session_year'] = $row['session_year'] ?? '';
+
+                $data_array[$i]['session'] = $row['session'] ?? '';
                 $i++;
         }
 

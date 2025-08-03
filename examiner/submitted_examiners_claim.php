@@ -77,7 +77,7 @@ if((isset($_SESSION['user_type']) && $_SESSION['user_type']  == 'ADMIN') || (iss
             <div class="col-md-6">
               <label for="belt">Belt No.</label>
               <select name="app_belt_no" class="form-control" id="belt" required>
-                <option value="" disabled selected>Select Belt No.</option>
+                <!-- <option value="" disabled selected>Select Belt No.</option> -->
                 <!-- Dynamic options loaded via script -->
               </select>
             </div>
@@ -259,7 +259,8 @@ if((isset($_SESSION['user_type']) && $_SESSION['user_type']  == 'ADMIN') || (iss
         success: function (data) {
           $('select[name=subject] option').remove();
           $('select[name=subject]').append(
-            '<option selected disabled>Select Subject</option>'
+            '<option selected disabled>Select Subject</option>'+
+            '<option ></option>'
           );
           $.each(data, function () {
             $('select[name=subject]').append(
@@ -310,8 +311,9 @@ if((isset($_SESSION['user_type']) && $_SESSION['user_type']  == 'ADMIN') || (iss
           dataType: 'json',
           success: function (data) {
             $('select[name=app_belt_no] option').remove();
-            if (data.status == '200') {
+           
                 $('select[name=app_belt_no]').append(
+                  '<option value="" selected disabled>Select belt</option>'+
                   '<option value="0">0</option>'
                 );
               $.each(data, function () {
@@ -320,8 +322,8 @@ if((isset($_SESSION['user_type']) && $_SESSION['user_type']  == 'ADMIN') || (iss
                 );
               });
 
-              $('select[name=app_belt_no] option[value=undefined]').remove();
-            }
+             
+            
           }
         });
       });

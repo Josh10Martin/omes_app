@@ -22,6 +22,7 @@ $pdf = new Dompdf($options);
         $total =0;
         $grand_total = 0;
         $no_of_examiners =0;
+        $table_rows = ''; // Initialize before the loop
         // $claim =0;
         // $examiners = array();
         $sql = $db_12_gce->prepare('SELECT marking_centre_name,full_name, position,grossed_up_rate,no_of_scripts, gross_pay, 15_wht, net_pay,account_no ,bank, branch,session_name
@@ -36,9 +37,40 @@ $pdf = new Dompdf($options);
             ':marking_centre_code'=>$marking_centre_code
             
         ));
-        $row = $sql->fetch(PDO::FETCH_ASSOC);
-           $marking_centre_name = $row['marking_centre_name'] ?? '';
-           $session_name = $row['session_name'] ?? '';
+       
+while ($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+
+    $full_name = $row['full_name'] ?? '';
+    $position = $row['position'] ?? '';
+    $rate = $row['grossed_up_rate'] ?? '';
+    $gross_pay = $row['gross_pay'] ?? '';
+    $wht = $row['15_wht'] ?? '';
+    $net_pay = $row['net_pay'] ?? '';
+    $account_no = $row['account_no'] ?? '';
+    $bank = $row['bank'] ?? '';
+    $branch = $row['branch'] ?? '';
+    $marking_centre_name = $row['marking_centre_name'] ?? '';
+    $session_name = $row['session_name'] ?? '';
+    $no_of_scripts = $row['no_of_scripts'] ?? '';
+
+    $table_rows .= '<tr>';
+    $table_rows .= '<td>' . htmlspecialchars($full_name) . '</td>';
+    $table_rows .= '<td>' . htmlspecialchars($position) . '</td>';
+    $table_rows .= '<td>' . htmlspecialchars($rate) . '</td>';
+    $table_rows .= '<td>' . number_format((float)$gross_pay, 2, '.', '') . '</td>';
+$table_rows .= '<td>' . number_format((float)$wht, 2, '.', '') . '</td>';
+$table_rows .= '<td>' . number_format((float)$net_pay, 2, '.', '') . '</td>';
+
+    $table_rows .= '<td>' . htmlspecialchars($account_no) . '</td>';
+    $table_rows .= '<td>' . htmlspecialchars($bank) . '</td>';
+    $table_rows .= '<td>' . htmlspecialchars($branch) . '</td>';
+  
+    $table_rows .= '<td></td>';
+    $table_rows .= '</tr>';
+        $no_of_examiners ++;
+         $grand_total += $net_pay;
+    
+}
 
       
 ?>
@@ -173,40 +205,7 @@ p{
         <tbody >
             <?php
            
-                while($row = $sql->fetch(PDO::FETCH_ASSOC)){
-                 
-                    $full_name = $row['full_name'] ?? '';
-                    $position = $row['position'] ?? '';
-                    $rate = $row['grossed_up_rate'] ?? '';
-                    $gross_pay = $row['gross_pay'] ?? '';
-                    $wht = $row['15_wht'] ?? '';
-                    $net_pay = $row['net_pay'] ?? '';
-                    $account_no = $row['account_no'] ?? '';
-                    $bank = $row['bank'] ?? '';
-                    $branch = $row['branch'] ?? '';
-                    
-                    $no_of_scripts = $row['no_of_scripts'] ?? '';
-            ?>
-            <tr>
-                <td><?php echo $full_name; ?></td>
-                <td><?php echo $position; ?></td>
-                <td><?php echo $rate; ?></td>
-                <td><?php echo number_format((float)$gross_pay,2,'.',''); ?></td>
-                <td><?php echo number_format((float)$wht,2,'.',''); ?></td>
-                <td><?php echo number_format((float)$net_pay,2,'.',''); ?></td>
-                <td><?php echo $account_no; ?></td>
-                <td><?php echo $bank; ?></td>
-                <td><?php echo $branch; ?></td>
-                <td></td>
-            </tr>
-            <?php
-            // $total += $script_no;
-            $grand_total += $net_pay;
-            // $no_of_examiners = $no_of_examiners++;
-            $no_of_examiners++;
-            
-            }
-            // while ($sql->fetch(PDO::FETCH_BOUND));
+             echo $table_rows; 
             ?>
         </tbody>
 

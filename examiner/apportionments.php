@@ -48,12 +48,15 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                 <table class="table table-border table-striped custom-table mb-0">
                                     <thead>
                                         <tr>
+                                            <th  style="text-align: center;" colspan="5" class=""><a class="dropdown-item table-icon" href="belts.php"><i class="fa fa-pencil m-r-5" style="color:blue"></i> View apportionment details</a></th>
+                                        </tr>
+                                        <tr>
                                             <th>Belt</th>
                                             <th>Subject </th>
                                             <th>Paper </th>
                                             <th>Centres</th>
                                             <th>NO. Scripts</th>
-                                            <th class=""><a class="dropdown-item table-icon" href="belts.php"><i class="fa fa-pencil m-r-5" style="color:blue"></i> View apportionment details</a></th>
+                                            
 
                                         </tr>
                                     </thead>
@@ -652,7 +655,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                 $.ajax({
                     url: 'php/belted_subjects.php',
                     method: 'POST',
-                    dataTyle: 'json',
+                    dataType: 'json',
                     success: function(data) {
                         $('table.table tbody').empty();
                         if (data.status == '400') {
@@ -665,29 +668,36 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                     '<td>' + this["belt_no"] + '</td>' +
                                     '<td>' + this["subject_name"] + '</td>' +
                                     '<td>' + this["paper"] + '</td>' +
-                                    '<td>' + this["no_of_centres"] + '</td>' +
-                                    '<td>' + this["no_of_scripts"] + '</td>' +
-                                    '<td class="">' +
-                                   
-                                   
-
-                                    // '<a class="dropdown-item table-icon" href="belts.php?belt_no=' + this["belt_no"] + '&subject_code=' + this["subject_code"] + '&subject_name=' + encodeURIComponent(this["subject_name"]) + '&paper_no=' + this["paper"] + '&id=' + this["id"] + '"><i class="fa fa-pencil m-r-5" style="color:blue"></i> View</a>' +
-                                  
-                                   
-                                    '</td>' +
+                                    '<td class="no-of-centres">' + this["no_of_centres"] + '</td>' +
+                                    '<td class="no-of-scripts">' + this["no_of_scripts"] + '</td>' +
+                     
                                     '</tr>');
                             });
                             click_delete();
-                            $('table.table tbody td').each(function() {
-                                var currentTd = $(this).html();
-                                if (currentTd == 'undefined') {
-                                    $(this).parent('tr.undefined').remove();
-                                }
-                            });
+                            
                         }
                     }
                 });
             }
+
+    function refresh_centres_and_scripts() {
+    $.ajax({
+        url: 'php/belted_subjects.php',
+        method: 'POST',
+        dataType: 'json',
+        success: function(data) {
+            if (data.status != '400') {
+                $.each(data, function() {
+                    const row = $('tr.' + this["id"]);
+                    row.find('.no-of-centres').text(this["no_of_centres"]);
+                    row.find('.no-of-scripts').text(this["no_of_scripts"]);
+                });
+            }
+        }
+    });
+}
+
+setInterval(refresh_centres_and_scripts, 1000); // every 10 seconds
 
             function confirm_apportionments() {
                 $('#confirm').submit(function(e) {

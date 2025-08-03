@@ -17,7 +17,7 @@ $sql->execute(array(
         ':marking_centre_code'=>$_SESSION['marking_centre_code']
 ));
 if($sql->rowCount() > 0){
-        $data_array['status'] = '200';
+        // $data_array['status'] = '200';
         $i=0;
         while($row = $sql->fetch(PDO::FETCH_ASSOC)){
                 $data_array[$i]['id'] = $row['id'] ?? '';

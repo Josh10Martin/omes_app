@@ -36,9 +36,31 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                     z-index: 1;
                     background-color: #1d9d74;
                 }
-                    input[type="checkbox"] {
-                        cursor: pointer;
-                        }
+                 input[type="checkbox"] {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 4px;
+    position: relative;
+}
+
+input[type="checkbox"]:checked::before {
+    content: "✓";
+    position: absolute;
+    left: 4px;
+    top: 0px;
+    font-size: 16px;
+    color: black;
+}
+input[type="checkbox"]:checked {
+    background-color: black;
+    border-color: black;
+}
+
             </style>
             <div class="main-wrapper">
 
@@ -79,11 +101,11 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                
                                
                             </div>
-                             <div class="d-flex justify-content-center">
+                             <!-- <div class="d-flex justify-content-center">
                                 <span class=" mx-auto mb-2">
                                     <button id="getApportionment" type="submit" class="btn btn-primary mx-auto"><i class="fa fa-search" aria-hidden="true"></i> Search </button>
                                 </span>
-                             </div>
+                             </div> -->
                            
                                 
                         </form>
@@ -147,7 +169,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
               get_subjects();
               get_paper();
             //   get_belts();
-              get_apportionments();
+            //   get_apportionments();
               move_scripts();
 
                
@@ -248,8 +270,10 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                     dataType: 'json',
                     success: function(data) {
                         $('select[name=apportioned_belt] option').remove();
+
                         $('select[name=apportioned_belt]').append(
-                            '<option value="" selected disabled>Select Belt</option>'
+                            '<option value="" selected disabled>Select Belt</option>'+
+                            '<option value=""></option>'
                         );
 
                       
@@ -258,17 +282,17 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                 '<option value="' + this["belt_no"] + '">BELT ' + this["belt_no"] + '</option>'
                             );
                         });
+                        get_apportionments(subject_code,paper_no)
                     }
                 });
                 });
             }
 
-             function get_apportionments() {
-                     $('#search_apportionment').submit(function(e) {
-                    e.preventDefault();
-                         var subject_code = $('select[name=subject]').val(),
-                         paper_no = $('select[name=paper]').val(),
-                         belt_no = $('select[name=apportioned_belt]').val();
+             function get_apportionments(subject_code,paper_no) {
+                     $('select[name=apportioned_belt]').change(function() {
+                   
+                         
+                        var belt_no = $(this).val();
 
                           $.ajax({
                         url: 'php/get_apportionments.php',
@@ -302,7 +326,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                         '<td class="text-center" style="width: 150px;">' +
                                         '<form class="move_scripts" > ' +
                                            '<div class="form-check">' +
-                                               ' <input class="form-check-input cursor-pointer" name="id_group" type="checkbox" value="'+this["id"]+'" >' +
+                                               ' <input  class="form-check-input cursor-pointer" name="id_group" type="checkbox" value="'+this["id"]+'" >' +
                                                
                                                ' </div>' +
                                            
