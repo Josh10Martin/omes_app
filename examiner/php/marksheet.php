@@ -12,11 +12,11 @@ if(isset($_POST['centre']) && isset($_POST['subject']) && isset($_POST['paper'])
         $subject_code = $_POST['subject'];
         $paper_no = $_POST['paper'];
         $status = $_POST['status'];
-        $belt_no = isset($_POST['belt_no']) ? $_POST['belt_no'] : '';
+        $belt_no = isset($_POST['belt_no']) ? $_POST['belt_no'] : 0;
         $candidate_type = $_POST['candidate_type'];
-        if($status == 'L' && ($belt_no == 0 || $belt_no == '')){
+        if($status == 'L' && ($belt_no == 0 || $belt_no == '' || preg_match('/^0[0-9]+$/', $belt_no))){
                 $data_array['status'] = '400';
-                $data_array['response_msg'] = 'Enter a belt number. Not 0';
+                $data_array['response_msg'] = 'Enter a belt number. Not 0  or a belt starting with 0 ';
         }elseif($status == 'L' && centre_already_entered($db_12_gce,$subject_code,$paper_no,$school,$belt_no,$candidate_type,$_SESSION['marking_centre_code']) != 'true'){
                 $data_array['status'] = '400';
                 $data_array['response_msg'] = centre_already_entered($db_12_gce,$subject_code,$paper_no,$school,$belt_no,$candidate_type,$_SESSION['marking_centre_code']);

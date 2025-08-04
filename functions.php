@@ -778,58 +778,58 @@ function marrks_disabled($db,$exam_no,$centre_code,$subject_code,$paper_no,$user
         }
 
 }
-function group_apportion($db,$subject_code,$paper_no,$belt_no,$username,$marking_centre_code,$province=null){
-        try{
+// function group_apportion($db,$subject_code,$paper_no,$belt_no,$username,$marking_centre_code,$province=null){
+//         try{
         
-        $sql = $db->prepare('SELECT id FROM group_apportion WHERE subject=:subject_code AND paper =:paper_no AND belt_no =:belt_no AND marking_centre =:marking_centre_code');
-        $sql->execute(array(
-                ':subject_code'=>$subject_code,
-                ':paper_no'=>$paper_no,
-                ':belt_no'=>$belt_no,
-                ':marking_centre_code'=>$marking_centre_code
-        ));
-        if($sql->rowCount() == 0){
-                $sql1 = $db->prepare('INSERT INTO group_apportion(id,subject,paper,belt_no,marking_centre,username,date_created)
-                                        VALUES(CONCAT(:marking_centre_code,"_",:subject_code,"_",:paper_no,"_",:belt_no),:subject_code,:paper_no,:belt_no,:marking_centre_code,:username, NOW())');
-                 $sql1->execute(array(
-                        ':subject_code'=>$subject_code,
-                        ':paper_no'=>$paper_no,
-                        ':belt_no'=>$belt_no,
-                        ':username'=>$username,
-                        ':marking_centre_code'=>$marking_centre_code
-                ));
-        }
-}catch(PDOException $e){
-        return $e->getMessage();
-}
-}
-function add_in_apportionment($db,$centre_code,$subject_code,$paper_no,$sen,$belt_no,$marking_centre_code){
-        $sql = $db->prepare('INSERT INTO apportionment(school,script_no,group_id,subject,paper,sen,belt_no,marking_centre,username,date_apportioned)
-                              SELECT centre_code,COUNT(*) AS no_of_scripts,CONCAT(marking_centre,"_",subject_code,"_",paper_no,"_",belt_no) AS group_id,subject_code,paper_no,sen,belt_no,marking_centre,entered_by AS entered_by, MAX(date_entered)
-                              FROM marks WHERE centre_code =:centre_code 
-                              AND subject_code =:subject_code 
-                              AND paper_no =:paper_no
-                              AND sen =:sen 
-                              AND belt_no =:belt_no 
-                              AND marking_centre =:marking_centre_code
-                              AND status = "-"
-                              AND date_entered <> "none"
-                              GROUP BY centre_code,subject_code,paper_no,sen,belt_no,marking_centre,entered_by
+//         $sql = $db->prepare('SELECT id FROM group_apportion WHERE subject=:subject_code AND paper =:paper_no AND belt_no =:belt_no AND marking_centre =:marking_centre_code');
+//         $sql->execute(array(
+//                 ':subject_code'=>$subject_code,
+//                 ':paper_no'=>$paper_no,
+//                 ':belt_no'=>$belt_no,
+//                 ':marking_centre_code'=>$marking_centre_code
+//         ));
+//         if($sql->rowCount() == 0){
+//                 $sql1 = $db->prepare('INSERT INTO group_apportion(id,subject,paper,belt_no,marking_centre,username,date_created)
+//                                         VALUES(CONCAT(:marking_centre_code,"_",:subject_code,"_",:paper_no,"_",:belt_no),:subject_code,:paper_no,:belt_no,:marking_centre_code,:username, NOW())');
+//                  $sql1->execute(array(
+//                         ':subject_code'=>$subject_code,
+//                         ':paper_no'=>$paper_no,
+//                         ':belt_no'=>$belt_no,
+//                         ':username'=>$username,
+//                         ':marking_centre_code'=>$marking_centre_code
+//                 ));
+//         }
+// }catch(PDOException $e){
+//         return $e->getMessage();
+// }
+// }
+// function add_in_apportionment($db,$centre_code,$subject_code,$paper_no,$sen,$belt_no,$marking_centre_code){
+//         $sql = $db->prepare('INSERT INTO apportionment(school,script_no,group_id,subject,paper,sen,belt_no,marking_centre,username,date_apportioned)
+//                               SELECT centre_code,COUNT(*) AS no_of_scripts,CONCAT(marking_centre,"_",subject_code,"_",paper_no,"_",belt_no) AS group_id,subject_code,paper_no,sen,belt_no,marking_centre,entered_by AS entered_by, MAX(date_entered)
+//                               FROM marks WHERE centre_code =:centre_code 
+//                               AND subject_code =:subject_code 
+//                               AND paper_no =:paper_no
+//                               AND sen =:sen 
+//                               AND belt_no =:belt_no 
+//                               AND marking_centre =:marking_centre_code
+//                               AND status = "-"
+//                               AND date_entered <> "none"
+//                               GROUP BY centre_code,subject_code,paper_no,sen,belt_no,marking_centre,entered_by
                               
-                              ON DUPLICATE KEY UPDATE
-                              script_no = VALUES (script_no),
-                              username = VALUES(username),
-                              date_apportioned = VALUES(date_apportioned)');
-        $sql->execute(array(
-                ':centre_code'=>$centre_code,
-                ':subject_code'=>$subject_code,
-                ':paper_no'=>$paper_no,
-                ':sen'=>$sen,
-                ':belt_no'=>$belt_no,
-                ':marking_centre_code'=>$marking_centre_code
-        ));
+//                               ON DUPLICATE KEY UPDATE
+//                               script_no = VALUES (script_no),
+//                               username = VALUES(username),
+//                               date_apportioned = VALUES(date_apportioned)');
+//         $sql->execute(array(
+//                 ':centre_code'=>$centre_code,
+//                 ':subject_code'=>$subject_code,
+//                 ':paper_no'=>$paper_no,
+//                 ':sen'=>$sen,
+//                 ':belt_no'=>$belt_no,
+//                 ':marking_centre_code'=>$marking_centre_code
+//         ));
         
-}
+// }
 function ted_group_apportion($db,$subject_code,$belt_no,$username,$marking_centre_code,$session_year){
         try{
         

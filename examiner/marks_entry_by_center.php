@@ -75,7 +75,7 @@ if($_SESSION['user_type']  == 'DEO'){
 					</div>
                     <div class="col-md-4 col-sm-3">
 						<label class="font-weight-bold belt_no" for="">Belt number:</label>
-                        <input type="number" name="belt_no" min ="1" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"  style="width:3cm;" placeholder="0">
+                        <input type="number" name="belt_no" min ="1" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"  style="width:3cm;" placeholder="0" oninput="removeLeadingZero(this)">
 					</div>
 
                    
@@ -236,7 +236,7 @@ if($_SESSION['user_type']  == 'DEO'){
 			// get_marksheet();
 			check_if_belted();
 			submit_marks();
-			// belt_no_disable_status();
+			 belt_no_disable_status();
             
             
       //  $(window).on('scroll',function(){
@@ -601,13 +601,17 @@ if($_SESSION['user_type']  == 'DEO'){
             var status= $(this).val();
             if(status == "L"){
                 $('label.belt_no').css('display','block');
-                $('input[type=number][name=belt_no]').attr({'required': true,'disabled': false});
+                $('input[type=number][name=belt_no]').attr({'required': true,'disabled': false}).css('display','block');
             }else{
                 $('label.belt_no').css('display','none');
-                $('input[type=number][name=belt_no]').attr({'required': false,'disabled': true});
+                $('input[type=number][name=belt_no]').attr({'required': false,'disabled': true}).css('display','none');;
             }
         });
     }
+    function removeLeadingZero(input) {
+    // Convert the value to a string, remove leading zeros
+    input.value = input.value.replace(/^0+/, '');
+}
 	function press_enter(){
         $('.mark').click(function(){
             $(this).select();
@@ -996,7 +1000,7 @@ if($_SESSION['user_type']  == 'DEO'){
                 success:function(data){
                     if(data.status == '200'){
                         var improvised = 0;
-                        enable(centre_code,subject_code,paper_no,improvised);
+                        enable(centre_code,subject_code,paper_no,improvised,data.username,data.first_name,data.last_name);
                     }else{
                         $('.auth').text('Password does not match with Chief Examiner').dialog('open');
                         $('img.loading').css('display','none');
@@ -1009,7 +1013,7 @@ if($_SESSION['user_type']  == 'DEO'){
             });
         });
         }
-        function enable(centre_code,subject_code,paper_no,improvised){
+        function enable(centre_code,subject_code,paper_no,improvised,username,first_name,last_name){
             $.ajax({
                 url: 'php/enable_mark.php',
                 method:'POST',
@@ -1026,11 +1030,23 @@ if($_SESSION['user_type']  == 'DEO'){
                         $('button#validate_button').addClass('d-none');
                         $('input:text.mark[value!=X]').attr('disabled',false);
                         $('input[type=checkbox][name=absent]').prop('disabled',false);
+                        record_audit(centre_code,subject_code,paper_no,improvised,username,first_name,last_name)
 
                         $('img.loading').css('display','none');
                         $('buton#auth').attr('disabled',false);
                        
                     }
+                }
+            });
+        }
+        function record_audit(centre_code,subject_code,paper_no,improvised,username,first_name,last_name){
+            $.ajax({
+                url: 'php/record_audit.php',
+                method: 'POST',
+                data: {centre_code:centre_code, subject_code:subject_code, paper_no:paper_no, improvised:improvised, username:username, first_name:first_name, last_name:last_name},
+                dataType: 'json',
+                success: function(data){
+
                 }
             });
         }

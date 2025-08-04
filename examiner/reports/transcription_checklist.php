@@ -20,7 +20,7 @@ $pdf = new Dompdf($options);
         $sen = $_POST['sen'] ??  $_SESSION['sen'];
         $i =0;
         $sql = $db_12_gce->prepare('SELECT m.exam_no AS exam_no,m.first_name AS first_name,m.last_name AS last_name,m.mark AS mark,
-                                    (SELECT belt_no FROM apportionment where school = m.centre_code AND subject = m.subject_code AND paper = m.paper_no AND sen = m.sen AND marking_centre = m.marking_centre AND school =:centre_code AND subject =:subject_code AND paper =:paper_no AND sen =:sen AND marking_centre =:marking_centre_code) AS belt_no,
+                                    m.belt_no AS belt_no,
                                 m.status AS status, CASE WHEN m.entered_by = "none" THEN "" ELSE m.entered_by END AS entered_by,sc.centre_code AS centre_code,sc.centre_name AS centre_name,
                                 su.subject_code AS subject_code,su.subject_name AS subject_name,pa.paper_no AS paper_no
                                 FROM school sc INNER JOIN marks m ON (sc.centre_code = m.centre_code)
@@ -33,7 +33,7 @@ $pdf = new Dompdf($options);
                                 AND m.centre_code =:centre_code
                                 AND m.improvised_mark = "0"
                                 AND m.marking_centre =:marking_centre_code
-                                GROUP BY m.exam_no,m.first_name,m.last_name,m.mark,m.status,m.entered_by,sc.centre_code,sc.centre_name,su.subject_code,su.subject_name,pa.paper_no
+                                GROUP BY m.exam_no,m.first_name,m.last_name,m.mark,m.status,m.belt_no,m.entered_by,sc.centre_code,sc.centre_name,su.subject_code,su.subject_name,pa.paper_no
                                 ');
                                 
         $sql->execute(array(

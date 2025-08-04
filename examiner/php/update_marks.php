@@ -94,7 +94,9 @@ if(isset($_POST['centre_code']) && isset($_POST['subject_code']) && isset($_POST
                                 $entered_mark = $row['mark'] ?? '';
                                 $stored_status = $row['status'] ?? '';
                                 if($mark != $entered_mark || ($mark == $entered_mark && $status != $stored_status)){
-                                $sql = $db_12_gce->prepare('UPDATE marks SET mark = CASE WHEN :mark = "" THEN 0 ELSE :mark END,status =:status,belt_no =:belt_no,entered_by = CASE WHEN status ="L" THEN "none" ELSE :entered_by END,
+                                $sql = $db_12_gce->prepare('UPDATE marks SET mark = CASE WHEN :mark = "" THEN 0 ELSE :mark END,status =:status,belt_no =:belt_no,
+                                                        id_group = CASE WHEN status = "L" THEN "none" ELSE CONCAT(:marking_centre_code,"_",:centre_code,"_",:subject_code,"_",:paper_no"_",:sen,"_",:belt_no) END,
+                                                        entered_by = CASE WHEN status ="L" THEN "none" ELSE :entered_by END,
                                                         date_entered = CASE WHEN status ="L" THEN "none" ELSE :date_entered END, disable = CASE WHEN status = "L" THEN 0 ELSE 1 END
                                                         WHERE exam_no =:exam_no AND subject_code =:subject_code AND paper_no =:paper_no AND centre_code =:centre_code AND marking_centre =:marking_centre_code AND disable = 0');
                                 $sql->execute(array(
@@ -104,6 +106,7 @@ if(isset($_POST['centre_code']) && isset($_POST['subject_code']) && isset($_POST
                                         ':date_entered'=>$date_entered,
                                         ':exam_no'=>$exam_no,
                                         ':paper_no'=>$paper_no,
+                                        ':sen'=>$sen,
                                         ':subject_code'=>$subject_code,
                                         ':centre_code'=>$centre_code,
                                         ':belt_no'=>$belt_no,
@@ -122,8 +125,8 @@ if(isset($_POST['centre_code']) && isset($_POST['subject_code']) && isset($_POST
                 $_SESSION['paper_no'] = $paper_no;
                 $_SESSION['sen'] = $sen;
                 
-         group_apportion($db_12_gce,$subject_code,$paper_no,$belt_no,$username,$_SESSION['marking_centre_code']);
-          add_in_apportionment($db_12_gce,$centre_code,$subject_code,$paper_no,$sen,$belt_no,$_SESSION['marking_centre_code']);
+        //  group_apportion($db_12_gce,$subject_code,$paper_no,$belt_no,$username,$_SESSION['marking_centre_code']);
+        //   add_in_apportionment($db_12_gce,$centre_code,$subject_code,$paper_no,$sen,$belt_no,$_SESSION['marking_centre_code']);
        
 }catch(PDOException $e){
         $data_array['status'] = '400';

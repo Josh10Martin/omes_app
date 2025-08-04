@@ -20,7 +20,7 @@ $pdf = new Dompdf($options);
         
         $sql = $db_12_gce->prepare('SELECT CONCAT(sc.centre_code," - ",sc.centre_name) AS school, m.exam_no AS exam_no, CONCAT(su.subject_code," - ",su.subject_name) AS subject,pa.paper_no AS paper_no,
                                     m.old_mark AS old_mark, m.old_status AS old_status,m.new_mark AS new_mark, m.status AS new_status,
-                                    CASE WHEN m.sen = 0 THEN "NO" ELSE "YES" END AS sen, CASE WHEN improvised_mark = 1 THEN "YES" ELSE "NO" END AS improvised_mark, m.entered_by AS entered_by,m.action AS action,
+                                    CASE WHEN m.sen = 0 THEN "NO" WHEN m.sen = 1 THEN "YES" ELSE "" END AS sen, CASE WHEN improvised_mark = 1 THEN "YES" ELSE "NO" END AS improvised_mark, m.entered_by AS entered_by,m.action AS action,
                                     m.date_entered AS date_entered
                                     FROM school sc INNER JOIN marks_audit_trail m ON (sc.centre_code = m.centre_code)
                                     INNER JOIN subjects su ON (m.subject_code = su.subject_code)
