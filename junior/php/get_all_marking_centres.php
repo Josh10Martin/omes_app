@@ -7,8 +7,11 @@ $data_array = array();
 if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'ECZ'){
 $sql = $db_9->prepare('SELECT ce.centre_code AS centre_code, ce.name AS centre_name,p.p_name AS province_name, CASE WHEN ce.centre_type ="E" THEN "GRADE 9 EXTERNAL" WHEN ce.centre_type = "I" THEN "GRADE 9 INTERNAL" ELSE "[UNKNOWN]" END AS centre_type
                         FROM centre ce INNER JOIN province p ON (ce.province = p.p_code)
+                        WHERE ce.centre_type =:centre_type
                         ORDER BY ce.centre_code ASC');
-$sql->execute();
+$sql->execute(array(
+        ':centre_type'=>$_SESSION['session_type']
+));
 if($sql->rowCount() > 0){
         $i=0;
         while($row = $sql->fetch(PDO::FETCH_ASSOC)){

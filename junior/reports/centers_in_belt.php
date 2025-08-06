@@ -124,7 +124,7 @@ p{
         </tr>
        
         <th>
-        Subject Code: <?php echo $subject_code,' - ',$subject_name; ?>
+        Subject: <?php echo $subject_code,' - ',$subject_name; ?>
         </th>
         <th>
             Paper:  <?php echo $paper_no; ?>
@@ -134,7 +134,7 @@ p{
         </th>
         <tr>
             <th>
-                Subject Name : <?php echo $subject_name; ?>
+                <!-- Subject Name : <?php// echo $subject_name; ?> -->
         </th>
         </tr>
     </table>

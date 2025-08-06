@@ -58,15 +58,15 @@ if($_SESSION['user_type'] == 'ECZ'){
                                <a href="javascript:void(0)" data-toggle="modal" data-target="#change-session-modal"><div>change active session</div></a> 
                         </div> -->
                 </div>
-                <hr>
-                <h5 class="blue-ecz">EXAMINERS:</h5> 
+                <!-- <hr> -->
+                <!-- <h5 class="blue-ecz">EXAMINERS:</h5>  -->
                 <div class="row">
                         <!-- <div class="col-md-6">
                               <a href="" data-toggle="modal" data-target="#upload-examiners-modal"><div><i class="fa fa-upload" aria-hidden="true"></i> UPLOAD EXAMINERS:</div></a>  
                         </div> -->
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                                <a href="examiners.php" ><div><i class="fa fa-eye" aria-hidden="true"></i> EXAMINERS LIST:</div></a> 
-                        </div>
+                        </div> -->
 
                 </div>
                 <hr>

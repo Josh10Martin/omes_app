@@ -159,7 +159,7 @@ if ($_SESSION['user_type'] == 'ADMIN' || $_SESSION['user_type'] == 'DEO') {
                     </p>
                   </div>
                   <div class="col-md-6">
-                    <p>ACCOUNT NUMBER:<input required type="text" placeholder="account number" maxlength="15" class="form-control" name="account_number"></p>
+                    <p>ACCOUNT NUMBER:<input required type="text" placeholder="account number" class="form-control" name="account_number"></p>
                   </div>
                   <div class="col-md-6">
                     <p>T-PIN:<input type="text" id="t-pin" required placeholder="10 digit t-pin" class="form-control" name="tpin" maxlength="10"></p>
@@ -227,7 +227,7 @@ if ($_SESSION['user_type'] == 'ADMIN' || $_SESSION['user_type'] == 'DEO') {
        
 
         add_transcriber();
-
+        account_length();
        
         $('.dialog').dialog({
           title: 'REQUEST RESPONSE',
@@ -328,7 +328,7 @@ if ($_SESSION['user_type'] == 'ADMIN' || $_SESSION['user_type'] == 'DEO') {
           success: function(data) {
 
             $('select[name=bank]').append(
-              '<option value="" selected disabled>Select Bank</option>'
+              '<option value="" selected>Select Bank</option>'
             );
             $.each(data, function() {
               $('select[name=bank]').append(
@@ -367,6 +367,16 @@ if ($_SESSION['user_type'] == 'ADMIN' || $_SESSION['user_type'] == 'DEO') {
           });
         });
       });
+
+      function account_length(){
+        $('select[name=bank]').change(function(){
+          var bank_id = $(this).val(),
+          account_no_length = bank_id == 16 ? 11 : (bank_id == 3 ? 10 : 13);
+
+          $('input[type=text][name=account_number]').attr('maxlength',account_no_length);
+
+        });
+      }
 
       function add_transcriber() {
         $('#add_transcriber').submit(function(e) {

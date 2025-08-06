@@ -612,6 +612,8 @@ $(document).ready(function(){
 
 <script>
   $("#pdf-btn").click(function(){
+      const session_name = "<?php echo $_SESSION['session_name']; ?>";
+      const session_year = "<?php echo $_SESSION['session_year']; ?>";
     var doc = new jsPDF()
     
     doc.autoTable({ 
@@ -626,8 +628,11 @@ $(document).ready(function(){
            headerImg.src = '../assets/img/eczlogo_tr_sm.jpg'; 
           //  signature.src = 'static/sign/signature.png';
           doc.setFontSize(13);
-          doc.text('EXAMINATIONS COUNCIL OF ZAMBIA', 67,35);
-          doc.text('MISSING MARKS REPORT', 80,40);
+          doc.text('EXAMINATIONS COUNCIL OF ZAMBIA', 45, 20);
+          doc.setFontSize(11);
+          doc.text(session_name, 80, 28); // dynamically injected JS variable
+          doc.text('EXAMINATION YEAR - ' + session_year, 80, 34);
+          doc.text('MISSING MARKS REPORT', 80, 40);
           //doc.addImage(img, 'PNG', logoX, logoY, logoWidth, logoHeight);
           doc.addImage(headerImg, 'JPEG', 100, 10, 20, 20);
 

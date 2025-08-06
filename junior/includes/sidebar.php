@@ -96,7 +96,7 @@ if(!isset($_SESSION['user_type']) && !isset($_SESSION['first_name']) && !isset($
                              <a href="javascript:void(0)"><i class="fa fa-university"></i> <span>Marking Centres</span><span class="menu-arrow"></span></a>
                              <ul style="display: none;">
                                  <li><a href="marking-centers.php">Marking Centres List</a></li>
-                                 <li><a href="unapportioned.php">Unapportioned Examination Ccentres <?php if($_SESSION['session_type'] == 'I'){echo '/ Subjects';} ?></a></li>
+                                 <li><a href="unapportioned.php">Unapportioned Examination Centres <?php if($_SESSION['session_type'] == 'I'){echo '/ Subjects';} ?></a></li>
                                  <li><a href="<?php if($_SESSION['session_type'] == 'E'){echo 'alter-marksheet-external.php';}else{echo 'alter-marksheet-internal.php';} ?>">Alter marksheet</a></li>
                                  <!-- <li><a href="subject_apportionment_internal.php">Marking Centre Internal</a></li> -->
                                  <!-- <li><a href="marking-center-apportionment.php"> Marking Apportionments</a></li> -->

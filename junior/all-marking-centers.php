@@ -141,9 +141,15 @@ if($_SESSION['user_type'] == 'ECZ'){
                     <div class="col-md-6">
                         <label for="type">Select Type</label>
                         <select name="centre_type" class="select" id="" required> 
-                            <option value="" selected disabled>select...</option>
+                           <?php if($_SESSION['session_type'] == 'I'){ ?>
                             <option value="I" >Grade 9 Internal</option>
+
+                            <?php  } else{ if($_SESSION['session_type'] == 'E'){
+                                ?>
                             <option value="E" >Grade 9 External</option>
+
+                            <?php }
+                        } ?>
                         </select>
                     </div>
                 </div>

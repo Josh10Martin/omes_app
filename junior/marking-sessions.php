@@ -144,7 +144,7 @@ if($_SESSION['user_type'] == 'ECZ'){
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>DESCRIPTION:</label>
-                            <input type="text" name="description" class="form-control" value="JUNIOR SECONDARY SCHOOL LEAVING EXAMINATION" readonly required>
+                            <input type="text" name="description" class="form-control" value="" readonly required>
                         </div>
                     </div>
                    
@@ -168,6 +168,7 @@ if($_SESSION['user_type'] == 'ECZ'){
 $(document).ready(function(){
     get_session();
     edit();
+    description();
     $('.dialog').dialog({
         title: 'REQUEST RESPONSE',
         width: '450',
@@ -382,6 +383,19 @@ $(document).ready(function(){
                     $('table.table tbody tr').find('td:nth-child(3)').text(data.type);
                 }
             }
+        });
+    }
+    function description(){
+        var description ='';
+        $('select[name=type]').change(function(){
+            var type = $(this).val();
+            if(type == 'I'){
+                description = 'JUNIOR SECONDARY SCHOOL LEAVING EXAMINATION';
+            }else{
+                description = 'JUNIOR SECONDARY SCHOOL EXAMINATION';
+            }
+
+            $('input[type=text][name=description]').val(description);
         });
     }
     function edit(){

@@ -8,11 +8,8 @@ if(isset($_POST['session_code'])){
     $type = $_POST['type'];
     $description = $_POST['description'];
     $year = $_POST['session_code'];
-    $sql = $db_9->prepare('INSERT IGNORE INTO session (id,name, year, type) VALUES(:year,:description,:year,:type)
-                            ON DUPLICATE KEY UPDATE
-                            name = VALUES(name),
-                            year = VALUES(year),
-                            type = VALUES(type)
+    $sql = $db_9->prepare('UPDATE session SET id =:year,name =:description, year =:year, type =:type
+                            
                             ');
     $sql->execute(array(
         ':description'=>$description,

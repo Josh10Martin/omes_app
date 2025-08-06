@@ -30,7 +30,6 @@ if(isset($_POST['exam_no'])){
         $sql->execute(array(
             ':centre_code'=>$centre_code,
             ':exam_no'=>$exam_no,
-            ':centre_code'=>$centre_code,
             ':subject_code'=>$subject_code,
             ':paper_no'=>$paper_no,
             ':mark'=>$mark,

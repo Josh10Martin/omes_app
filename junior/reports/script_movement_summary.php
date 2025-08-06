@@ -58,6 +58,7 @@ $sql->fetch(PDO::FETCH_BOUND);
                    <p  style="text-align: center;">EXAMINATIONS COUNCIL OF ZAMBIA</p> 
                     <p style="text-align: center;"><?php echo $_SESSION['session_name']; ?></p>
                     <p style="text-align: center;">SCRIPT MOVEMENT SUMMARY</p> 
+                    <p style="text-align: center;">EXAMINATION YEAR - <?php echo $_SESSION['session_year']; ?></p> 
                     <p style="text-align: center;"><?php echo $_SESSION['province_name']; ?> PROVINCE</p> 
                 </td>
             </tr>
