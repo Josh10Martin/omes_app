@@ -1,7 +1,7 @@
 <?php
 header('Content-Type:application/json ; charset=utf-8');
 session_start();
-include '../../config.php';
+include '../../../config.php';
 $data_array = array();
 
 $_POST = json_decode(file_get_contents('php://input'), JSON_OBJECT_AS_ARRAY);

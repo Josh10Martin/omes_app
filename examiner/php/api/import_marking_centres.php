@@ -1,7 +1,7 @@
 <?php
 session_start();
 header('Content-Type:application/json; charset=utf-8;');
-include '../../config.php';
+include '../../../config.php';
 $data_array = array();
 
     $marking_centres = json_decode(file_get_contents('php://input'),JSON_OBJECT_AS_ARRAY);
