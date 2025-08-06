@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 06, 2025 at 11:05 AM
+-- Generation Time: Aug 06, 2025 at 01:19 PM
 -- Server version: 8.0.36
 -- PHP Version: 8.1.11
 
@@ -969,7 +969,6 @@ CREATE TABLE `marking_centre` (
 
 INSERT INTO `marking_centre` (`id`, `sen`, `subject`, `paper`, `centre_code`) VALUES
 (1, 0, '1121', 1, '240e720af8d71909cfe0872a14ab6be3'),
-(65, 1, '1121', 1, '11112222'),
 (2, 1, '1121', 2, '11112222'),
 (3, 1, '2011', 1, '11112222'),
 (4, 1, '2011', 2, '11112222'),
@@ -1020,7 +1019,8 @@ INSERT INTO `marking_centre` (`id`, `sen`, `subject`, `paper`, `centre_code`) VA
 (49, 1, '7010', 1, '11112222'),
 (50, 1, '7100', 1, '11112222'),
 (51, 1, '7110', 1, '11112222'),
-(52, 1, '7110', 2, '11112222');
+(52, 1, '7110', 2, '11112222'),
+(65, 1, '1121', 1, '11112222');
 
 -- --------------------------------------------------------
 
@@ -78492,7 +78492,7 @@ ALTER TABLE `examiner_claim`
 --
 ALTER TABLE `marking_centre`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `subject_2` (`subject`,`paper`,`sen`,`centre_code`) USING BTREE,
+  ADD UNIQUE KEY `sen` (`sen`,`subject`,`paper`),
   ADD KEY `subject` (`subject`,`paper`),
   ADD KEY `centre_code` (`centre_code`);
 

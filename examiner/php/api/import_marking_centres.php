@@ -22,7 +22,7 @@ $data_array = array();
         ':centre_type'=>$centre_type
     ));
     
-        $sql2 = $db_12_gce->prepare('INSERT IGNORE INTO marking_centre (sen,subject,paper,centre_code) VALUES(:sen,:subject_code,:paper_no,:centre_code)
+        $sql2 = $db_12_gce->prepare('INSERT INTO marking_centre (sen,subject,paper,centre_code) VALUES(:sen,:subject_code,:paper_no,:centre_code)
                                     ON DUPLICATE KEY UPDATE
                                     centre_code = VALUES(centre_code)
                                     ');
@@ -34,18 +34,21 @@ $data_array = array();
         ));
         $i++;
          
-    }catch(PDOEXCeption $e){
+    }catch(PDOException $e){
          $data_array['status'] = '400';
-        $data_array['response_msg'] = 'Erroe: '.$e.getMessage();
+        $data_array['response_msg'] = 'Erroe: '.$e->getMessage();
     }
-        $i++;
+      
         
 }
 
 }
-if($i == $sql2->rowCount()){
+if( $i > 0){
         $data_array['status'] = '200';
         $data_array['response_msg'] = 'Successfully added  and aligned subjects to marking centre(s)';
+}else{
+     $data_array['status'] = '400';
+    $data_array['response_msg'] = 'No marking centres were successfully processed.';
 }
 echo json_encode($data_array);
 ?>
