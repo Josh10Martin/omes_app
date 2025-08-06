@@ -325,7 +325,7 @@ if($_SESSION['user_type']  == 'DEO'){
             {
                 text: 'YES',
                 click: function(){
-                    cancel_improvised_mark2();
+                    cancel_improvised_mark();
                     $(this).dialog('close');
                 }
             }
@@ -548,7 +548,7 @@ if($_SESSION['user_type']  == 'DEO'){
 
             if(data.status == '200'){
                 var improvised = 1;
-                enable(centre_code,subject_code,paper_no,improvised);
+                enable(centre_code,subject_code,paper_no,improvised,data.username,data.first_name,data.last_name);
                
             }else{
                 $('.auth').text('Password does not match with Chief Examiner').dialog('open');
@@ -570,7 +570,7 @@ if($_SESSION['user_type']  == 'DEO'){
         cancel_improvised2(improvised);
     }
 
-    function enable(centre_code,subject_code,paper_no,improvised){
+    function enable(centre_code,subject_code,paper_no,improvised,username,first_name,last_name){
             $.ajax({
                 url: 'php/enable_mark.php',
                 method:'POST',
@@ -589,11 +589,25 @@ if($_SESSION['user_type']  == 'DEO'){
                        
                         $('.load').css('display','none');
                         $('buton#auth2').attr('disabled',false);
+                            record_audit(centre_code,subject_code,paper_no,improvised,username,first_name,last_name);
                        
                     }
                 }
             });
         }
+
+              function record_audit(centre_code,subject_code,paper_no,improvised,username,first_name,last_name){
+                $.ajax({
+                    url: 'php/record_audit.php',
+                    method: 'POST',
+                    data: {centre_code:centre_code, subject_code:subject_code, paper_no:paper_no, improvised:improvised, username:username, first_name:first_name, last_name:last_name},
+                    dataType: 'json',
+                    success: function(data){
+
+                    }
+                });
+        }
+
         function page_reload(){
         window.onbeforeunload = function ()
     {
@@ -845,7 +859,7 @@ function get_max_mark(subject_code){
                 dataType: 'json',
                 success:function(data){
                     if(data.status == '200'){
-                        $('#improvised_marks_tble tbody tr').find("td").eq(4).text(data.mark);
+                        $('#improvised_marks_tble tbody tr').find("td").eq(5).text(data.mark);
                         cancel();
                     }else{
                         $('.dialog').text(data.response_msg).dialog('open')

@@ -12,14 +12,18 @@ if(isset($_POST['exam_no']) && isset($_POST['subject_name']) && isset($_POST['pa
     $belt_no = $_POST['belt_no'];
     $sen = $_POST['sen'];
 
-    $sql = $db_12_gce->prepare('UPDATE marks SET mark =:mark,belt_no =:belt_no,sen =:sen WHERE exam_no =:exam_no AND subject_code = (SELECT subject_code FROM subjects WHERE subject_name =:subject_name) AND paper_no =:paper_no AND improvised_mark = 1 AND disable = 0');
+    $sql = $db_12_gce->prepare('UPDATE marks SET mark =:mark,belt_no =:belt_no,sen =:sen,  id_group = CONCAT(SUBSTRING_INDEX(id_group, "_", 4), "_", :sen,"_":belt_no)
+         WHERE exam_no =:exam_no AND subject_code = (SELECT subject_code FROM subjects WHERE subject_name =:subject_name) AND paper_no =:paper_no AND improvised_mark = 1 AND disable = 0
+              AND marking_centre =:marking_centre_code
+              ');
     $sql->execute(array(
         ':exam_no'=>$exam_no,
         ':subject_name'=>$subject_name,
         ':paper_no'=>$paper_no,
         ':mark'=>$mark,
         ':sen'=>$sen,
-        ':belt_no'=>$belt_no
+        ':belt_no'=>$belt_no,
+        ':marking_centre_code'=>$_SESSION['marking_centre_code']
     ));
     if($sql->rowCount() > 0){
         $data_array['status'] = '200';

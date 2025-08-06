@@ -5,14 +5,14 @@ include '../../config.php';
 $data_array = array();
 if($_SESSION['session_type'] == 'E'){
 $sql =$db_9->prepare('SELECT c.centre_code AS marking_centre_code, c.name AS marking_centre_name
-                        FROM centre c INNER JOIN marking_centre mc ON (c.centre_code = mc.centre_code)
-                        INNER JOIN users u ON (mc.centre_code = u.marking_centre)
+                        FROM centre c INNER JOIN marking_centre_centres mcc ON (c.centre_code = mcc.marking_centre)
+                        INNER JOIN users u ON (mcc.marking_centre = u.marking_centre)
                         WHERE c.province = u.province
-                        AND u.province = mc.province
+                        AND u.province = mcc.province
                         AND c.centre_code = u.marking_centre
-                        AND mc.centre_code = u.marking_centre
-                        AND mc.centre_code =:marking_centre_code
-                        AND mc.province =:province_code
+                        AND mcc.marking_centre = u.marking_centre
+                        AND mcc.marking_centre =:marking_centre_code
+                        AND mcc.province =:province_code
                         AND c.centre_type =:centre_type
                         
                         ');

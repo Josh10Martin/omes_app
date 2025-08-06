@@ -23,7 +23,7 @@ if (
         $date_time = date('d/m/Y H:m:s');
         try{
         $sql = $db_12_gce->prepare('INSERT IGNORE INTO marks_audit_trail (centre_code, subject_code, paper_no, improvised_mark, entered_by,action, date_entered, marking_centre)
-                                        VALUES(:centre_code, :subject_code, :paper_no, :improvised, CONCAT(:username," - ",:first_name," ",:last_name),"MARKSHEET DISABLED" :date_time, :marking_centre_code)
+                                        VALUES(:centre_code, :subject_code, :paper_no, :improvised, CONCAT(:username," - ",:first_name," ",:last_name),"MARKSHEET DISABLED", :date_time, :marking_centre_code)
                                         
                                         ');
         $sql->execute(array(
@@ -48,7 +48,7 @@ if (
         
         }catch(PDOException $e){
                 $data_array['status'] = '400';
-                $data_array['response_msg'] = 'Error enabling: '.$e->getMessage();
+                $data_array['response_msg'] = 'Error recording: '.$e->getMessage();
         }
         
         

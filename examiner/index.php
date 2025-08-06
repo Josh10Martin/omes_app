@@ -277,7 +277,6 @@ if($_SESSION['user_type'] == 'DEO' ){
 	<script src="js/apexchart.js"></script>
 
 
- 
 
 </body>
 
@@ -424,6 +423,20 @@ function statistics(){
 		}
 	});
 }
+
+
+<?php
+if ($_SESSION['user_type'] == 'DEO'){
+?>
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});
+
+
+
+<?php } ?>
+
+
 });
 </script>
 <?php

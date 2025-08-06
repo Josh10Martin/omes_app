@@ -13,37 +13,39 @@ $data_array = array();
     $centre_type = trim(strtoupper($row['centre_type']));
     $subject_code = trim($row['subject_code']);
     $paper_no = trim($row['paper_no']);
-    $sql = $db_12_gce->prepare('REPLACE INTO centre (centre_code,name,centre_type) VALUES(:centre_code,:name,:centre_type)');
+    $sen = trim($row['sen']);
+    try{
+    $sql = $db_12_gce->prepare('INSERT IGNORE INTO centre (centre_code,name,centre_type) VALUES(:centre_code,:name,:centre_type)');
     $sql->execute(array(
         ':centre_code'=>$marking_centre_code,
         ':name'=>$marking_centre_name,
         ':centre_type'=>$centre_type
     ));
-    if($sql->rowCount() > 0){
-        $sql2 = $db_12_gce->prepare('INSERT IGNORE INTO marking_centre (subject,paper,centre_code) VALUES(:subject_code,:paper_no,:centre_code)
+    
+        $sql2 = $db_12_gce->prepare('INSERT IGNORE INTO marking_centre (sen,subject,paper,centre_code) VALUES(:sen,:subject_code,:paper_no,:centre_code)
                                     ON DUPLICATE KEY UPDATE
                                     centre_code = VALUES(centre_code)
                                     ');
         $sql2->execute(array(
+            ':sen'=>$sen,
             ':subject_code'=>$subject_code,
             ':paper_no'=>$paper_no,
             ':centre_code'=>$marking_centre_code
         ));
         $i++;
-        if($sql2->rowCount() > 0){
-            $data_array['status'] = '200';
-            $data_array['response_msg'] = 'Successfully added  and aligned subjects to marking centre(s)';
-        }else{
-            $data_array['status'] = '400';
-            $data_array['response_msg'] = 'Coulld not add subject to marking centre';
-        }
-        
-        
+         
+    }catch(PDOEXCeption $e){
+         $data_array['status'] = '400';
+        $data_array['response_msg'] = 'Erroe: '.$e.getMessage();
     }
-   
+        $i++;
+        
 }
 
 }
-
+if($i == $sql2->rowCount()){
+        $data_array['status'] = '200';
+        $data_array['response_msg'] = 'Successfully added  and aligned subjects to marking centre(s)';
+}
 echo json_encode($data_array);
 ?>

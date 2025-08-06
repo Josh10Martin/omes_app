@@ -6,6 +6,8 @@ $data_array = array();
 
 if(isset($_FILES['myFile']['name'])){
     $path = $_FILES['myFile']['tmp_name'];
+    // $_SESSION['status'] = $_POST['status'];
+    $_SESSION['date_time'] = date('Y-m-d H-m-s');
     try{
     $sql = $db_12_gce->prepare('LOAD DATA LOCAL INFILE :path INTO TABLE sen_exam_no
                             CHARACTER SET latin1
@@ -13,11 +15,14 @@ if(isset($_FILES['myFile']['name'])){
                             OPTIONALLY ENCLOSED BY \'"\'
                             ESCAPED BY \'"\'
                             LINES TERMINATED BY "\r\n"
-                            (exam_no)
+                            (exam_no,subject_code,paper_no)
+
+                            SET date_time =:date_time
                         ');
 
     $sql->execute(array(
-        ':path'=>$path
+        ':path'=>$path,
+        ':date_time'=> $_SESSION['date_time']
     ));
     $data_array['status'] = '200';
     $data_array['response_msg'] = 'SEN data sussessfully uploaded';

@@ -976,10 +976,39 @@ function remove_subject_paper_from_marksheet_not_belong($db){
         $sql->execute();
         return $sql->rowCount();
 }
-function remove_from_sen_exam_no($db){
-        $sql = $db->prepare('DELETE FROM sen_exam_no');
-       return $sql->execute();
-}
+// function get_exam_no_not_exist($db){
+       
+        
+//         $sql = $db->prepare('SELECT exam_no,subject_code,paper_no FROM marks WHERE status <> "L" AND (exam_no,subject_code,paper_no) IN
+//                                 (SELECT exam_no,subject_code,paper_no FROM sen_exam_no WHERE date_time = (SELECT MAX(date_time) FROM sen_exam_no WHERE exam_no IN (SELECT exam_no FROM marks WHERE status <> "L"))
+//         )');
+//         $sql->execute();
+//       if($sql->rowCount() > 0){
+//          $results = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+//         // Output headers for CSV
+//         header('Content-Type: text/csv');
+//         header('Content-Disposition: attachment; filename="exam_no_not_exist.csv"');
+//         header('Pragma: no-cache');
+//         header('Expires: 0');
+
+//         $output = fopen('php://output', 'w');
+
+//         // Output header row
+//         fputcsv($output, ['exam_no', 'subject_code', 'paper_no']);
+
+//         // Output each row
+//         foreach ($results as $row) {
+//             fputcsv($output, $row);
+//         }
+
+//         fclose($output);
+//         exit; // Stop further script execution
+//       }else{
+//           http_response_code(204);
+//                 exit;
+//       }
+// }
 //  function absa_account_length($db,$accout_no_length){
 //         $sql = $db->prepare('SELECT LENGTH(account_no)');
 //  }

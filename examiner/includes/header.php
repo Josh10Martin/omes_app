@@ -31,6 +31,57 @@ if(!isset($_SESSION['user_type'])){
     <!-- <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"> -->
     <!-- <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script> -->
     <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+
+     <?php
+if ($_SESSION['user_type'] == 'DEO'){
+?>
+<script>
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});
+
+document.addEventListener('mousedown', function(e) {
+    if (e.button === 1) {  // Middle mouse button
+        e.preventDefault();
+    }
+});
+
+document.querySelectorAll('a').forEach(function(link) {
+    link.setAttribute('target', '_self');
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const href = link.getAttribute('href');
+
+        if (href.includes('reports/')) {
+            // Simulate loading and showing report data in a table
+            showReportTable(href);
+        } else {
+            // Regular navigation
+            window.location.href = href;
+        }
+    });
+});
+
+// Prevent multiple tabs
+(function(){
+    const tabKey = 'omes_sec';
+
+    if (localStorage.getItem(tabKey)) {
+        alert('This application is already open in another tab.');
+        window.close();
+    } else {
+        localStorage.setItem(tabKey, 'open');
+        window.addEventListener('beforeunload', function () {
+            localStorage.removeItem(tabKey);
+        });
+    }
+})();
+
+</script>
+<?php } ?>
+
+
     <style>
       .ui-dialog .ui-dialog-buttonpane{
         height: 50px;

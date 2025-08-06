@@ -32,8 +32,8 @@ if(isset($_POST['exam_no'])){
         $data_array['status'] = '400';
         $data_array['response_msg'] = centre_already_entered($db_12_gce,$subject_code,$paper_no,$centre_code,$belt_no,$candidate_type,$_SESSION['marking_centre_code']);
     }else{
-        $sql = $db_12_gce->prepare('INSERT IGNORE INTO marks (centre_code,exam_no,subject_code,paper_no,mark,status,sen,improvised_mark,belt_no,entered_by,date_entered,marking_centre,disable)
-                                VALUES(:centre_code,:exam_no,:subject_code,:paper_no,:mark,:status,:candidate_type,:improvised_mark,:belt_no,:entered_by,:date_entered,:marking_centre_code,"1")');
+        $sql = $db_12_gce->prepare('INSERT IGNORE INTO marks (centre_code,exam_no,subject_code,paper_no,mark,status,sen,improvised_mark,belt_no,id_group,entered_by,date_entered,marking_centre,disable)
+                                VALUES(:centre_code,:exam_no,:subject_code,:paper_no,:mark,:status,:candidate_type,:improvised_mark,:belt_no,CONCAT(:marking_centre_code,"_",:centre_code,"_",:subject_code,"_",:paper_no,"_",:candidate_type,"_",:belt_no),:entered_by,:date_entered,:marking_centre_code,"1")');
         $sql->execute(array(
             ':centre_code'=>$centre_code,
             ':exam_no'=>$exam_no,
@@ -58,8 +58,8 @@ if(isset($_POST['exam_no'])){
             $data_array['belt_no'] = $belt_no;
             $data_array['date_entered'] = $date_time;
 
-            group_apportion($db_12_gce,$subject_code,$paper_no,$belt_no,$username,$_SESSION['marking_centre_code']);
-            add_in_apportionment($db_12_gce,$centre_code,$subject_code,$paper_no,$candidate_type,$belt_no,$_SESSION['marking_centre_code']);
+            // group_apportion($db_12_gce,$subject_code,$paper_no,$belt_no,$username,$_SESSION['marking_centre_code']);
+            // add_in_apportionment($db_12_gce,$centre_code,$subject_code,$paper_no,$candidate_type,$belt_no,$_SESSION['marking_centre_code']);
 
             
 

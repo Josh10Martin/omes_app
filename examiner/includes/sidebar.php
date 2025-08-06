@@ -39,7 +39,7 @@ if(!isset($_SESSION['user_type']) && !isset($_SESSION['first_name']) && !isset($
                         <li class="submenu">
                             <a href="examiners.php"><i class="fa fa-list-alt"></i> <span>Marks Entry</span><span class="menu-arrow"></span></a>
                             <ul style="display: none;">
-								<li><a href="marks_entry_by_center.php"> By Center</a></li>
+								<li><a href="marks_entry_by_center.php" target="_self"> By Center</a></li>
 								 <li><a href="marks_entry_by_improvised.php"> Improvised</a></li>
                                 <!-- <li><a href="marks_entry_by_question.php"> Per Question</a></li>> -->
                                <!-- <li><a href="marks_entry_by_question_improvised.php"> Per Question (Improvised)</a></li> -->

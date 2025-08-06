@@ -573,23 +573,23 @@ if($_SESSION['user_type']  == 'DEO'){
             }
         ]
     });
-//     document.onkeydown = (e) => {
-//     if (e.key == 123) {
-//         e.preventDefault();
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.key == 'I') {
-//         e.preventDefault();
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.key == 'C') {
-//         e.preventDefault();
-//     }
-//     if (e.ctrlKey && e.shiftKey && e.key == 'J') {
-//         e.preventDefault();
-//     }
-//     if (e.ctrlKey && e.key == 'U') {
-//         e.preventDefault();
-//     }
-// };
+    document.onkeydown = (e) => {
+    if (e.key == 123) {
+        e.preventDefault();
+    }
+    if (e.ctrlKey && e.shiftKey && e.key == 'I') {
+        e.preventDefault();
+    }
+    if (e.ctrlKey && e.shiftKey && e.key == 'C') {
+        e.preventDefault();
+    }
+    if (e.ctrlKey && e.shiftKey && e.key == 'J') {
+        e.preventDefault();
+    }
+    if (e.ctrlKey && e.key == 'U') {
+        e.preventDefault();
+    }
+};
     function page_reload(){
         window.onbeforeunload = function ()
     {
@@ -1030,7 +1030,7 @@ if($_SESSION['user_type']  == 'DEO'){
                         $('button#validate_button').addClass('d-none');
                         $('input:text.mark[value!=X]').attr('disabled',false);
                         $('input[type=checkbox][name=absent]').prop('disabled',false);
-                        record_audit(centre_code,subject_code,paper_no,improvised,username,first_name,last_name)
+                        record_audit(centre_code,subject_code,paper_no,improvised,username,first_name,last_name);
 
                         $('img.loading').css('display','none');
                         $('buton#auth').attr('disabled',false);

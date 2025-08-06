@@ -5,11 +5,10 @@ include '../../config.php';
 $data_array = array();
 if($_SESSION['user_type'] == 'SESO'){
 if($_SESSION['session_type'] == 'E'){
-        $sql = $db_9->prepare('SELECT DISTINCT ce.centre_code AS centre_code, ce.name AS centre_name, mc.centre_code AS marking_centre_code,
-                         COUNT(DISTINCT (CASE WHEN mcc.centre_code <> "none" THEN mcc.centre_code END)) AS no_of_centres, COUNT(DISTINCT(mc.subject)) AS no_of_subjects, MAX(mcc.sen) AS sen, 
+        $sql = $db_9->prepare('SELECT DISTINCT ce.centre_code AS centre_code, ce.name AS centre_name, mcc.marking_centre AS marking_centre_code,
+                         COUNT(DISTINCT (CASE WHEN mcc.marking_centre <> "none" THEN mcc.marking_centre END)) AS no_of_centres, COUNT(DISTINCT(mcc.subject_code)) AS no_of_subjects, MAX(mcc.sen) AS sen, 
                          mcc.valid AS valid
-                        FROM centre ce LEFT OUTER JOIN marking_centre mc ON (ce.centre_code = mc.centre_code)
-                        LEFT OUTER JOIN marking_centre_centres mcc ON (ce.centre_code = mcc.marking_centre)
+                        FROM centre ce LEFT OUTER JOIN marking_centre_centres mcc ON (ce.centre_code = mcc.marking_centre)
                          WHERE ce.province =:province_code 
                          AND ce.centre_type =:centre_type
                          GROUP BY ce.centre_code,ce.name,mcc.valid');
@@ -60,12 +59,11 @@ if($sql->rowCount() > 0){
 }
 }else {
         if($_SESSION['session_type'] == 'E'){
-        $sql = $db_9->prepare('SELECT DISTINCT ce.centre_code AS centre_code, ce.name AS centre_name, mc.centre_code AS marking_centre_code ,COUNT(DISTINCT(mcc.centre_code)) AS no_of_centres, COUNT(DISTINCT(mc.subject)) AS no_of_subjects
-                        FROM centre ce LEFT OUTER JOIN marking_centre mc ON (ce.centre_code = mc.centre_code)
-                        LEFT OUTER JOIN marking_centre_centres mcc ON (ce.centre_code = mcc.marking_centre)
+        $sql = $db_9->prepare('SELECT DISTINCT ce.centre_code AS centre_code, ce.name AS centre_name, mcc.marking_centre AS marking_centre_code ,COUNT(DISTINCT(mcc.marking_centre)) AS no_of_centres, COUNT(DISTINCT(mcc.subject_code)) AS no_of_subjects
+                        FROM centre ce LEFT OUTER JOIN marking_centre_centres mcc ON (ce.centre_code = mcc.marking_centre)
                          WHERE ce.province =:province_code 
                          AND ce.centre_type =:centre_type
-                         AND mc.centre_code =:marking_centre_code
+                         AND mcc.marking_centre =:marking_centre_code
                          GROUP BY ce.centre_code,ce.name');
 $sql->execute(array(
         ':marking_centre_code'=>$_SESSION['marking_centre_code'],
