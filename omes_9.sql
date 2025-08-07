@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 27, 2025 at 02:25 PM
+-- Generation Time: Aug 07, 2025 at 04:25 PM
 -- Server version: 8.0.36
 -- PHP Version: 8.1.11
 
@@ -1275,7 +1275,7 @@ CREATE TABLE `marks` (
 --
 DELIMITER $$
 CREATE TRIGGER `marks_audit_trail_trigger` AFTER UPDATE ON `marks` FOR EACH ROW BEGIN
-  IF OLD.marking_centre != 'none' AND OLD.province != '00' THEN
+  IF OLD.marking_centre != 'none' AND OLD.province != '00' AND new.status !='L' THEN
     INSERT INTO marks_audit_trail (
       centre_code,
       exam_no,
@@ -1563,7 +1563,7 @@ CREATE TABLE `session` (
 --
 
 INSERT INTO `session` (`id`, `name`, `year`, `level`, `type`) VALUES
-('2024', 'JUNIOR SECONDARY SCHOOL LEAVING EXAMINATION', '2024', '9', 'I');
+('2025', 'JUNIOR SECONDARY SCHOOL EXAMINATION', '2025', '9', 'E');
 
 -- --------------------------------------------------------
 
