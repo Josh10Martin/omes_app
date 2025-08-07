@@ -54,10 +54,11 @@ $data_array['response_msg'] = 'Successfully aligned mainstream candidates';
     if($_SESSION['user_type'] == 'ECZ'){
         try{
 $sql = $db_9->prepare('UPDATE marks m
-                    INNER JOIN (SELECT centre_code,sen,marking_centre,province FROM marking_centre_centres) mcc
+                    INNER JOIN (SELECT centre_code,subject_code,sen,marking_centre,province FROM marking_centre_centres) mcc
                     ON (m.centre_code = mcc.centre_code)
                     SET m.marking_centre = mcc.marking_centre,m.province = mcc.province
                     WHERE m.centre_code = mcc.centre_code
+                    AND m.subject_code = mcc.subject_code
                     AND m.sen = mcc.sen
                     AND m.sen = 0
                     AND m.marking_centre = "none"
@@ -74,10 +75,11 @@ $data_array['response_msg'] = 'Successfully aligned mainstream examination centr
 }else{
     try{
 $sql = $db_9->prepare('UPDATE marks m
-INNER JOIN (SELECT centre_code, sen,marking_centre,province FROM marking_centre_centres) mcc
+INNER JOIN (SELECT centre_code,subject_code, sen,marking_centre,province FROM marking_centre_centres) mcc
 ON (m.centre_code = mcc.centre_code)
 SET m.marking_centre = mcc.marking_centre,m.province = mcc.province
 WHERE m.centre_code = mcc.centre_code
+AND m.subject_code = mcc.subject_code
 AND m.sen = mcc.sen
 AND m.sen = 0
 AND m.marking_centre = "none"
