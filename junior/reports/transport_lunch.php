@@ -103,7 +103,7 @@ $pdf = new Dompdf($options);
             </td>
             <td>
                <p  style="text-align: center;">EXAMINATIONS COUNCIL OF ZAMBIA</p> 
-                <p style="text-align: center;"><?php echo $_SESSION['session_name']; ?></p>
+                <p style="text-align: center;"><?php echo $_SESSION['session_year']," ", $_SESSION['session_name']; ?></p>
                 <p style="text-align: center;">TRANSPORT AND LUNCH ALLOWANCE REPORT</p> 
             </td>
         </tr>
