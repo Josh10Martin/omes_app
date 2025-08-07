@@ -226,7 +226,7 @@ $y = $h - $textHeight;
 
 
 $canvas->page_text($x, $y, $text, $font, 10);
-$canvas->page_text(500, $y, $date_generated, $font, 10);
+$canvas->page_text(50, $y, $date_generated, $font, 10);
 $pdf->stream('Attendance Report', Array('Attachment'=>0));
 if(isset($_SESSION['centre_code'])){
     unset($_SESSION['centre_code']);

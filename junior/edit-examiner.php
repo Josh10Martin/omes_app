@@ -30,8 +30,8 @@ if($_SESSION["user_type"]  == "ADMIN" || $_SESSION['user_type'] == 'DEO'){
         $sql = $db_9->prepare("SELECT DISTINCT ex.nrc AS nrc,ex.id AS id,ex.tpin,ex.first_name AS first_name,ex.last_name AS last_name,ex.phone_number AS phone,ex.address AS address,
         ex.email AS email,ex.belt_no AS belt_no,ex.role AS examiner_role,ex.attendance AS examiner_attendance, ex.title AS examiner_title, b.id AS examiner_bank,ex.branch AS examiner_branch,
         ex.subject_code AS examiner_subject_code, ex.paper_no AS examiner_paper_no, ex.no_of_days, ex.account_no
-        FROM examiner ex INNER JOIN bankbranch br ON (ex.branch = br.id)
-        INNER JOIN bank b ON (br.bank_id = b.id)
+        FROM examiner ex LEFT OUTER JOIN bankbranch br ON (ex.branch = br.id)
+        LEFT OUTER JOIN bank b ON (br.bank_id = b.id)
          WHERE nrc =:nrc");
 $sql->execute(array(
 ":nrc"=>$nrc
@@ -385,9 +385,10 @@ $(document).ready(function(){
                 '<option value="" selected disabled>Select Paper Number</option>'
               );
               $.each(data,function(){
-                var selected = this["paper_no"] == <?php echo $examiner_paper_no; ?> ? 'selected' : '';
+               
+               
                 $('select[name=paper]').append(
-                '<option value="'+this["paper_no"]+'" '+selected+'>'+this["paper_no"]+'</option>'
+                '<option value="'+this["paper_no"]+'">'+this["paper_no"]+'</option>'
               );
               });
             }
@@ -431,7 +432,7 @@ function get_apportioned_belts() {
               dataType: 'json',
               success: function(data) {
                 $('select[name=belt_no] option').remove();
-                if (data.status == '200') {
+               
                   $('select[name=belt_no]').append(
                     '<option value="0">0</option>'
                   );
@@ -444,7 +445,7 @@ function get_apportioned_belts() {
                     );
                   });
                   $('select[name=belt_no] option[value=undefined]').remove();
-                }
+                
               }
             });
           
@@ -486,7 +487,7 @@ $('select[name=subject]').change(function(){
               dataType: 'json',
               success: function(data) {
                 $('select[name=belt_no] option').remove();
-                if (data.status == '200') {
+                
                   $('select[name=belt_no]').append(
                     '<option value="0">0</option>'
                   );
@@ -496,7 +497,7 @@ $('select[name=subject]').change(function(){
                     );
                   });
                   $('select[name=belt_no] option[value=undefined]').remove();
-                }
+                
               }
             });
           });
