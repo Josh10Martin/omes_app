@@ -69,7 +69,7 @@ $sql->fetch(PDO::FETCH_BOUND);
                 </td>
                 <td>
                    <p  style="text-align: center;">EXAMINATIONS COUNCIL OF ZAMBIA</p> 
-                    <p style="text-align: center;"><?php echo $_SESSION['session_name']; ?></p>
+                    <p style="text-align: center;"><?php echo $_SESSION['session_year']," ", $_SESSION['session_name']; ?></p>
                     <p style="text-align: center;">SCRIPT MOVEMENT SUMMARY</p> 
                     <p style="text-align: center;"><?php echo $province_name; ?> PROVINCE</p> 
                 </td>

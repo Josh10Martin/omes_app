@@ -381,9 +381,7 @@ $(document).ready(function(){
             dataType: 'json',
             success:function(data){
               $('select[name=paper] option').remove();
-              $('select[name=paper]').append(
-                '<option value="" selected disabled>Select Paper Number</option>'
-              );
+            
               $.each(data,function(){
                
                
