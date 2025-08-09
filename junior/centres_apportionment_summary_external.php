@@ -88,6 +88,7 @@ if($_SESSION['user_type']  == 'SESO'){
             <thead>
                 <th>CODE</th>
                 <th>MARKING CENTER NAME</th>                
+                <th>SUBJECTS</th>                
                 <th>DISTRICT (S)</th>
                 <th><span class="one">CENTRES</span> </th>
                 <th>Actions</th>
@@ -320,6 +321,7 @@ if($_SESSION['user_type']  == 'SESO'){
                     $('table#script_movement tbody').append('<tr class="'+this["marking_centre_code"]+'">'+
                         '<td>'+this["marking_centre_code"]+'</td>'+
                         '<td>'+this["marking_centre_name"]+'</td>'+
+                        '<td>'+this["subject"]+'</td>'+
                         '<td class="text-center">'+this["districts"]+'</td>'+
                         '<td>'+
                             '<span class="" data-toggle="modal" data-target="#from-centres-modal">'+

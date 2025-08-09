@@ -70,9 +70,9 @@ if($_SESSION['user_type']  == 'SESO'){
             <thead>
                 <th>EXAMINATION CENTRE</th>              
                 <th>DISTRICT </th>
-                <?php if($_SESSION['session_type'] == 'I'){ ?>
+               
                 <th><span class="one">SUBJECT(S)</span> </th>
-                <?php } ?>
+               
             </thead>
             <tbody>
 
@@ -123,9 +123,9 @@ if($_SESSION['user_type']  == 'SESO'){
                         var html = '<tr>'+
                         '<td>'+this["exam_centre"]+'</td>'+
                         '<td>'+this["district"]+'</td>'+
-                        <?php if($_SESSION['session_type'] == 'I'){ ?>
+                       
                             '<td>'+this["subject"]+'</td>'+
-                        <?php } ?>
+                       
                         '</tr>';
                         $('table#unapportioned tbody').append(html);
                     });
