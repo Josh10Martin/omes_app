@@ -9,7 +9,7 @@ if(isset($_POST['username']) && isset($_POST['password']) && isset($_POST['passw
         $password = $_POST['password'];
         $password1 = $_POST['password1'];
         $password2 = $_POST['password2'];
-        $password_pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
+       $password_pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_\/])[A-Za-z\d@$!%*?&_\/]{8,}$/';
         $pattern = preg_match($password_pattern,$password1);
         $option = array('cost'=>12);
         // $hashed_password = password_verify($password, PASSWORD_BCRYPT,$option);
