@@ -22,7 +22,7 @@ session_start();
             </div>
             <div class="col-xs-6">
                 
-                <a href="javascript:void(0)" data-toggle="modal" data-target="#add-admin" class="btn bg-light btn-sm"><i class="fa fa-user-plus"></i> Add SESO</a>
+                <a href="javascript:void(0)" data-toggle="modal" data-target="#add-admin" class="btn bg-light btn-sm"><i class="fa fa-user-plus"></i> Add USER</a>
             </div>
 
         </div>

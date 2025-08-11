@@ -692,13 +692,30 @@ $(document).ready(function(){
             }
             
         });
+      
+
         function send_seso_email(email,username,password,first_name,last_name,user_type){
+            var work = user_type == 'ECZ' ? 'administrative duties' : 'co - ordination',
+            link = 'https://omes.exams-council.org.zm/omes/';
+            var email_data = {
+                subject: `Registered for Grade 9 ${work}`,
+                body: `
+                    Dear ${first_name} ${last_name}<br /><br />
+                    You have been defined by the Examinations Council of Zambia to ${work} Grade 9 exams.<br /><br />
+                    Visit or copy the link below and enter the username <span style="font-weight:bold;">${username}</span>
+                    and password <span style="font-weight:bold;">${password}</span>.<br /><br />
+                    ${link}
+                `,
+                recipients: email
+            };
             $.ajax({
                 //  url: 'php/send_seso_email.php',
-		        url: 'https://verify.exams-council.org.zm/orvs/send_seso_email.php',
-                method: 'POST',
-                data: {email:email,username:username,password:password,first_name:first_name,last_name:last_name,user_type:user_type},
+		        url: 'https://ems.exams-council.org.zm:8080//api/mail-proxy/send-email/',
+                type: 'POST',
+                data: JSON.stringify(email_data),
                 dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                
                 success:function(data){
                     // $('button[id=save]').text('Save');
                     if(data.status == '200'){
@@ -715,6 +732,29 @@ $(document).ready(function(){
                 }
             });
         }
+        // function send_seso_email(email,username,password,first_name,last_name,user_type){
+        //     $.ajax({
+        //         //  url: 'php/send_seso_email.php',
+		//         url: 'https://verify.exams-council.org.zm/orvs/send_seso_email.php',
+        //         method: 'POST',
+        //         data: {email:email,username:username,password:password,first_name:first_name,last_name:last_name,user_type:user_type},
+        //         dataType: 'json',
+        //         success:function(data){
+        //             // $('button[id=save]').text('Save');
+        //             if(data.status == '200'){
+        //                 $('.dialog').text(data.response_msg).dialog('open');
+        //                 $('button[id=save]').removeClass('bg_att');
+        //                 $('img.loading').css('display','none');
+        //                 $('button').attr('disabled',false);
+        //             }else{
+        //                 $('.dialog').text(data.response_msg).dialog('open');
+        //                 $('button[id=save]').removeClass('bg_att');
+        //                 $('img.loading').css('display','none');
+        //                 $('button').attr('disabled',false);
+        //             }
+        //         }
+        //     });
+        // }
 
         
     });

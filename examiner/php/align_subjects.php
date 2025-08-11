@@ -10,10 +10,10 @@ $sql = $db_12_gce->prepare('UPDATE marks m
                         ON (m.subject_code = mc.subject)
                         SET m.marking_centre = mc.centre_code
                         WHERE m.subject_code = mc.subject
-                        AND m.paper_no = mc.paper
+                        AND m.paper_no = mc.paper 
                         AND m.marking_centre = "none"
-                        AMD m.exam_no NOT IN (SELECT exam_no FROM sen_exam_no)
-                        AMD mc.sen = 0
+                        AND m.exam_no NOT IN (SELECT exam_no FROM sen_exam_no)
+                        AND mc.sen = 0
 
                         ');
                 
