@@ -128,20 +128,45 @@ $(document).ready(function(){
    });
 
 function send_reset_email(email,first_name,last_name,username){
+
+         const resetLink = `https://omes.exams-council.org.zm/omes/reset_password.php?username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}`;
+    
+    const button = `
+        <a href="${resetLink}">
+            <button type="submit" style="cursor:pointer; padding:5px; color:white; background-color:green;">
+                Reset Password
+            </button>
+        </a>
+    `;
+
+    const email_data = {
+        subject: 'Password reset request (OMES Grade 9)',
+        body: `
+            Dear ${first_name} ${last_name}<br /><br />
+            You have requested a password reset for your Online Marks Entry (OMES) Grade 9 account.<br /><br />
+            Click the button below to begin the reset process.<br /><br />
+            ${button}
+            <br /><br />
+            If you did not request this password reset, you may ignore this email.
+        `,
+        recipients: email
+    };
         $.ajax({
                 // url: 'php/send_reset_email.php',
-                url: 'https://verify.exams-council.org.zm/orvs/send_reset_email.php',
-                method: 'POST',
-                data: {email:email,first_name:first_name,last_name:last_name,username:username},
+                // url: 'https://verify.exams-council.org.zm/orvs/send_reset_email.php',
+                url: 'https://ems.exams-council.org.zm:8080//api/mail-proxy/send-email/',
+                type: 'POST',
+                data: JSON.stringify(email_data),
+                contentType: 'application/json; charset=utf-8',
                 dataType: 'json',
-                eforeSend: function(){
+                beforeSend: function(){
                         $('.feedback').text('Sending email. Please wait...');
                 },
                 success: function(data){
                         $('.feedback').text('');
                         $('button[type=submit]').attr('disabled',false);
                         $('.load').html('');
-                        if(data,status == '200'){
+                        if(data.status == '200'){
                                 $('#form-forgot-password').trigger('reset');
                                 $('input[type=email]').val('');
                                 $('.dialog').text(data.response_msg).dialog('open');
@@ -152,6 +177,31 @@ function send_reset_email(email,first_name,last_name,username){
 
         });
 }
+// function send_reset_email(email,first_name,last_name,username){
+//         $.ajax({
+//                 // url: 'php/send_reset_email.php',
+//                 url: 'https://verify.exams-council.org.zm/orvs/send_reset_email.php',
+//                 method: 'POST',
+//                 data: {email:email,first_name:first_name,last_name:last_name,username:username},
+//                 dataType: 'json',
+//                 eforeSend: function(){
+//                         $('.feedback').text('Sending email. Please wait...');
+//                 },
+//                 success: function(data){
+//                         $('.feedback').text('');
+//                         $('button[type=submit]').attr('disabled',false);
+//                         $('.load').html('');
+//                         if(data,status == '200'){
+//                                 $('#form-forgot-password').trigger('reset');
+//                                 $('input[type=email]').val('');
+//                                 $('.dialog').text(data.response_msg).dialog('open');
+//                         }else{
+//                                 $('.dialog').text(data.response_msg).dialog('open');
+//                         }
+//                 }
+
+//         });
+// }
     
   
 
