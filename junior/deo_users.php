@@ -480,7 +480,7 @@ $(document).ready(function(){
 
     var email_data =  {
         subject: `CHOSEN AS ${user_type} FOR GRADE 9 MARKING SESSION`,
-        body: "Dear " + first_name + " " + last_name + ",\n\n" +
+        html_body: "Dear " + first_name + " " + last_name + ",\n\n" +
       "You have been chosen by the " + person + " to be " + user_type + " for Grade 9 marking session at " + marking_centre_name + ".\n\n" +
       "Visit or copy the link below and enter the username " + username + " and password " + password + ".\n\n" +
       link + "\n\n" +
