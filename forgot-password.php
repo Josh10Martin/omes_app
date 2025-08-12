@@ -141,16 +141,14 @@ function send_reset_email(email,first_name,last_name,username){
 
     const email_data = {
         subject: 'Password reset request (OMES Grade 9)',
-        body: `
-            Dear ${first_name} ${last_name}<br /><br />
-            You have requested a password reset for your Online Marks Entry (OMES) Grade 9 account.<br /><br />
-            Click the button below to begin the reset process.<br /><br />
-            ${button}
-            <br /><br />
-            If you did not request this password reset, you may ignore this email.
-        `,
-        recipients: email
-    };
+        html_body: 
+          "Dear " + first_name + " " + last_name + "\n\n" +
+          "You have requested a password reset for your Online Marks Entry (OMES) Grade 9 account.\n\n" +
+          "Click the link below to begin the reset process.\n\n" +
+          resetLink + "\n\n" +
+          "If you did not request this password reset, you may ignore this email.\n\n",
+              recipients: email
+          };
         $.ajax({
                 // url: 'php/send_reset_email.php',
                 // url: 'https://verify.exams-council.org.zm/orvs/send_reset_email.php',
