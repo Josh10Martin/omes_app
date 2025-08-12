@@ -477,25 +477,15 @@ $(document).ready(function(){
     var person = user_type == 'DATA ENTRY OPERATOR' ? 'Systems Administrator' : 'Senior Education Standards Officer (SESO)',
     link = 'https://omes.exams-council.org.zm/omes/';
 
-nction send_admin_email(username, email, first_name, last_name, marking_centre_name, password, user_type) {
-
-    var person = user_type == 'DATA ENTRY OPERATOR'
-        ? 'Systems Administrator'
-        : 'Senior Education Standards Officer (SESO)';
-    var link = 'https://omes.exams-council.org.zm/omes/';
 
     var email_data = {
         subject: `CHOSEN AS ${user_type} FOR GRADE 9 MARKING SESSION`,
-        body: `Dear ${first_name} ${last_name}
-
-You have been chosen by the ${person} to be ${user_type} for the Grade 9 marking session at ${marking_centre_name}.
-
-Visit or copy the link below and enter the username ${username} and password ${password}.
-
-${link}
-
-Best regards,
-Examinations Council of Zambia`,
+        body: "Dear " + first_name + " " + last_name + ",\n\n" +
+      "You have been chosen by the " + person + " to be " + user_type + " for Grade 9 marking session at " + marking_centre_name + ".\n\n" +
+      "Visit or copy the link below and enter the username " + username + " and password " + password + ".\n\n" +
+      link + "\n\n" +
+      "Best regards,\n" +
+      "Examinations Council of Zambia",
         recipients: email
     };
 
@@ -514,29 +504,7 @@ Examinations Council of Zambia`,
     });
 }
 
-    $.ajax({
-        // url: 'php/send_admin_email.php',
-        // url: 'https://verify.exams-council.org.zm/orvs/send_admin_email.php',
-          url: 'https://ems.exams-council.org.zm:8080//api/mail-proxy/send-email/',
-        type: 'POST',
-         data: JSON.stringify(email_data),
-        dataType: 'json',
-        contentType: 'application/json; charset=utf-8',
-        success: function(data){
-            if(data.status == '200'){
-                $('.dialog6').text(data.response_msg).dialog('open');
-                    $('button[id=save]').removeClass('bg_att');
-                    $('img.loading').css('display','none');
-                    $('button').attr('disabled',false);
-            }else{
-                    $('.dialog6').text(data.response_msg).dialog('open');
-                    $('button[id=save]').removeClass('bg_att');
-                    $('img.loading').css('display','none');
-                    $('button').attr('disabled',false);
-            }
-        }
-    });
-   }
+   
 //    function send_admin_email(username,email,first_name,last_name,marking_centre_name,password,user_type){
 //     $.ajax({
 //         // url: 'php/send_admin_email.php',
