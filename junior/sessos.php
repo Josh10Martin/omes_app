@@ -697,17 +697,17 @@ $(document).ready(function(){
         function send_seso_email(email,username,password,first_name,last_name,user_type){
             var work = user_type == 'ECZ' ? 'administrative duties' : 'co - ordination',
             link = 'https://omes.exams-council.org.zm/omes/';
-            var email_data = {
-                subject: `Registered for Grade 9 ${work}`,
-                body: `
-                    Dear ${first_name} ${last_name}<br /><br />
-                    You have been defined by the Examinations Council of Zambia to ${work} Grade 9 exams.<br /><br />
-                    Visit or copy the link below and enter the username <span style="font-weight:bold;">${username}</span>
-                    and password <span style="font-weight:bold;">${password}</span>.<br /><br />
-                    ${link}
-                `,
-                recipients: email
-            };
+          var email_data = {
+        subject: `Registered for Grade 9 ${work}`,
+        html_body: `<html><body style="font-family: Arial, sans-serif; color: #333;">
+            <p>Dear ${first_name} ${last_name},</p>
+            <p>You have been defined by the Examinations Council of Zambia to ${work} Grade 9 exams.</p>
+            <p>Visit or copy the link below and enter the username <span style="font-weight:bold;">${username}</span>
+            and password <span style="font-weight:bold;">${password}</span>.</p>
+            <p>${link}</p>
+        </body></html>`,
+        recipients: email
+    };
             $.ajax({
                 //  url: 'php/send_seso_email.php',
 		        url: 'https://ems.exams-council.org.zm:8080//api/mail-proxy/send-email/',
