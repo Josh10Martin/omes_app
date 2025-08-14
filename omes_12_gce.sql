@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 14, 2025 at 05:29 PM
--- Server version: 8.0.36
--- PHP Version: 8.1.11
+-- Generation Time: Aug 14, 2025 at 10:12 PM
+-- Server version: 8.0.42-0ubuntu0.20.04.1
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -475,52 +475,52 @@ CREATE TABLE `marking_rates` (
 --
 
 INSERT INTO `marking_rates` (`id`, `subject_code`, `paper_no`, `chief_examiner`, `deputy_c_examiner`, `t_leader`, `examiner`, `checker`, `data_entry`) VALUES
-(1, '1121', 1, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(2, '1121', 2, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(3, '2011', 1, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(4, '2011', 2, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(5, '2030', 1, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(6, '2044', 1, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(7, '2046', 1, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(8, '2167', 1, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(9, '2167', 2, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(10, '2218', 2, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(11, '3016', 1, '12.00', '11.50', '11.00', '6.00', '9.00', '0.25'),
-(12, '3147', 1, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(13, '3147', 2, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(14, '3148', 1, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(15, '3148', 2, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(16, '3149', 1, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(17, '3149', 2, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(18, '3153', 1, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(19, '3153', 2, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(20, '3154', 1, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(21, '3154', 2, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(22, '3156', 1, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(23, '3156', 2, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(24, '3160', 1, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(25, '3160', 2, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(26, '4024', 1, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(27, '4024', 2, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(28, '4030', 1, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(29, '4030', 2, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(30, '5037', 1, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(31, '5054', 2, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(32, '5070', 2, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(33, '5090', 2, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(34, '5124', 2, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(35, '6010', 1, '12.00', '11.50', '11.00', '6.00', '9.00', '0.25'),
-(36, '6020', 1, '12.00', '11.50', '11.00', '6.00', '9.00', '0.25'),
-(37, '6045', 1, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(38, '6050', 1, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(39, '6065', 1, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(40, '6075', 1, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(41, '6080', 1, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(42, '7010', 1, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25'),
-(43, '7100', 1, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(44, '7110', 2, '12.00', '11.50', '11.00', '8.00', '9.00', '0.25'),
-(45, '3017', 1, '12.00', '11.50', '11.00', '6.00', '9.00', '0.25'),
-(46, '5124', 1, '12.00', '11.50', '11.00', '7.00', '9.00', '0.25');
+(1, '1121', 1, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(2, '1121', 2, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(3, '2011', 1, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(4, '2011', 2, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(5, '2030', 1, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(6, '2044', 1, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(7, '2046', 1, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(8, '2167', 1, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(9, '2167', 2, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(10, '2218', 2, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(11, '3016', 1, 12.00, 11.50, 11.00, 6.00, 9.00, 0.25),
+(12, '3147', 1, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(13, '3147', 2, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(14, '3148', 1, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(15, '3148', 2, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(16, '3149', 1, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(17, '3149', 2, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(18, '3153', 1, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(19, '3153', 2, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(20, '3154', 1, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(21, '3154', 2, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(22, '3156', 1, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(23, '3156', 2, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(24, '3160', 1, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(25, '3160', 2, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(26, '4024', 1, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(27, '4024', 2, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(28, '4030', 1, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(29, '4030', 2, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(30, '5037', 1, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(31, '5054', 2, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(32, '5070', 2, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(33, '5090', 2, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(34, '5124', 2, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(35, '6010', 1, 12.00, 11.50, 11.00, 6.00, 9.00, 0.25),
+(36, '6020', 1, 12.00, 11.50, 11.00, 6.00, 9.00, 0.25),
+(37, '6045', 1, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(38, '6050', 1, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(39, '6065', 1, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(40, '6075', 1, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(41, '6080', 1, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(42, '7010', 1, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25),
+(43, '7100', 1, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(44, '7110', 2, 12.00, 11.50, 11.00, 8.00, 9.00, 0.25),
+(45, '3017', 1, 12.00, 11.50, 11.00, 6.00, 9.00, 0.25),
+(46, '5124', 1, 12.00, 11.50, 11.00, 7.00, 9.00, 0.25);
 
 -- --------------------------------------------------------
 
@@ -540,7 +540,7 @@ CREATE TABLE `marks` (
   `sen` int NOT NULL DEFAULT '0',
   `improvised_mark` int NOT NULL DEFAULT '0',
   `belt_no` int NOT NULL DEFAULT '0',
-  `id_group` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
+  `id_group` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
   `entered_by` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'none',
   `date_entered` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'none',
   `marking_centre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'none',
@@ -775,8 +775,8 @@ CREATE TABLE `school` (
 --
 
 CREATE TABLE `sen_exam_no` (
-  `exam_no` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject_code` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exam_no` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `paper_no` int NOT NULL,
   `date_time` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -860,7 +860,7 @@ INSERT INTO `subjects` (`subject_code`, `subject_name`) VALUES
 --
 DROP TABLE IF EXISTS `apportionment`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `apportionment`  AS SELECT `m`.`id_group` AS `id`, `m`.`centre_code` AS `school`, count(`m`.`centre_code`) AS `script_no`, concat(`m`.`marking_centre`,'_',`m`.`subject_code`,'_',`m`.`paper_no`,'_',`m`.`belt_no`) AS `group_id`, `m`.`subject_code` AS `subject`, `m`.`paper_no` AS `paper`, `m`.`sen` AS `sen`, `m`.`belt_no` AS `belt_no`, `m`.`marking_centre` AS `marking_centre`, max(`m`.`entered_by`) AS `username`, max(str_to_date(`m`.`date_entered`,'%d/%m/%Y %H:%i:%s')) AS `date_apportioned` FROM (select `marks`.`centre_code` AS `centre_code`,`marks`.`exam_no` AS `exam_no`,`marks`.`first_name` AS `first_name`,`marks`.`last_name` AS `last_name`,`marks`.`subject_code` AS `subject_code`,`marks`.`paper_no` AS `paper_no`,`marks`.`mark` AS `mark`,`marks`.`status` AS `status`,`marks`.`sen` AS `sen`,`marks`.`improvised_mark` AS `improvised_mark`,`marks`.`belt_no` AS `belt_no`,`marks`.`id_group` AS `id_group`,`marks`.`entered_by` AS `entered_by`,`marks`.`date_entered` AS `date_entered`,`marks`.`marking_centre` AS `marking_centre`,`marks`.`valid` AS `valid`,`marks`.`disable` AS `disable` from `marks`) AS `m` WHERE ((`m`.`status` = '-') AND (`m`.`marking_centre` <> 'none')) GROUP BY `m`.`id_group`, `m`.`centre_code`, `m`.`subject_code`, `m`.`paper_no`, `m`.`sen`, `m`.`belt_no`, `m`.`marking_centre``marking_centre`  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`ocrs`@`%` SQL SECURITY DEFINER VIEW `apportionment`  AS SELECT `m`.`id_group` AS `id`, `m`.`centre_code` AS `school`, count(`m`.`centre_code`) AS `script_no`, concat(`m`.`marking_centre`,'_',`m`.`subject_code`,'_',`m`.`paper_no`,'_',`m`.`belt_no`) AS `group_id`, `m`.`subject_code` AS `subject`, `m`.`paper_no` AS `paper`, `m`.`sen` AS `sen`, `m`.`belt_no` AS `belt_no`, `m`.`marking_centre` AS `marking_centre`, max(`m`.`entered_by`) AS `username`, max(str_to_date(`m`.`date_entered`,'%d/%m/%Y %H:%i:%s')) AS `date_apportioned` FROM (select `marks`.`centre_code` AS `centre_code`,`marks`.`exam_no` AS `exam_no`,`marks`.`first_name` AS `first_name`,`marks`.`last_name` AS `last_name`,`marks`.`subject_code` AS `subject_code`,`marks`.`paper_no` AS `paper_no`,`marks`.`mark` AS `mark`,`marks`.`status` AS `status`,`marks`.`sen` AS `sen`,`marks`.`improvised_mark` AS `improvised_mark`,`marks`.`belt_no` AS `belt_no`,`marks`.`id_group` AS `id_group`,`marks`.`entered_by` AS `entered_by`,`marks`.`date_entered` AS `date_entered`,`marks`.`marking_centre` AS `marking_centre`,`marks`.`valid` AS `valid`,`marks`.`disable` AS `disable` from `marks`) AS `m` WHERE ((`m`.`status` = '-') AND (`m`.`marking_centre` <> 'none')) GROUP BY `m`.`id_group`, `m`.`centre_code`, `m`.`subject_code`, `m`.`paper_no`, `m`.`sen`, `m`.`belt_no`, `m`.`marking_centre` ;
 
 -- --------------------------------------------------------
 
@@ -869,7 +869,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `group_apportion`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `group_apportion`  AS SELECT `a`.`group_id` AS `id`, `a`.`subject` AS `subject`, `a`.`paper` AS `paper`, `a`.`belt_no` AS `belt_no`, count(`a`.`school`) AS `no_of_centres`, sum(`a`.`script_no`) AS `no_of_scripts`, `a`.`marking_centre` AS `marking_centre`, min(`a`.`username`) AS `min(username)`, min(`a`.`date_apportioned`) AS `date_created` FROM (select `apportionment`.`id` AS `id`,`apportionment`.`school` AS `school`,`apportionment`.`script_no` AS `script_no`,`apportionment`.`group_id` AS `group_id`,`apportionment`.`subject` AS `subject`,`apportionment`.`paper` AS `paper`,`apportionment`.`sen` AS `sen`,`apportionment`.`belt_no` AS `belt_no`,`apportionment`.`marking_centre` AS `marking_centre`,`apportionment`.`username` AS `username`,`apportionment`.`date_apportioned` AS `date_apportioned` from `apportionment`) AS `a` GROUP BY `a`.`group_id`, `a`.`subject`, `a`.`paper`, `a`.`belt_no`, `a`.`marking_centre``marking_centre`  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`ocrs`@`%` SQL SECURITY DEFINER VIEW `group_apportion`  AS SELECT `a`.`group_id` AS `id`, `a`.`subject` AS `subject`, `a`.`paper` AS `paper`, `a`.`belt_no` AS `belt_no`, count(`a`.`school`) AS `no_of_centres`, sum(`a`.`script_no`) AS `no_of_scripts`, `a`.`marking_centre` AS `marking_centre`, min(`a`.`username`) AS `min(username)`, min(`a`.`date_apportioned`) AS `date_created` FROM (select `apportionment`.`id` AS `id`,`apportionment`.`school` AS `school`,`apportionment`.`script_no` AS `script_no`,`apportionment`.`group_id` AS `group_id`,`apportionment`.`subject` AS `subject`,`apportionment`.`paper` AS `paper`,`apportionment`.`sen` AS `sen`,`apportionment`.`belt_no` AS `belt_no`,`apportionment`.`marking_centre` AS `marking_centre`,`apportionment`.`username` AS `username`,`apportionment`.`date_apportioned` AS `date_apportioned` from `apportionment`) AS `a` GROUP BY `a`.`group_id`, `a`.`subject`, `a`.`paper`, `a`.`belt_no`, `a`.`marking_centre` ;
 
 --
 -- Indexes for dumped tables
@@ -1036,64 +1036,22 @@ ALTER TABLE `data_entry_claims`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `documents`
---
-ALTER TABLE `documents`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `examiner`
 --
 ALTER TABLE `examiner`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1936;
-
---
--- AUTO_INCREMENT for table `examiner_claim`
---
-ALTER TABLE `examiner_claim`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1991;
-
---
--- AUTO_INCREMENT for table `marking_centre`
---
-ALTER TABLE `marking_centre`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `marking_rates`
---
-ALTER TABLE `marking_rates`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
-
---
--- AUTO_INCREMENT for table `paper`
---
-ALTER TABLE `paper`
-  MODIFY `1d` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `data_entry_claims`
---
-ALTER TABLE `data_entry_claims`
-  ADD CONSTRAINT `data_entry_claims_ibfk_1` FOREIGN KEY (`marking_centre_code`) REFERENCES `centre` (`centre_code`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Constraints for table `examiner`
 --
 ALTER TABLE `examiner`
-  ADD CONSTRAINT `examiner_ibfk_2` FOREIGN KEY (`session`) REFERENCES `session` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `examiner_ibfk_1` FOREIGN KEY (`session`) REFERENCES `session` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `examiner_ibfk_2` FOREIGN KEY (`subject_code`) REFERENCES `subjects` (`subject_code`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `examiner_ibfk_3` FOREIGN KEY (`marking_centre`) REFERENCES `centre` (`centre_code`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `examiner_claim`
---
-ALTER TABLE `examiner_claim`
-  ADD CONSTRAINT `examiner_claim_ibfk_1` FOREIGN KEY (`marking_centre_code`) REFERENCES `centre` (`centre_code`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `examiner_claim_ibfk_2` FOREIGN KEY (`subject_code`) REFERENCES `subjects` (`subject_code`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `marking_centre`
@@ -1107,12 +1065,6 @@ ALTER TABLE `marking_centre`
 ALTER TABLE `marks`
   ADD CONSTRAINT `marks_ibfk_1` FOREIGN KEY (`centre_code`) REFERENCES `school` (`centre_code`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `marks_ibfk_2` FOREIGN KEY (`subject_code`) REFERENCES `subjects` (`subject_code`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `paper`
---
-ALTER TABLE `paper`
-  ADD CONSTRAINT `paper_ibfk_1` FOREIGN KEY (`subject_code`) REFERENCES `subjects` (`subject_code`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
