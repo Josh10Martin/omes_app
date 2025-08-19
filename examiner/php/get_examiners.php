@@ -21,7 +21,7 @@ $data_array = array();
         AND mc.paper =:paper)
 
         SELECT * FROM cte
-        ORDER BY FIELD(belt_no, "NOT BELTED") DESC');
+        ORDER BY FIELD(belt_no, "NOT BELTED") DESC, belt_no ASC');
 $sql->execute(array(
 ':marking_centre_code'=>$_SESSION['marking_centre_code'],
 ':subject_code'=>$subject_code,
