@@ -120,6 +120,9 @@ if($_SESSION['user_type'] == 'ADMIN'){
                     if($_SESSION['user_type'] == 'DEO'){
                 ?>
                         <div class="col-md-6">
+                          <?php
+                            echo $_SESSION['username'].' - '.$_SESSION['first_name'].' '.$_SESSION['last_name'];
+                          ?>
                         <a href="#" id="submit_data_entry_claim" class="btn btn-white"><i class="fa fa-check" aria-hidden="true"></i> Submit Claim</a>
                             
                                <a href="javascript:void(0)" data-toggle="modal" data-target="#data_entry_modal"><div> Data Entry Officer Statistics (Yours)</div></a> 
@@ -881,7 +884,7 @@ if($_SESSION['user_type'] == 'DEO'){
         </div>
         <div class="col-md-12">
             <p>Candidate type
-            <select name="sen" class="select" id="Center" required>
+            <select name="sen" class="select"  required>
               <option value="" selected>Select Candidate Type</option>
               <option value="0">Mainstream</option>
               <option value="1">Sen</option>
@@ -1223,9 +1226,11 @@ $('#export2').dialog({
         $('select[name=end_centre]').select2({
           data:data
         });
-        $('select[name=centre_code]').select2({
-          data:data
-        });
+       $('select[name=centre_code]').select2({
+    dropdownParent: $('#transcription_checklist_modal'),
+    placeholder: 'Select Centre',
+    width: '100%'
+});
         $('select[name=start_centre] option[value=undefined]').remove();
         $('select[name=end_centre] option[value=undefined]').remove();
         $('select[name=centre_code] option[value=undefined]').remove();

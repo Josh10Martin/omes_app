@@ -176,7 +176,7 @@ if((isset($_SESSION['user_type']) && $_SESSION['user_type']  == 'DEO') || (isset
         
         function submitted_claims(){
             $.ajax({
-                url: 'php/payment_schedule/data_entry.php',
+                url: 'php/api/payment_schedule/data_entry.php',
                 method: 'POST',
                 dataType: 'json',
                 success: function(data){
