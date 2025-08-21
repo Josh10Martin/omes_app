@@ -10,6 +10,7 @@ if($_SESSION['user_type'] == 'DEO'){
         logout($db_ted,$_SESSION['username']);
     }else{
         logout($db_12_gce,$_SESSION['username']);
+        nullify_session($db_12_gce,$_SESSION['username']);
     }
    
 }

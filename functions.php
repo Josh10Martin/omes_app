@@ -976,6 +976,30 @@ function remove_subject_paper_from_marksheet_not_belong($db){
         $sql->execute();
         return $sql->rowCount();
 }
+function nullify_session($db,$username){
+        $sql = $db->prepare('UPDATE examiner SET session_token = NULL WHERE examiner_number =:username');
+        $sql->execute(array(
+                ':username'=>$username
+        ));
+        
+}
+function generate_session_token($db,$username){
+        $token = bin2hex(random_bytes(16));
+        $sql = $db->prepare('UPDATE examiner SET session_token =:token WHERE examiner_number =:username');
+        $sql->execute(array(
+                ':username'=>$username,
+                ':token'=>$token
+        ));
+        return $token;
+}
+function generated_session_token($db,$username){
+        $sql = $db->prepare('SELECT session_token FROM examiner WHERE examiner_number =:username');
+        $sql->execute(array(
+                ':username'=>$username
+        ));
+        $row = $sql->fetch(PDO:: FETCH_ASSOC);
+        return $row['session_token'];
+}
 // function get_exam_no_not_exist($db){
        
         

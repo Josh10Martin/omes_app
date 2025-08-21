@@ -15,6 +15,7 @@ if(!isset($_SESSION['user_type']) && !isset($_SESSION['first_name']) && !isset($
 					<img src="../assets/img/logo.jpg" class="rounded-circle" width="35" height="35" alt=""> <span>Marks Entry</span>
 				</a>
 			</div>
+            
 			<a id="toggle_btn" href="javascript:void(0);"><i class="fa fa-bars"></i></a>
             <a id="mobile_btn" class="mobile_btn float-left" href="#sidebar"><i class="fa fa-bars"></i></a>
             <h5 style="color:white; text-transform:uppercase; text-align:center; position:absolute;top:30%;left:50%; transform:translate(-50%,-50%);">session: <?php echo isset($_SESSION['session_name']) ? $_SESSION['session_year'].' '.$session_type.' '.$_SESSION['session_name'] : 'No Set Session'; ?></h5>
