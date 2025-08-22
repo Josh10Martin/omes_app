@@ -1,0 +1,14 @@
+
+User	Username	New_Password
+ECZ	    eczuser	21310
+SESO	sesoqa	sesoQA@25
+
+System Admin	saqa	saQA@2025
+
+Data Entry	ckaula	Ckaula@2025
+
+
+
+2167/109903 Chief Eng 1 Test
+
+
