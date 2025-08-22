@@ -1,7 +1,7 @@
 <?php
 header('Content-Type:application/json; charset=utf-8;');
 session_start();
-include './../../config.php';
+include '../../../config.php';
 $data_array = array();
 
 // if(isset($_POST['examiner_number']) && isset($_POST['nrc']) && isset($_POST['tpin']) && isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['phone_number']) && isset($_POST['email']) && isset($_POST['address']) && isset($_POST['title']) && isset($_POST['role']) && isset($_POST['no_of_days']) && isset($_POST['marking_centre_code']) && isset($_POST['subject_code']) && isset($_POST['paper_number']) && isset($_POST['bank']) && isset($_POST['branch']) && isset($_POST['sortcode']) && isset($_POST['account_no'])){
