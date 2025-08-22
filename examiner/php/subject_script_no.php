@@ -13,10 +13,8 @@ if($_SESSION['user_type'] == 'ECZ'){
                             GROUP BY su.subject_code,pa.paper_no
                             ORDER BY subject_code,paper_no');
     $sql->execute();
-    $row = $sql->fetch(PDO::FETCH_ASSOC);
-    $data_array[0]['no_of_scripts'] =  $row['no_of_scripts'] ?? '0';
-    $data_array[0]['subject_code'] = $row['subject_code'].'/'.$row['paper_no'] ?? '';
-    $i =1;
+    
+    $i =0;
     while($row = $sql->fetch(PDO::FETCH_ASSOC)){
         $data_array[$i]['no_of_scripts'] =  $row['no_of_scripts'] ?? '0';
         $data_array[$i]['subject_code'] = $row['subject_code'].'/'.$row['paper_no'] ?? '';
@@ -36,10 +34,8 @@ $sql->execute(array(
     
     ':marking_centre_code'=>$_SESSION['marking_centre_code']
 ));
-$row = $sql->fetch(PDO::FETCH_ASSOC);
-    $data_array[0]['no_of_scripts'] =  $row['no_of_scripts'] ?? '0';
-    $data_array[0]['subject_code'] = $row['subject_code'].'/'.$row['paper_no'] ?? '';
-    $i =1;
+    
+    $i =0;
     while($row = $sql->fetch(PDO::FETCH_ASSOC)){
         $data_array[$i]['no_of_scripts'] =  $row['no_of_scripts'] ?? '0';
         $data_array[$i]['subject_code'] = $row['subject_code'].'/'.$row['paper_no'] ?? '';
