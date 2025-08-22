@@ -15,11 +15,11 @@ if (isset($_POST['subject']) && isset($_POST['paper']) && isset($_POST['attendan
     $output = fopen('php://output', 'w');
 
     // Add CSV headers
-    fputcsv($output, ['NRC', 'first Name','last name', 'No. of Days', 'Attendance', 'Subject Code', 'Subject Name', 'Paper No', 'Role','belt number', 'Account No', 'Bank', 'Branch']);
+    fputcsv($output, ['Examiner Number', 'NRC', 'first Name','last name', 'No. of Days', 'Attendance', 'Subject Code', 'Subject Name', 'Paper No', 'Role','belt number', 'Account No', 'Bank', 'Branch']);
 
     if ($belt_no == 'all') {
         $sql = $db_12_gce->prepare('
-            SELECT ex.nrc AS nrc, ex.first_name AS first_name,ex.last_name AS last_name, ex.no_of_days AS no_of_days,
+            SELECT ex.examiner_number AS examiner_number,ex.nrc AS nrc, ex.first_name AS first_name,ex.last_name AS last_name, ex.no_of_days AS no_of_days,
                    CASE WHEN ex.attendance = 1 THEN "PRESENT" ELSE "NOT PRESENT" END AS attendance,
                    su.subject_code AS subject_code, su.subject_name AS subject_name,  pa.paper_no, ex.role AS role,
                    ex.belt_no AS belt_no,ex.account_no AS account_no, ex.bank AS bank, ex.branch AS branch
@@ -41,7 +41,7 @@ if (isset($_POST['subject']) && isset($_POST['paper']) && isset($_POST['attendan
         ]);
     } else {
         $sql = $db_12_gce->prepare('
-            SELECT ex.nrc AS nrc, ex.first_name, AS first_name,ex.last_name AS last_name, ex.no_of_days AS no_of_days,
+            SELECT ex.examiner_number AS examiner_number,ex.nrc AS nrc, ex.first_name, AS first_name,ex.last_name AS last_name, ex.no_of_days AS no_of_days,
                    CASE WHEN ex.attendance = 1 THEN "PRESENT" ELSE "NOT PRESENT" END AS attendance,
                    su.subject_code AS subject_code, su.subject_name AS subject_name,  pa.paper_no, ex.role AS role,
                    ex.belt_no AS belt_no, ex.account_no AS account_no, ex.bank AS bank, ex.branch AS branch
