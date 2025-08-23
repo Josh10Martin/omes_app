@@ -20,7 +20,7 @@ $pdf = new Dompdf($options);
         $sen = $_POST['sen'] ??  $_SESSION['sen'];
         $i =0;
         $sql = $db_12_gce->prepare('SELECT m.exam_no AS exam_no,m.first_name AS first_name,m.last_name AS last_name,m.mark AS mark,
-                                    m.belt_no AS belt_no,
+                                    MAX(m.belt_no) AS belt_no,
                                 m.status AS status, CASE WHEN m.entered_by = "none" THEN "" ELSE m.entered_by END AS entered_by,sc.centre_code AS centre_code,sc.centre_name AS centre_name,
                                 su.subject_code AS subject_code,su.subject_name AS subject_name,pa.paper_no AS paper_no
                                 FROM school sc INNER JOIN marks m ON (sc.centre_code = m.centre_code)

@@ -14,8 +14,9 @@ try{
                                 AND ex.marking_centre = be.marking_centre
                                 AND be.marking_centre = :marking_centre_code
                                 AND be.uploaded_by =:username
-                                AND be.date_uploaded = (SELECT MAX(date_uploaded) FROM belted_examiners WHERE uploaded_ny =:username AND marking_centre =:marking_centre_code)
+                                AND be.date_uploaded = (SELECT MAX(date_uploaded) FROM belted_examiners WHERE uploaded_by =:username AND marking_centre =:marking_centre_code)
                                 AND (be.belt_no <> 0 AND be.belt_no <> "")
+                                AND ex.attendance = 1
                                 AND ex.role NOT IN ("CHIEF EXAMINER","DEPUTY CHIEF EXAMINER","DATA ENTRY OFFICER")
         
         ');

@@ -107,13 +107,18 @@ if ($_SESSION['user_type']  == 'ADMIN') {
 							<div class="modal-content">
 								<div class="modal-body">
 									<h3 class="text-center">Upload Examiners To Belts</h3>
-									<form action="" method="POST" enctype="multipart/form-data">
+									<div class="upload_dialog1"></div>
+									<div class="upload_dialog2"></div>
+									<form  id="upload_belted_examiner_form" enctype="multipart/form-data">
 										<div class="form-group">
-											<label for="file">Select CSV File</label>
-											<input type="file" name="file" id="file" class="form-control" accept=".xls, .xlsx" required>
+											<label for="file">Select CSV File </label> | <a href="documents/belted_examiners_template.csv">dowload template</a>
+											<input type="file" name="myFile" id="file" class="form-control" accept=".csv" required>
 										</div>
+										<div class="feedback1"></div>
+										<div class="feedback2"></div>
 										<div class="form-group">
 											<button type="submit" class="btn btn-primary">Upload</button>
+											<img src="../images/loading.gif" class ="loading" alt="" style="display: none;">
 										</div>
 									</form>
 								</div>
@@ -248,7 +253,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
 				draggable: false,
 				resizable: false,
 				closeOnEscape: false,
-				// appendTo: '#add-admin',
+				appendTo: '#upload_to_belts',
 				autoOpen: false,
 				create: function(e) {
 					$(e.target).parent().css({
@@ -281,7 +286,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
 				draggable: false,
 				resizable: false,
 				closeOnEscape: false,
-				// appendTo: '#add-admin',
+				appendTo: '#upload_to_belts',
 				autoOpen: false,
 				create: function(e) {
 					$(e.target).parent().css({
@@ -530,7 +535,64 @@ if ($_SESSION['user_type']  == 'ADMIN') {
 					}
 				});
 			}
+
+
+function upload_belted_examiners(){
+	$('#upload_belted_examiner_form').submit(function(e){
+		e.preventDefault();
+		$.ajax({
+			url: 'php/upload_belted_examiners.php',
+			method: 'POST',
+			data: new FormData(this),
+			cache: false,
+			processData: false,
+			contentType: false,
+			dataType: 'json',
+			beforeSend: function(){
+				$('.feedback1').text('uploading data . . ...');
+				$('button[type=submit]').attr('disabled', true);
+				$('img.loading').css('display','block');
+			},
+			success: function(data){
+				if(data.status == '200'){
+					$('.feedback1').text('upload done.');
+					process_belted_examiners();
+				}else{
+					$('.feedback1').text('');
+					$('button[type=submit]').attr('disabled', false);
+					$('.upload_dialog1').text(data.response_msg).dialog('open');
+					$('img.loading').css('display','none');
+				}
+			}
+
 		});
+	});
+
+}
+
+function process_belted_examiners(){
+	$.ajax({
+		url: 'php/process_belted_examiners.php',
+		method: 'POST',
+		dataType: 'json',
+		beforeSend: function(){
+			$('.feedback2').text('belting examiner(s). Please wait . . . ....');
+		},
+		success: function(data){
+			if(data.status == '200'){
+				$('.upload_dialog2').text(data.response_msg).dialog('open');
+				$('img.loading').css('display','none');
+			}else{
+				$('.feedback1').text('');
+				$('.feedback2').text('');
+				$('button[type=submit]').attr('disabled', false);
+				$('img.loading').css('display','none');
+				$('.upload_dialog1').text(data.response_msg).dialog('open');
+			}
+		}
+	});
+}
+});
 	</script>
 
 
