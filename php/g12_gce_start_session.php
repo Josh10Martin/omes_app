@@ -12,6 +12,10 @@ if(isset($_POST['username']) && isset($_POST['first_name']) && isset($_POST['las
             $data_array['response_msg'] = 'Unable to log user in. '.attendance_status($db_12_gce,$_POST['username']);
         }else{
         if(login_status($db_12_gce,$_POST['username']) == 0){
+            $token = generated_session_token($db_12_gce, $_POST['username']);
+            if(!is_null($token)){
+                nullify_session($db_12_gce,$_POST['username']);
+            }
             update_login_status($db_12_gce,$_POST['username']);
             $data_array['status'] = '200';
             $_SESSION['username'] = $_POST['username'];
@@ -28,6 +32,7 @@ if(isset($_POST['username']) && isset($_POST['first_name']) && isset($_POST['las
             $_SESSION['session_level'] = $_POST['session_level'];
             $_SESSION['session_type'] = $_POST['session_type'];
             $_SESSION['session_year'] = $_POST['session_year'];
+            $_SESSION['session_token'] = generate_session_token($db_12_gce, $_POST['username']);
         }else{
         $data_array['status'] = '400';
         $data_array['response_msg'] = 'There might be another session using this account';

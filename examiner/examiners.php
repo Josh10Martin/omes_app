@@ -173,6 +173,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
 		$(document).ready(function() {
 			get_subjects();
 			get_paper();
+			upload_belted_examiners();
 			$('#belt_number').mask('000');
 
 			$('.dialog').dialog({
@@ -236,6 +237,73 @@ if ($_SESSION['user_type']  == 'ADMIN') {
 							$(this).dialog('close');
 						}
 					}
+				]
+			});
+
+			$('.upload_dialog1').dialog({
+				title: 'REQUEST RESPONSE',
+				width: '450',
+				height: '150',
+				modal: true,
+				draggable: false,
+				resizable: false,
+				closeOnEscape: false,
+				// appendTo: '#add-admin',
+				autoOpen: false,
+				create: function(e) {
+					$(e.target).parent().css({
+						'position': 'fixed'
+					});
+
+				},
+				buttons: [{
+						text: 'OK',
+						click: function() {
+							$(this).dialog('close');
+						}
+					}
+					//     {
+					//         text: 'YES',
+					//         click: function(){
+					// 		var id = $('.dialog1').data('id');
+					// 		remove_examiner(id);
+					//             $(this).dialog('close');
+					//         }
+					//     }
+				]
+			});
+
+			$('.upload_dialog2').dialog({
+				title: 'REQUEST RESPONSE',
+				width: '450',
+				height: '150',
+				modal: true,
+				draggable: false,
+				resizable: false,
+				closeOnEscape: false,
+				// appendTo: '#add-admin',
+				autoOpen: false,
+				create: function(e) {
+					$(e.target).parent().css({
+						'position': 'fixed'
+					});
+
+				},
+				buttons: [{
+						text: 'OK',
+						click: function() {
+							location.reload();
+							$(this).dialog('close');
+						}
+					}
+					//     {
+					//         text: 'YES',
+					//         click: function(){
+					// 		var id = $('.dialog1').data('id');
+					// 		remove_examiner(id);
+					//             $(this).dialog('close');
+					//         }
+					//     }
 				]
 			});
 

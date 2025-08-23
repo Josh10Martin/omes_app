@@ -120,6 +120,9 @@ if($_SESSION['user_type'] == 'ADMIN'){
                     if($_SESSION['user_type'] == 'DEO'){
                 ?>
                         <div class="col-md-6">
+                          <?php
+                            echo $_SESSION['username'].' - '.$_SESSION['first_name'].' '.$_SESSION['last_name'];
+                          ?>
                         <a href="#" id="submit_data_entry_claim" class="btn btn-white"><i class="fa fa-check" aria-hidden="true"></i> Submit Claim</a>
                             
                                <a href="javascript:void(0)" data-toggle="modal" data-target="#data_entry_modal"><div> Data Entry Officer Statistics (Yours)</div></a> 
@@ -780,7 +783,7 @@ if($_SESSION['user_type'] == 'ADMIN'){
 <!-- examiner_attendance -->
 <div class="modal fade" id="examiner_attendance"  role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-  <form action="reports/attendance_register.php" target="_blank" method="post" style="width:100%;">
+  <form  id="present_not_present" method="post" style="width:100%;">
     <div class="modal-content">
       <div class="modal-header bg-success p-1 d-flex justify-content-center">
         <div class="modal-title h4 text-white text-center " id="exampleModalLongTitle">Examiner Attendance</div>
@@ -825,6 +828,16 @@ if($_SESSION['user_type'] == 'ADMIN'){
           <div class="col-md-6">
             <p>Attendance
             <select name="attendance" class="select" id="Attendance" required>
+            </select>
+            </p>
+          </div>
+           <div class="col-md-6">
+            <p>
+              Format:
+              <select name="format" class="select" id="format" required>
+                <option value="" selected disabled> Choose format</option>
+                <option value="pdf">PDF</option>
+                <option value="csv">CSV</option>
             </select>
             </p>
           </div>
@@ -881,7 +894,7 @@ if($_SESSION['user_type'] == 'DEO'){
         </div>
         <div class="col-md-12">
             <p>Candidate type
-            <select name="sen" class="select" id="Center" required>
+            <select name="sen" class="select"  required>
               <option value="" selected>Select Candidate Type</option>
               <option value="0">Mainstream</option>
               <option value="1">Sen</option>
@@ -1089,6 +1102,7 @@ $('#export2').dialog({
   get_schools();
   get_centre_type();
   get_attendance();
+  attendance_format();
   get_schools_improvised();
   data_entry_claim();
   data_entry_statisticts();
@@ -1223,9 +1237,11 @@ $('#export2').dialog({
         $('select[name=end_centre]').select2({
           data:data
         });
-        $('select[name=centre_code]').select2({
-          data:data
-        });
+       $('select[name=centre_code]').select2({
+    dropdownParent: $('#transcription_checklist_modal'),
+    placeholder: 'Select Centre',
+    width: '100%'
+});
         $('select[name=start_centre] option[value=undefined]').remove();
         $('select[name=end_centre] option[value=undefined]').remove();
         $('select[name=centre_code] option[value=undefined]').remove();
@@ -1270,7 +1286,15 @@ $('#export2').dialog({
           }
         });
   }
+function attendance_format(){
+  $('select[name=format]').change(function(){
+    var format = $(this).val(),
+    action = format == 'pdf' ? 'reports/attendance_register.php' : (format == 'csv' ? 'export/attendance_register.php' : ''),
+    target = format == 'pdf' ? '_blank' : '';
 
+    $('form#present_not_present').attr({action: action,target:target});
+  });
+}
   function get_schools_improvised(){
     $.ajax({
           url: 'php/get_schools_improvised_marks.php',

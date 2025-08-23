@@ -185,7 +185,7 @@ if((isset($_SESSION['user_type']) && $_SESSION['user_type']  == 'ADMIN') || (iss
         
         function submitted_claims(){
             $.ajax({
-                url: 'php/payment_schedule/examiners.php',
+                url: 'php/api/payment_schedule/examiners.php',
                 method: 'POST',
                 dataType: 'json',
                 success: function(data){

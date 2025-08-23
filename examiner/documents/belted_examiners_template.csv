@@ -1,0 +1,15 @@
+﻿Examiner number,Subject code,Paper number,belt number
+1121/100255,1121,1,1
+1121/1225412,1121,1,1
+1121/125444,1121,1,3
+2030/122564,2030,1,4
+2030/125411,2030,1,2
+5124/244125,5124,2,3
+,,,
+The belt number should not be zero (0) or empty,,,
+Maintain the headers,,,
+You can get csv or excel file of examiners from examiner attendance report in report section or from the Examiner Management System respectively and edit,,,
+,,,
+The  file to be uploaded should be saved as .csv (UTF-8),,,
+,,,
+,Remove shaded message when using the file,,

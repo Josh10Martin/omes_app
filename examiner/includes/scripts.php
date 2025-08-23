@@ -13,4 +13,5 @@
 
  <!-- <script src="js/session_time.js"></script> 
  <script src="js/active_status.js"></script>
-   <script src="js/session_count.js"></script>   -->
+   <script src="js/session_count.js"></script>  
+   <script src="js/session_token.js"></script>   -->

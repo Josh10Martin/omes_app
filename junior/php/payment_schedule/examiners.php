@@ -45,7 +45,7 @@ if($sql->rowCount() > 0){
 
 }else{
 $sql = $db_9->prepare('SELECT marking_centre_name,nrc,tpin,address,full_name,position,no_of_scripts,bank,branch,sortcode,account_no,net_rate,grossed_up_rate,gross_pay,15_wht,net_pay,subject_code,subject_name,paper_no,belt_no,session_name
-                                FROM examiner_claim  WHERE ((nrc,tpin,subject_code,paper_no,belt_no,marking_centre_code) IN (SELECT nrc,tpin,subject_code,paper_no,belt_no,marking_centre FROM examiner) OR (nrc,tpin) IN (SELECT nrc,tpin FROM transcriber))
+                                FROM examiner_claim  WHERE no_of_scripts <> 0 AND ((nrc,tpin,subject_code,paper_no,belt_no,marking_centre_code) IN (SELECT nrc,tpin,subject_code,paper_no,belt_no,marking_centre FROM examiner) OR (nrc,tpin) IN (SELECT nrc,tpin FROM transcriber))
                        ');
 $sql->execute();
 if($sql->rowCount() > 0){

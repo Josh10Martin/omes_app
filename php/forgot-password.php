@@ -22,14 +22,15 @@ if(isset($_POST['email'])){
                         
                         $row = $sql->fetch(PDO:: FETCH_ASSOC);
                         $note = $row['note'] ?? '';
-                        if(!is_null($note) || $note != ''){
-                                $note = md5($email);
+                       
+                                $note_value = md5($email);
+                               try{
                                 $sql2 = $db_9->prepare('UPDATE users SET note =:note WHERE email =:email');
                                 $sql2->execute(array(
                                         ':email'=>$email,
-                                        ':note'=>$note
+                                        ':note'=>$note_value
                                 ));
-                                if($sql2->rowCount() > 0){
+                                
                                         $data_array['status'] = '200';
                                         $data_array['email'] = $row['email'] ?? '';
                                         $data_array['first_name'] = $row['first_name'] ?? '';
@@ -37,14 +38,12 @@ if(isset($_POST['email'])){
                                         $data_array['username'] = $row['username'] ?? '';
 
                         
-                                }else{
+                               
+                               }catch(PDOException $e){
+                                
                                         $data_array['status'] = '400';
-                                        $data_array['response_msg'] = 'Could not process password reset request. Refresh and try again';
-                                }
-                        }else{
-                                $data_array['status'] = '400';
-                                $data_array['response_msg'] = 'You had already made a password reset request. Click the button in your email inbox';
-                        }
+                                         $data_array['response_msg'] = 'There was an error: '.$e->getMessage();
+                               }
 
 
                 }else{
