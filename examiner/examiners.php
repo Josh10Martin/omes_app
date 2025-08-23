@@ -140,6 +140,7 @@ if($_SESSION['user_type']  == 'ADMIN'){
 $(document).ready(function(){
 	get_subjects();
 	get_paper();
+	upload_belted_examiners();
 	$('#belt_number').mask('000');
 
 	$('.dialog').dialog({
@@ -204,6 +205,75 @@ $(document).ready(function(){
                     $(this).dialog('close');
                 }
             }
+        ]
+    });
+
+	$('.upload_dialog1').dialog({
+        title: 'REQUEST RESPONSE',
+        width: '450',
+        height: '150',
+        modal: true,
+        draggable: false,
+        resizable: false,
+        closeOnEscape: false,
+        // appendTo: '#add-admin',
+        autoOpen: false,
+        create: function(e){
+            $(e.target).parent().css({
+                'position':'fixed'
+            }); 
+            
+        },
+        buttons: [
+            {
+                text: 'OK',
+                click: function(){
+                    $(this).dialog('close');
+                }
+            }
+        //     {
+        //         text: 'YES',
+        //         click: function(){
+	// 		var id = $('.dialog1').data('id');
+	// 		remove_examiner(id);
+        //             $(this).dialog('close');
+        //         }
+        //     }
+        ]
+    });
+
+	$('.upload_dialog2').dialog({
+        title: 'REQUEST RESPONSE',
+        width: '450',
+        height: '150',
+        modal: true,
+        draggable: false,
+        resizable: false,
+        closeOnEscape: false,
+        // appendTo: '#add-admin',
+        autoOpen: false,
+        create: function(e){
+            $(e.target).parent().css({
+                'position':'fixed'
+            }); 
+            
+        },
+        buttons: [
+            {
+                text: 'OK',
+                click: function(){
+			location.reload();
+                    $(this).dialog('close');
+                }
+            }
+        //     {
+        //         text: 'YES',
+        //         click: function(){
+	// 		var id = $('.dialog1').data('id');
+	// 		remove_examiner(id);
+        //             $(this).dialog('close');
+        //         }
+        //     }
         ]
     });
 
@@ -414,6 +484,55 @@ function remove_examiner(id){
 				
 			}else{
 				$('.dialog').text(data.response_msg).dialog('open');
+			}
+		}
+	});
+}
+
+function upload_belted_examiners(){
+	$('#upload_belted_examiners').submit(function(){
+		$.ajax({
+			url: 'php/upload_belted_examiners.php',
+			method: 'POST',
+			data: new FormData(this),
+			cache: false,
+			processData: false,
+			contentType: false,
+			dataType: 'json',
+			beforeSend: function(){
+				$('.feedback1').text('uploading data . . ...');
+				$('button[type=submit]').attr('disabled', true);
+			},
+			success: function(data){
+				if(data.status == '200'){
+					$('.feedback1').text('upload done.');
+					process_belted_examiners();
+				}else{
+					$('.feedback1').text('');
+					$('button[type=submit]').attr('disabled', false);
+					$('.upload_dialog1').text(data.response_msg).dialog('open');
+				}
+			}
+		});
+	});
+}
+
+function process_belted_examiners(){
+	$.ajax({
+		url: 'php/process_belted_examiners.php',
+		method: 'POST',
+		dataType: 'json',
+		beforeSend: function(){
+			$('.feedback2').text('belting examiner(s). Please wait . . . ....');
+		},
+		success: function(data){
+			if(data.status == '200'){
+				$('.upload_dialog2').text(data.response_msg).dialog('open');
+			}else{
+				$('.feedback1').text('');
+				$('.feedback2').text('');
+				$('button[type=submit]').attr('disabled', false);
+				$('.upload_dialog1').text(data.response_msg).dialog('open');
 			}
 		}
 	});

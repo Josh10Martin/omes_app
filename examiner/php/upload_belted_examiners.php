@@ -12,8 +12,9 @@ if (isset($_FILES['myFile']['name']) && isset($_SESSION['username'])) {
 
     // Assign session values to variables
     $marking_centre_code = $_SESSION['marking_centre_code'];
-    $username = $_SESSION['username'] . ' - ' . $_SESSION['first_name'] . ' ' . $_SESSION['last_name'];
-
+    $username = $_SESSION['username'];
+     $date_time = date('Y-m-d H:m:s');
+     $_SESSION['date_time'] = $date_time;
     $file_name = explode('.', $name);
     $file_extension = $file_name[1];
     
@@ -22,7 +23,7 @@ if (isset($_FILES['myFile']['name']) && isset($_SESSION['username'])) {
         if (($handle = fopen($file_path, 'r')) !== false) {
             $header = fgetcsv($handle, 1000, ',');
 
-            $sql = $db_12_gce->prepare('INSERT IGNORE INTO belted_examiners (examiner_number, subject_code, paper_no, belt_no,uploaded_by, date_uploaded, marking_centre) VALUES (:examiner_number, :subject_code, :paper_no, :belt_no, :username, NOW(), :marking_centre_code)');
+            $sql = $db_12_gce->prepare('INSERT IGNORE INTO belted_examiners (examiner_number, subject_code, paper_no, belt_no,uploaded_by, date_uploaded, marking_centre) VALUES (:examiner_number, :subject_code, :paper_no, :belt_no, :username, :date_time, :marking_centre_code)');
             
             // Bind parameters
             $sql->bindParam(':examiner_number', $examiner_number, PDO::PARAM_STR);
@@ -31,6 +32,7 @@ if (isset($_FILES['myFile']['name']) && isset($_SESSION['username'])) {
             $sql->bindParam(':belt_no', $belt_no, PDO::PARAM_INT);
             $sql->bindParam(':marking_centre_code', $marking_centre_code, PDO::PARAM_STR);
             $sql->bindParam(':username', $username, PDO::PARAM_STR);
+            $sql->bindParam(':date_time', $_SESSION['date_time'], PDO::PARAM_STR);
 
             while (($data = fgetcsv($handle, 1000, ',')) !== false) {
                 $examiner_number = $data[0];
