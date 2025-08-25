@@ -40,23 +40,23 @@ if(isset($_POST['subject']) && isset($_POST['paper'])){
                         CASE WHEN ex.role ="CHIEF EXAMINER" THEN mr.chief_examiner ELSE mr.deputy_c_examiner END AS net_rate,
                         CASE WHEN ex.role ="CHIEF EXAMINER" THEN mr.chief_examiner * :rate_value ELSE mr.deputy_c_examiner * :rate_value END AS grossed_up_rate,
                              (
-                                SELECT (CASE WHEN no_of_scripts < 100 THEN 100 ELSE no_of_scripts END) / no_of_examiners AS no_of_scripts_marked FROM highest_claim
+                                SELECT (CASE WHEN no_of_scripts / no_of_examiners < 100 THEN 100 ELSE no_of_scripts / no_of_examiners END) AS no_of_scripts_marked FROM highest_claim
                                 ORDER BY no_of_scripts_marked DESC LIMIT 1
                              ) * (CASE WHEN ex.role = "CHIEF EXAMINER" THEN mr.chief_examiner * :rate_value ELSE mr.deputy_c_examiner * :rate_value END
                         ) AS gross_pay,
                         (
-                                SELECT (CASE WHEN no_of_scripts < 100 THEN 100 ELSE no_of_scripts END) / no_of_examiners AS no_of_scripts_marked FROM highest_claim
+                                SELECT (CASE WHEN no_of_scripts / no_of_examiners < 100 THEN 100 ELSE no_of_scripts / no_of_examiners END) AS no_of_scripts_marked FROM highest_claim
                                 ORDER BY no_of_scripts_marked DESC LIMIT 1
                              ) * (CASE WHEN ex.role = "CHIEF EXAMINER" THEN mr.chief_examiner * :rate_value ELSE mr.deputy_c_examiner * :rate_value END
                         ) * :tax AS 15_wht,
                         ((
-                                SELECT (CASE WHEN no_of_scripts < 100 THEN 100 ELSE no_of_scripts END) / no_of_examiners AS no_of_scripts_marked FROM highest_claim
+                                SELECT (CASE WHEN no_of_scripts / no_of_examiners < 100 THEN 100 ELSE no_of_scripts / no_of_examiners END) AS no_of_scripts_marked FROM highest_claim
                                 ORDER BY no_of_scripts_marked DESC LIMIT 1
                              ) * (CASE WHEN ex.role = "CHIEF EXAMINER" THEN mr.chief_examiner * :rate_value ELSE mr.deputy_c_examiner * :rate_value END
                         )) -
                         (
                                 (
-                                        SELECT (CASE WHEN no_of_scripts < 100 THEN 100 ELSE no_of_scripts END) / no_of_examiners AS no_of_scripts_marked FROM highest_claim
+                                        SELECT (CASE WHEN no_of_scripts / no_of_examiners < 100 THEN 100 ELSE no_of_scripts / no_of_examiners END) AS no_of_scripts_marked FROM highest_claim
                                         ORDER BY no_of_scripts_marked DESC LIMIT 1
                                      ) * (CASE WHEN ex.role = "CHIEF EXAMINER" THEN mr.chief_examiner * :rate_value ELSE mr.deputy_c_examiner * :rate_value END
                                 ) * :tax

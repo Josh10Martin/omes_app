@@ -12,7 +12,6 @@ if(isset($_POST['subject_code']) && isset($_POST['paper'])){
 
         $sql = $db_12_gce->prepare('SELECT DISTINCT belt_no FROM apportionment WHERE subject =:subject_code 
                                 AND paper =:paper_no
-                                AND belt_no <> 0
                                 AND marking_centre =:marking_centre_code
                                 ORDER BY belt_no ASC');
         $sql->execute(array(

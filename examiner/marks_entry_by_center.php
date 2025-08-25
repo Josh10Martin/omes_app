@@ -236,7 +236,7 @@ if($_SESSION['user_type']  == 'DEO'){
 			// get_marksheet();
 			check_if_belted();
 			submit_marks();
-			 belt_no_disable_status();
+			// belt_no_disable_status();
             
             
       //  $(window).on('scroll',function(){

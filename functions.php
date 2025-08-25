@@ -1000,6 +1000,11 @@ function generated_session_token($db,$username){
         $row = $sql->fetch(PDO:: FETCH_ASSOC);
         return $row['session_token'];
 }
+
+function remove_dash($db){
+        $sql = $db->prepare('UPDATE marks SET date_entered = REPLACE(date_entered, "-", "") WHERE belt_no <> 0');
+        $sql->execute();
+}
 // function get_exam_no_not_exist($db){
        
         

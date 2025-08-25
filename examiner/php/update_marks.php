@@ -10,12 +10,16 @@ if(isset($_POST['absent_exam_no'])){
         $centre_code = $_POST['centre_code'];
         $subject_code = $_POST['subject_code'];
         $paper_no = $_POST['paper_no'];
+        // $sen = $_POST['sen'];
+        // $belt_no = $_POST['belt_no'];
         $date_entered = date('d/m/Y H:m:s');
         // if(marrks_disabled($db_12_gce,$absent_exam_no,$centre_code,$subject_code,$paper_no,$username,$_SESSION['marking_centre_code']) == 'true'){
         //         $data_array['status'] = '400';
         //         $data_array['response_msg'] = 'You cannot add an absent. Refresh the page and get in touch with your Chief Examiner to allow edit';
         // }else{
-        $sql = $db_12_gce->prepare('UPDATE marks SET mark ="0",status ="X",entered_by =:entered_by,date_entered =:date_entered, disable = 1
+        $sql = $db_12_gce->prepare('UPDATE marks SET mark ="0",status ="X",
+                                                
+                                                entered_by =:entered_by,date_entered =:date_entered, disable = 1
                                                 WHERE subject_code =:subject_code AND paper_no =:paper_no AND centre_code =:centre_code AND exam_no =:exam_no');
         $sql->execute(array(
                 ':subject_code'=>$subject_code,
@@ -24,6 +28,9 @@ if(isset($_POST['absent_exam_no'])){
                 ':exam_no'=>$absent_exam_no,
                 ':entered_by'=>$_SESSION['username'].' - '.$_SESSION['first_name'].' '.$_SESSION['last_name'],
                 ':date_entered'=>$date_entered
+                // ':belt_no'=>$belt_no,
+                // ':sen'=>$sen,
+                // ':marking_centre_code'=>$_SESSION['marking_centre_code']
         ));
 
         if($sql->rowCount() > 0){
@@ -127,7 +134,7 @@ if(isset($_POST['centre_code']) && isset($_POST['subject_code']) && isset($_POST
                 
         //  group_apportion($db_12_gce,$subject_code,$paper_no,$belt_no,$username,$_SESSION['marking_centre_code']);
         //   add_in_apportionment($db_12_gce,$centre_code,$subject_code,$paper_no,$sen,$belt_no,$_SESSION['marking_centre_code']);
-       
+       remove_dash($db_12_gce);
 }catch(PDOException $e){
         $data_array['status'] = '400';
         $data_array['response_msg'] = 'There was an error: '.$e->getMessage();

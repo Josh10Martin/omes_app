@@ -41,6 +41,9 @@ if((isset($_SESSION['user_type']) && $_SESSION['user_type']  == 'ADMIN') || (iss
             <div class="col-xs-6">
                 <h1><a href="javascript:void(0)" data-toggle="modal" data-target="#examiners_claim_modal" class="btn bg-light "> Generate Claims</a></h1>
             </div>
+            <div class="col-xs-6">
+                <h1><a href="reports/marking_rates.php" target="_blank" class="btn bg-light "> Generate Marking Rates / Formula</a></h1>
+            </div>
             <br>
         </div>
          <!-- Examiner Claim Modal -->
