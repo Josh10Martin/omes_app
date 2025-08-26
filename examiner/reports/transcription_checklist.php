@@ -12,7 +12,7 @@ $options->set('isRemoteEnabled', true);
 $options->setChroot(['../../assets']);
 $pdf = new Dompdf($options);
     ob_start();
-    if((isset($_POST['centre_code']) || (isset($_SESSION['centre_code'])) && (isset($_POST['subject']) || isset($_POST['subject_code'])) && isset($_POST['paper']) || isset($_SESSION['paper_no'])) && (isset($_POST['sen']) || isset($_SESSION['sen']))){
+    if((isset($_POST['centre_code']) || (isset($_SESSION['centre_code'])) && (isset($_POST['subject']) || isset($_SESSION['subject_code'])) && isset($_POST['paper']) || isset($_SESSION['paper_no'])) && (isset($_POST['sen']) || isset($_SESSION['sen']))){
 
         $centre_code = $_POST['centre_code'] ?? $_SESSION['centre_code'];
         $subject_code = $_POST['subject'] ??  $_SESSION['subject_code'];

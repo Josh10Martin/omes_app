@@ -10,15 +10,15 @@ if(isset($_POST['absent_exam_no'])){
         $centre_code = $_POST['centre_code'];
         $subject_code = $_POST['subject_code'];
         $paper_no = $_POST['paper_no'];
-        // $sen = $_POST['sen'];
-        // $belt_no = $_POST['belt_no'];
+        $sen = $_POST['sen'];
+        $belt_no = $_POST['belt_no'];
         $date_entered = date('d/m/Y H:m:s');
         // if(marrks_disabled($db_12_gce,$absent_exam_no,$centre_code,$subject_code,$paper_no,$username,$_SESSION['marking_centre_code']) == 'true'){
         //         $data_array['status'] = '400';
         //         $data_array['response_msg'] = 'You cannot add an absent. Refresh the page and get in touch with your Chief Examiner to allow edit';
         // }else{
-        $sql = $db_12_gce->prepare('UPDATE marks SET mark ="0",status ="X",
-                                                
+        $sql = $db_12_gce->prepare('UPDATE marks SET mark ="0",status ="X",belt_no =:belt_no,
+                                                id_group = CONCAT(:marking_centre_code,"_",:centre_code,"_",:subject_code,"_",:paper_no"_",:sen,"_",:belt_no),
                                                 entered_by =:entered_by,date_entered =:date_entered, disable = 1
                                                 WHERE subject_code =:subject_code AND paper_no =:paper_no AND centre_code =:centre_code AND exam_no =:exam_no');
         $sql->execute(array(
@@ -27,10 +27,10 @@ if(isset($_POST['absent_exam_no'])){
                 ':centre_code'=>$centre_code,
                 ':exam_no'=>$absent_exam_no,
                 ':entered_by'=>$_SESSION['username'].' - '.$_SESSION['first_name'].' '.$_SESSION['last_name'],
-                ':date_entered'=>$date_entered
-                // ':belt_no'=>$belt_no,
-                // ':sen'=>$sen,
-                // ':marking_centre_code'=>$_SESSION['marking_centre_code']
+                ':date_entered'=>$date_entered,
+                ':belt_no'=>$belt_no,
+                ':sen'=>$sen,
+                ':marking_centre_code'=>$_SESSION['marking_centre_code']
         ));
 
         if($sql->rowCount() > 0){
@@ -51,7 +51,7 @@ if(isset($_POST['missing_exam_no'])){
         //         $data_array['status'] = '400';
         //         $data_array['response_msg'] = 'You cannot remove an absent. Refresh the page and get in touch with your Chief Examiner to allow edit';
         // }else{
-        $sql = $db_12_gce->prepare('UPDATE marks SET mark ="0",status ="L",entered_by = "none",date_entered = "none", disable = 0
+        $sql = $db_12_gce->prepare('UPDATE marks SET mark ="0",status ="L",id_group ="none", belt_no = 0,,entered_by = "none",date_entered = "none", disable = 0
                                                 WHERE subject_code =:subject_code AND paper_no =:paper_no AND centre_code =:centre_code AND exam_no =:exam_no');
         $sql->execute(array(
                 ':subject_code'=>$subject_code,

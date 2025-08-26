@@ -767,12 +767,14 @@ if($_SESSION['user_type']  == 'DEO'){
     function make_absent(absent_exam_no){
         var centre_code = $('input[type=hidden][name=centre_code]').val(),
         subject_code = $('input[type=hidden][name=subject_code]').val(),
-        paper_no =  $('input[type=hidden][name=paper_no]').val();
+        paper_no =  $('input[type=hidden][name=paper_no]').val(),
+        belt_no =  $('input[type=hidden][name=belt_no]').val(),
+        sen =  $('input[type=hidden][name=sen]').val();
 
         $.ajax({
             url: 'php/update_marks.php',
             method: 'POST',
-            data: {absent_exam_no:absent_exam_no,centre_code:centre_code,subject_code:subject_code,paper_no:paper_no},
+            data: {absent_exam_no:absent_exam_no,centre_code:centre_code,subject_code:subject_code,paper_no:paper_no, belt_no:belt_no, sen:sen},
             dataType: 'json',
             success: function(data){
                 if(data.status == '200'){

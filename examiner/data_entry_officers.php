@@ -43,6 +43,7 @@ session_start();
                 <th>USERNAME</th>
                 <th>OTHER NAME(s)</th>
                 <th>SURNAME</th>
+                <th>NO. OF SCRIPTS ENTERED</th>
                 <th>ACTIVATION STATUS</th>
                 <th>LOGIN STATUS</th>
                 <!-- <th>ACTION</th> -->
@@ -248,6 +249,7 @@ function get_data_entry(){
                     '<td>'+this["username"]+'</td>'+
                     '<td>'+this["first_name"]+'</td>'+
                     '<td>'+this["last_name"]+'</td>'+
+                    '<td>'+this["no_of_entered_marks"]+'</td>'+
                     '<td> <button type="button" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" class="btn btn-lg '+color+' btn-toggle active_status" aria-pressed ="false" data-id="'+this["id"]+'" autocomplete="off"><span style="color:white;">'+this["active"]+'</span></button> </td>'+
                     '<td> <button type="button" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" class="btn btn-lg '+login_status_color+' btn-toggle login_status" aria-pressed ="false" data-id="'+this["id"]+'" autocomplete="off"><span style="color:white;">'+this["login_status"]+'</span></button></td>'+
                     // '<td class="text-right">'+
@@ -314,6 +316,20 @@ function get_data_entry(){
                 // });
              
             }
+        }
+    });
+    setInterval(get_no_of_scripts_entered,1000);
+}
+
+function get_no_of_scripts_entered(){
+    $.ajax({
+        url: 'php/get_data_entry.php', // This should return only {id, no_of_entered_marks}
+        method: 'POST',
+        dataType: 'json',
+        success: function(data){
+            $.each(data,function(){
+                $('td.entered-marks[data-id="'+this["id"]+'"]').text(this["no_of_entered_marks"]);
+            });
         }
     });
 }
