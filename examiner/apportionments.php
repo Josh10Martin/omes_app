@@ -696,7 +696,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
     });
 }
 
-setInterval(refresh_centres_and_scripts, 1000); // every 10 seconds
+// setInterval(refresh_centres_and_scripts, 1000); // every 10 seconds
 
             function confirm_apportionments() {
                 $('#confirm').submit(function(e) {
