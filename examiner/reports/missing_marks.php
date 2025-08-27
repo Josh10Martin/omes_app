@@ -21,9 +21,9 @@ $pdf = new Dompdf($options);
 
         $sql = $db_12_gce->prepare('SELECT DISTINCT m.exam_no AS exam_no, m.first_name AS first_name,m.last_name AS last_name,m.centre_code AS centre_code,
                                 m.status AS status, CASE WHEN m.sen = 1 THEN "YES" WHEN m.sen = 0 THEN "NO" ELSE "[UNKNOWN]" END AS sen, su.subject_code AS subject_code,su.subject_name, pa.paper_no
-                                FROM apportionment a INNER JOIN marks m ON (a.subject =m.subject_code)
-                                INNER JOIN subjects su ON (m.subject_code = su.subject_code)
-                                INNER JOIN paper pa ON (su.subject_code = pa.subject_code)
+                                FROM marks m LEFT OUTER JOIN apportionment a ON (m.subject_code = a.subject)
+                                LEFT OUTER JOIN subjects su ON (a.subject = su.subject_code)
+                                LEFT OUTER JOIN paper pa ON (su.subject_code = pa.subject_code)
                                 WHERE a.paper = m.paper_no
                                 AND a.marking_centre = m.marking_centre
                                 AND a.subject = su.subject_code

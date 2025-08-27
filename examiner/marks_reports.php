@@ -134,7 +134,7 @@ if($_SESSION['user_type'] == 'ADMIN'){
                                <!-- <a href="reports/data_entry_claim_question.php" target="_blank"><div> Data Entry Officer Claims</div></a>  -->
                         </div>
                         <div class="col-md-6">
-                        <a href="submitted_data_entry_claim.php" target="_blank"  class="btn btn-white"><i class="fa fa-check" aria-hidden="true"></i> Submitted Claim</a>
+                        <a href="submitted_data_entry_claim.php"  class="btn btn-white"><i class="fa fa-check" aria-hidden="true"></i> Submitted Claim</a>
                                
                                 
                     

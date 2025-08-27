@@ -173,8 +173,10 @@ if($_SESSION['user_type']  == 'ADMIN' || $_SESSION['user_type']  == 'ECZ' || $_S
 								<thead>
 									<tr>
 										<th>EXAM NO</th>
-										<th>SURNAME</th>
-										<th>FIRST NAME</th>
+										<!-- <th>SURNAME</th>
+										<th>FIRST NAME</th> -->
+										<th>SUBJECT CODE</th>
+										<th>PAPER NO</th>
 										<th>CENTER CODE</th>
 										<th>SEN</th>
 										<th>STATUS</th>
@@ -446,8 +448,10 @@ $(document).ready(function(){
 						$.each(data,function(){
 							$('table.table tbody').append('<tr class="'+this["exam_no"]+'">'+
 							'<td>'+this["exam_no"]+'</td>'+
-							'<td>'+this["last_name"]+'</td>'+
-							'<td>'+this["first_name"]+'</td>'+
+							// '<td>'+this["last_name"]+'</td>'+
+							// '<td>'+this["first_name"]+'</td>'+
+							'<td>'+this["subject_code"]+'</td>'+
+							'<td>'+this["paper_no"]+'</td>'+
 							'<td>'+this["centre_code"]+'</td>'+
 							'<td>'+this["sen"]+'</td>'+
 							'<td>'+this["status"]+'</td>'+
@@ -623,6 +627,7 @@ $(document).ready(function(){
           doc.setFontSize(13);
           doc.text('EXAMINATIONS COUNCIL OF ZAMBIA', 67,35);
           doc.text('MISSING MARKS REPORT', 80,40);
+          doc.text('<?php echo $_SESSION['session_year']," ",$_SESSION['session_name']; ?>', 76,45);
           //doc.addImage(img, 'PNG', logoX, logoY, logoWidth, logoHeight);
           doc.addImage(headerImg, 'JPEG', 100, 10, 20, 20);
 

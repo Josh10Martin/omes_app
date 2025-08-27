@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if($_SESSION['user_type'] == 'DEO'){
+if( isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'DEO'){
     include '../config.php';
     include '../functions.php';
     if($_SESSION['session_level'] == 9){

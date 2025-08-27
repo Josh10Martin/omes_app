@@ -4,7 +4,7 @@ session_start();
 include '../../config.php';
 include '../../functions.php';
 $data_array = array();
-if($_SESSION['user_type'] == 'DEO'){
+if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'DEO'){
     if(activation_status($db_12_gce,$_SESSION['username'],$_SESSION['marking_centre_code']) == 1){
         $data_array['status'] = '200';
     }else{

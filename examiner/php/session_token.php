@@ -5,7 +5,7 @@ $data_array = array();
 include '../../config.php';
 include '../../functions.php';
 
-if($_SESSION['user_type'] == 'DEO'){
+if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'DEO'){
         
 if($_SESSION['session_token'] == generated_session_token($db_12_gce, $_SESSION['username'])){
         $data_array['status'] = '200';

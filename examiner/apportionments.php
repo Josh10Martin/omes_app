@@ -422,8 +422,9 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                     {
                         text: 'YES',
                         click: function() {
-                            submit_claim();
                             $(this).dialog('close');
+                            submit_claim();
+                            
                         }
                     }
                 ]
@@ -514,7 +515,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                     var subject = $(this).val().split(':'),
                         subject_code = subject[0],
                         subject_name = subject[1];
-                    if (subject_code != '') {
+                   
                         $.ajax({
                             url: 'php/get_paper.php',
                             method: 'POST',
@@ -534,9 +535,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                 });
                             }
                         });
-                    } else {
-                        $('select[name=paper] option[value=""]').change();
-                    }
+                   
                 });
             }
             function search_in_belt(){

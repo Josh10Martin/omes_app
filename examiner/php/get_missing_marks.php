@@ -40,6 +40,9 @@ if($sql->rowCount() > 0){
         $data_array[$i]['exam_no'] = $row['exam_no'] ?? '';
         $data_array[$i]['last_name'] = $row['last_name'] ?? '';
         $data_array[$i]['first_name'] = $row['first_name'] ?? '';
+        $data_array[$i]['subject_code'] = $row['subject_code']?? '';
+        $data_array[$i]['subject_name'] = $row['subject_name']?? '';
+        $data_array[$i]['paper_no'] = $row['paper_no']?? '';
         $data_array[$i]['centre_code'] = $row['centre_code'] ?? '';
         $data_array[$i]['sen'] = $row['sen'] ?? '';
         $data_array[$i]['status'] = $row['status'] ?? '';
@@ -78,6 +81,9 @@ if($sql->rowCount() > 0){
         $data_array[$i]['exam_no'] = $row['exam_no'] ?? '';
         $data_array[$i]['last_name'] = $row['last_name'] ?? '';
         $data_array[$i]['first_name'] = $row['first_name'] ?? '';
+         $data_array[$i]['subject_code'] = $row['subject_code']?? '';
+        $data_array[$i]['subject_name'] = $row['subject_name']?? '';
+        $data_array[$i]['paper_no'] = $row['paper_no']?? '';
         $data_array[$i]['centre_code'] = $row['centre_code'] ?? '';
         $data_array[$i]['sen'] = $row['sen'] ?? '';
         $data_array[$i]['status'] = $row['status'] ?? '';

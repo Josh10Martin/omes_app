@@ -4,8 +4,8 @@ header('COntent-Type: application/json;charset=utf-8');
 // header("Access-Control-Allow-Origin: *"); 
 include '../../config.php';
 $data_array = array();
-$rate_value = 100/85;
-$tax =15/100;
+$rate_value = 1.176470588235294;
+$tax = 0.15;
 
 if(isset($_POST['subject']) && isset($_POST['paper'])){
 
