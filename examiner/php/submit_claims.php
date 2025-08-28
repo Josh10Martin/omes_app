@@ -76,7 +76,7 @@ if(isset($_POST['subject']) && isset($_POST['paper'])){
                         AND ex.marking_centre =:marking_centre_code
                         AND ex.attendance = 1
                         AND ex.role IN ("DEPUTY CHIEF EXAMINER","CHIEF EXAMINER")
-                        GROUP BY ex.nrc,ex.examiner_number,ex.tpin,ex.role,ex.address,ex.district,ex.province, ex.first_name,ex.last_name,mr.chief_examiner,mr.deputy_c_examiner,ex.account_no,ex.bank,ex.branch,ex.sortcode
+                        GROUP BY ex.nrc,ex.examiner_number,ex.tpin,ex.role,ex.address,ex.district,ex.province, ex.first_name,ex.last_name,mr.chief_examiner,mr.deputy_c_examiner,ex.belt_no,ex.account_no,ex.bank,ex.branch,ex.sortcode
                        
                        UNION
 
