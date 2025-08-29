@@ -142,23 +142,24 @@ if(isset($_POST['centre_code']) && isset($_POST['subject_code']) && isset($_POST
       
   
 }
-// $sql2 = $db_12_gce->prepare('UPDATE marks 
-//                              SET disable = 1 
-//                              WHERE disable = 0 
-//                              AND status <> "L"
-//                              AND entered_by = :username 
-//                              AND subject_code = :subject_code 
-//                              AND paper_no = :paper_no 
-//                              AND centre_code = :centre_code 
-//                              AND marking_centre = :marking_centre_code');
+$sql2 = $db_12_gce->prepare('UPDATE marks 
+                             SET disable = 1 
+                             WHERE disable = 0 
+                             AND status <> "L"
+                             AND entered_by = :username 
+                             AND subject_code = :subject_code 
+                             AND paper_no = :paper_no 
+                             AND centre_code = :centre_code 
+                             AND marking_centre = :marking_centre_code');
 
-// $sql2->execute(array(
-//     ':username' => $username,
-//     ':paper_no' => $paper_no,
-//     ':subject_code' => $subject_code,
-//     ':centre_code' => $centre_code,
-//     ':marking_centre_code' => $_SESSION['marking_centre_code']
-// ));
+$sql2->execute(array(
+    ':username' => $username,
+    ':paper_no' => $paper_no,
+    ':subject_code' => $subject_code,
+    ':centre_code' => $centre_code,
+    ':username'=>$_SESSION['username'].' - '.$_SESSION['first_name'].' '.$_SESSION['last_name'],
+    ':marking_centre_code' => $_SESSION['marking_centre_code']
+));
 
 echo json_encode($data_array);
 ?>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 28, 2025 at 08:37 PM
+-- Generation Time: Aug 29, 2025 at 07:22 PM
 -- Server version: 8.0.36
 -- PHP Version: 8.1.11
 
@@ -25,232 +25,250 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `submit_examiner_claim` (IN `in_subject_code` VARCHAR(10), IN `in_subject_name` VARCHAR(255), IN `in_paper_no` VARCHAR(10), IN `in_rate_value` VARCHAR(30), IN `in_tax` DECIMAL(5,4), IN `in_session_year` VARCHAR(4), IN `in_session_name` VARCHAR(100), IN `in_marking_centre_code` VARCHAR(100), IN `in_marking_centre_name` VARCHAR(255))   BEGIN
-
-    -- First part: CHIEF EXAMINER and DEPUTY
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_chief_examiner_claim` (IN `p_subject_code` VARCHAR(10), IN `p_subject_name` VARCHAR(100), IN `p_paper_no` INT, IN `p_belt_no` INT, IN `p_rate_value` DECIMAL(16,15), IN `p_tax` DECIMAL(10,6), IN `p_session_year` VARCHAR(10), IN `p_session_name` VARCHAR(50), IN `p_marking_centre_code` VARCHAR(100), IN `p_marking_centre_name` VARCHAR(100))   BEGIN
     REPLACE INTO examiner_claim (
-        marking_centre_code, marking_centre_name, nrc, examiner_number, tpin, full_name,
-        address, province, district, position, no_of_scripts, sortcode, account_no,
-        net_rate, grossed_up_rate, gross_pay, 15_wht, net_pay, bank, branch,
-        subject_code, subject_name, paper_no, belt_no, session,session_name
+        marking_centre_code,
+        marking_centre_name,
+        nrc,
+        examiner_number,
+        tpin,
+        full_name,
+        address,
+        province,
+        district,
+        position,
+        no_of_scripts,
+        sortcode,
+        account_no,
+        net_rate,
+        grossed_up_rate,
+        gross_pay,
+        15_wht,
+        net_pay,
+        bank,
+        branch,
+        subject_code,
+        subject_name,
+        paper_no,
+        belt_no,
+        session,
+        session_name
     )
-    SELECT 
-        in_marking_centre_code,
-        in_marking_centre_name,
-        ex.nrc,
-        ex.examiner_number,
-        ex.tpin,
-        CONCAT(ex.first_name, ' ', ex.last_name),
-        ex.address,
-        ex.province,
-        ex.district,
-        ex.role,
-        IF(h.no_of_scripts < 100, 100, h.no_of_scripts) / h.no_of_examiners,
-        ex.sortcode,
-        ex.account_no,
-        CASE
-            WHEN ex.role = 'CHIEF EXAMINER' THEN mr.chief_examiner
-            ELSE mr.deputy_c_examiner
-        END,
-        CASE
-            WHEN ex.role = 'CHIEF EXAMINER' THEN mr.chief_examiner * in_rate_value
-            ELSE mr.deputy_c_examiner * in_rate_value
-        END,
-        (IF(h.no_of_scripts < 100, 100, h.no_of_scripts) / h.no_of_examiners) *
-            (CASE
-                WHEN ex.role = 'CHIEF EXAMINER' THEN mr.chief_examiner * in_rate_value
-                ELSE mr.deputy_c_examiner * in_rate_value
-            END),
-        ((IF(h.no_of_scripts < 100, 100, h.no_of_scripts) / h.no_of_examiners) *
-            (CASE
-                WHEN ex.role = 'CHIEF EXAMINER' THEN mr.chief_examiner * in_rate_value
-                ELSE mr.deputy_c_examiner * in_rate_value
-            END)) * in_tax,
-        ((IF(h.no_of_scripts < 100, 100, h.no_of_scripts) / h.no_of_examiners) *
-            (CASE
-                WHEN ex.role = 'CHIEF EXAMINER' THEN mr.chief_examiner * in_rate_value
-                ELSE mr.deputy_c_examiner * in_rate_value
-            END)) -
-        (((IF(h.no_of_scripts < 100, 100, h.no_of_scripts) / h.no_of_examiners) *
-            (CASE
-                WHEN ex.role = 'CHIEF EXAMINER' THEN mr.chief_examiner * in_rate_value
-                ELSE mr.deputy_c_examiner * in_rate_value
-            END)) * in_tax),
-        ex.bank,
-        ex.branch,
-        in_subject_code,
-        in_subject_name,
-        in_paper_no,
-        ex.belt_no,
-        in_session_year,
-        CONCAT(in_session_year, ' ', in_session_name)
-    FROM examiner ex
-    JOIN marking_rates mr ON ex.subject_code = mr.subject_code AND ex.paper_no = mr.paper_no
-    JOIN group_apportion ga ON ex.subject_code = ga.subject AND ex.paper_no = ga.paper AND ex.marking_centre = ga.marking_centre
-    JOIN (
-        SELECT COUNT(examiner_number) AS no_of_examiners, ga.no_of_scripts, ga.belt_no
+    WITH highest_claim AS (
+        SELECT 
+            COUNT(ex.examiner_number) AS no_of_examiners,
+            ga.no_of_scripts AS no_of_scripts,
+            ga.belt_no AS belt_no,
+            ga.no_of_scripts / COUNT(ex.examiner_number) AS scripts_per_examiner,
+            CASE 
+                WHEN ga.no_of_scripts / COUNT(ex.examiner_number) < 100 
+                THEN 100 
+                ELSE ga.no_of_scripts / COUNT(ex.examiner_number) 
+            END AS no_of_scripts_marked
         FROM group_apportion ga
-        JOIN examiner ex ON ga.subject = ex.subject_code
-        WHERE ga.paper = ex.paper_no
-            AND ex.belt_no = ga.belt_no
-            AND ex.attendance = 1
-            AND ga.marking_centre = ex.marking_centre
-            AND ga.subject = in_subject_code
-            AND ga.paper = in_paper_no
-            AND ga.marking_centre = in_marking_centre_code
-            AND ex.role IN ('EXAMINER', 'TEAM LEADER')
+        INNER JOIN examiner ex 
+            ON ga.subject = ex.subject_code
+           AND ga.paper = ex.paper_no
+           AND ga.belt_no = ex.belt_no
+           AND ga.marking_centre = ex.marking_centre
+        WHERE ex.attendance = 1
+          AND ga.subject = p_subject_code
+          AND ga.paper = p_paper_no
+          AND ga.marking_centre = p_marking_centre_code
+          AND ex.role IN ('EXAMINER','TEAM LEADER')
         GROUP BY ga.no_of_scripts, ga.belt_no
-        LIMIT 1
-    ) AS h ON h.belt_no = ex.belt_no
-    WHERE ex.subject_code = in_subject_code
-        AND ex.paper_no = in_paper_no
-        AND ex.marking_centre = in_marking_centre_code
-        AND ex.attendance = 1
-        AND ex.role IN ('CHIEF EXAMINER', 'DEPUTY CHIEF EXAMINER')
-     GROUP BY ex.nrc, ex.examiner_number,h.no_of_scripts,h.no_of_examiners;
-
-    -- Second part: EXAMINER, TEAM LEADER, CHECKER
-    REPLACE INTO examiner_claim (
-        marking_centre_code, marking_centre_name, nrc, examiner_number, tpin, full_name,
-        address, province, district, position, no_of_scripts, sortcode, account_no,
-        net_rate, grossed_up_rate, gross_pay, 15_wht, net_pay, bank, branch,
-        subject_code, subject_name, paper_no, belt_no,session, session_name
     )
     SELECT 
-        in_marking_centre_code,
-        in_marking_centre_name,
+        p_marking_centre_code AS marking_centre_code,
+        p_marking_centre_name AS marking_centre_name,
         ex.nrc,
         ex.examiner_number,
         ex.tpin,
-        CONCAT(ex.first_name, ' ', ex.last_name),
+        CONCAT(ex.first_name,' ',ex.last_name) AS full_name,
         ex.address,
         ex.province,
         ex.district,
-        ex.role,
-        ga.no_of_scripts,
+        ex.role AS position,
+
+        (SELECT scripts_per_examiner FROM highest_claim ORDER BY scripts_per_examiner DESC LIMIT 1) AS no_of_scripts,
+
         ex.sortcode,
         ex.account_no,
-        CASE
-            WHEN ex.role = 'TEAM LEADER' THEN mr.t_leader
-            WHEN ex.role = 'CHECKER' THEN mr.checker
-            ELSE mr.examiner
-        END,
-        CASE
-            WHEN ex.role = 'TEAM LEADER' THEN mr.t_leader * in_rate_value
-            WHEN ex.role = 'CHECKER' THEN mr.checker * in_rate_value
-            ELSE mr.examiner * in_rate_value
-        END,
-        (
-            (CASE
-                WHEN ga.no_of_scripts = 0 THEN 0
-                WHEN ga.no_of_scripts < 100 THEN 100
-                ELSE ga.no_of_scripts
-            END)
-            * 
-            CASE
-                WHEN ex.role = 'TEAM LEADER' THEN mr.t_leader * in_rate_value
-                WHEN ex.role = 'CHECKER' THEN mr.checker * in_rate_value
-                ELSE mr.examiner * in_rate_value
-            END
-        )
-        / (
-            SELECT COUNT(*) 
-            FROM examiner 
-            WHERE subject_code = in_subject_code 
-                AND paper_no = in_paper_no 
-                AND belt_no = ex.belt_no 
-                AND marking_centre = in_marking_centre_code 
-                AND attendance = 1 
-                AND role IN ('EXAMINER','TEAM LEADER')
-        ),
-        (
-            (
-                (CASE
-                    WHEN ga.no_of_scripts = 0 THEN 0
-                    WHEN ga.no_of_scripts < 100 THEN 100
-                    ELSE ga.no_of_scripts
-                END)
-                * 
-                CASE
-                    WHEN ex.role = 'TEAM LEADER' THEN mr.t_leader * in_rate_value
-                    WHEN ex.role = 'CHECKER' THEN mr.checker * in_rate_value
-                    ELSE mr.examiner * in_rate_value
-                END
-            ) / (
-                SELECT COUNT(*) 
-                FROM examiner 
-                WHERE subject_code = in_subject_code 
-                    AND paper_no = in_paper_no 
-                    AND belt_no = ex.belt_no 
-                    AND marking_centre = in_marking_centre_code 
-                    AND attendance = 1 
-                    AND role IN ('EXAMINER','TEAM LEADER')
-            )
-        ) * in_tax,
-        (
-            (
-                (CASE
-                    WHEN ga.no_of_scripts = 0 THEN 0
-                    WHEN ga.no_of_scripts < 100 THEN 100
-                    ELSE ga.no_of_scripts
-                END)
-                * 
-                CASE
-                    WHEN ex.role = 'TEAM LEADER' THEN mr.t_leader * in_rate_value
-                    WHEN ex.role = 'CHECKER' THEN mr.checker * in_rate_value
-                    ELSE mr.examiner * in_rate_value
-                END
-            ) / (
-                SELECT COUNT(*) 
-                FROM examiner 
-                WHERE subject_code = in_subject_code 
-                    AND paper_no = in_paper_no 
-                    AND belt_no = ex.belt_no 
-                    AND marking_centre = in_marking_centre_code 
-                    AND attendance = 1 
-                    AND role IN ('EXAMINER','TEAM LEADER')
-            )
-        ) - (
-            (
-                (CASE
-                    WHEN ga.no_of_scripts = 0 THEN 0
-                    WHEN ga.no_of_scripts < 100 THEN 100
-                    ELSE ga.no_of_scripts
-                END)
-                * 
-                CASE
-                    WHEN ex.role = 'TEAM LEADER' THEN mr.t_leader * in_rate_value
-                    WHEN ex.role = 'CHECKER' THEN mr.checker * in_rate_value
-                    ELSE mr.examiner * in_rate_value
-                END
-            ) / (
-                SELECT COUNT(*) 
-                FROM examiner 
-                WHERE subject_code = in_subject_code 
-                    AND paper_no = in_paper_no 
-                    AND belt_no = ex.belt_no 
-                    AND marking_centre = in_marking_centre_code 
-                    AND attendance = 1 
-                    AND role IN ('EXAMINER','TEAM LEADER')
-            )
-        ) * in_tax,
+
+        CASE 
+            WHEN ex.role = 'CHIEF EXAMINER' THEN mr.chief_examiner 
+            ELSE mr.deputy_c_examiner 
+        END AS net_rate,
+
+        CASE 
+            WHEN ex.role = 'CHIEF EXAMINER' THEN mr.chief_examiner * p_rate_value 
+            ELSE mr.deputy_c_examiner * p_rate_value 
+        END AS grossed_up_rate,
+
+        ( (SELECT no_of_scripts_marked FROM highest_claim ORDER BY no_of_scripts_marked DESC LIMIT 1) *
+          (CASE WHEN ex.role = 'CHIEF EXAMINER' THEN mr.chief_examiner * p_rate_value ELSE mr.deputy_c_examiner * p_rate_value END)
+        ) AS gross_pay,
+
+        ( (SELECT no_of_scripts_marked FROM highest_claim ORDER BY no_of_scripts_marked DESC LIMIT 1) *
+          (CASE WHEN ex.role = 'CHIEF EXAMINER' THEN mr.chief_examiner * p_rate_value ELSE mr.deputy_c_examiner * p_rate_value END)
+        ) * p_tax AS `15_wht`,
+
+        ( (SELECT no_of_scripts_marked FROM highest_claim ORDER BY no_of_scripts_marked DESC LIMIT 1) *
+          (CASE WHEN ex.role = 'CHIEF EXAMINER' THEN mr.chief_examiner * p_rate_value ELSE mr.deputy_c_examiner * p_rate_value END)
+        ) - 
+        ( (SELECT no_of_scripts_marked FROM highest_claim ORDER BY no_of_scripts_marked DESC LIMIT 1) *
+          (CASE WHEN ex.role = 'CHIEF EXAMINER' THEN mr.chief_examiner * p_rate_value ELSE mr.deputy_c_examiner * p_rate_value END) * p_tax
+        ) AS net_pay,
+
         ex.bank,
         ex.branch,
-        in_subject_code,
-        in_subject_name,
-        in_paper_no,
+        p_subject_code AS subject_code,
+        p_subject_name AS subject_name,
+        p_paper_no AS paper_no,
         ex.belt_no,
-        in_session_year,
-        CONCAT(in_session_year, ' ', in_session_name)
+        p_session_year AS session,
+        CONCAT(p_session_year,' ',p_session_name) AS session_name
     FROM examiner ex
-    JOIN group_apportion ga ON ex.subject_code = ga.subject AND ex.paper_no = ga.paper AND ex.belt_no = ga.belt_no
-    JOIN marking_rates mr ON ex.subject_code = mr.subject_code AND ex.paper_no = mr.paper_no
-    WHERE ex.marking_centre = in_marking_centre_code
-        AND ex.subject_code = in_subject_code
-        AND ex.paper_no = in_paper_no
-        AND ex.attendance = 1
-        AND ex.role IN ('EXAMINER','TEAM LEADER','CHECKER')
-   GROUP BY ex.nrc, ex.examiner_number,ga.no_of_scripts;
+    INNER JOIN marking_rates mr 
+        ON ex.subject_code = mr.subject_code AND ex.paper_no = mr.paper_no
+    RIGHT OUTER JOIN group_apportion ga 
+        ON mr.subject_code = ga.subject AND mr.paper_no = ga.paper
+    WHERE ex.subject_code = ga.subject
+      AND ex.paper_no = ga.paper
+      AND ex.marking_centre = ga.marking_centre
+      AND ex.attendance = 1
+      AND ex.role IN ('DEPUTY CHIEF EXAMINER','CHIEF EXAMINER')
+      AND ex.subject_code = p_subject_code
+      AND ex.paper_no = p_paper_no
+      AND ex.marking_centre = p_marking_centre_code
+    GROUP BY ex.nrc,ex.examiner_number,ex.tpin,ex.role,ex.address,ex.district,
+             ex.province, ex.first_name,ex.last_name,mr.chief_examiner,
+             mr.deputy_c_examiner,ex.belt_no,ex.account_no,ex.bank,ex.branch,ex.sortcode;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_examiner_claims` (IN `p_subject_code` VARCHAR(10), IN `p_subject_name` VARCHAR(100), IN `p_paper_no` INT, IN `p_belt_no` INT, IN `p_rate_value` DECIMAL(16,15), IN `p_tax` DECIMAL(16,15), IN `p_session_year` VARCHAR(10), IN `p_session_name` VARCHAR(20), IN `p_marking_centre_code` VARCHAR(100), IN `p_marking_centre_name` VARCHAR(100))   BEGIN
+
+    REPLACE INTO examiner_claim (
+        marking_centre_code,
+        marking_centre_name,
+        nrc,
+        examiner_number,
+        tpin,
+        full_name,
+        address,
+        province,
+        district,
+        position,
+        no_of_scripts,
+        sortcode,
+        account_no,
+        net_rate,
+        grossed_up_rate,
+        gross_pay,
+        15_wht,
+        net_pay,
+        bank,
+        branch,
+        subject_code,
+        subject_name,
+        paper_no,
+        belt_no,
+        session,
+        session_name
+    )
+    WITH examiners_claim AS (
+        SELECT 
+            ex.subject_code AS subject_code,
+            ex.paper_no AS paper_no,
+            ex.belt_no AS belt_no,
+            ex.marking_centre AS marking_centre,
+            COUNT(ex.nrc) AS no_of_examiners,
+            ga.no_of_scripts AS no_of_scripts
+        FROM examiner ex
+        INNER JOIN group_apportion ga
+            ON ex.subject_code = ga.subject
+            AND ex.paper_no = ga.paper
+            AND ex.belt_no = ga.belt_no
+            AND ex.marking_centre = ga.marking_centre
+        WHERE ex.attendance = 1
+          AND ex.role IN ('EXAMINER','TEAM LEADER')
+          AND ex.subject_code = p_subject_code
+          AND ex.paper_no = p_paper_no
+          AND ex.belt_no = p_belt_no
+          AND ex.marking_centre = p_marking_centre_code
+        GROUP BY ex.subject_code, ex.paper_no, ex.belt_no, ex.marking_centre, ga.no_of_scripts
+    )
+    SELECT 
+        p_marking_centre_code AS marking_centre_code,
+        p_marking_centre_name AS marking_centre_name,
+        ex.nrc,
+        ex.examiner_number,
+        ex.tpin,
+        CONCAT(ex.first_name,' ',ex.last_name) AS full_name,
+        ex.address,
+        ex.province,
+        ex.district,
+        ex.role AS position,
+        ec.no_of_scripts AS no_of_scripts,
+        ex.sortcode,
+        ex.account_no,
+        CASE 
+            WHEN ex.role='TEAM LEADER' THEN mr.t_leader
+            WHEN ex.role='CHECKER' THEN mr.checker
+            ELSE mr.examiner
+        END AS net_rate,
+        CASE 
+            WHEN ex.role='TEAM LEADER' THEN mr.t_leader * p_rate_value
+            WHEN ex.role='CHECKER' THEN mr.checker * p_rate_value
+            ELSE mr.examiner * p_rate_value
+        END AS grossed_up_rate,
+        (CASE WHEN ec.no_of_scripts < 100 THEN 100 ELSE ec.no_of_scripts END)
+        * (CASE 
+             WHEN ex.role='TEAM LEADER' THEN mr.t_leader * p_rate_value
+             WHEN ex.role='CHECKER' THEN mr.checker * p_rate_value
+             ELSE mr.examiner * p_rate_value
+           END) / ec.no_of_examiners AS gross_pay,
+        (CASE WHEN ec.no_of_scripts < 100 THEN 100 ELSE ec.no_of_scripts END)
+        * (CASE 
+             WHEN ex.role='TEAM LEADER' THEN mr.t_leader * p_rate_value
+             WHEN ex.role='CHECKER' THEN mr.checker * p_rate_value
+             ELSE mr.examiner * p_rate_value
+           END) / ec.no_of_examiners * p_tax AS `15_wht`,
+        ((CASE WHEN ec.no_of_scripts < 100 THEN 100 ELSE ec.no_of_scripts END)
+        * (CASE 
+             WHEN ex.role='TEAM LEADER' THEN mr.t_leader * p_rate_value
+             WHEN ex.role='CHECKER' THEN mr.checker * p_rate_value
+             ELSE mr.examiner * p_rate_value
+           END) / ec.no_of_examiners)
+        - ((CASE WHEN ec.no_of_scripts < 100 THEN 100 ELSE ec.no_of_scripts END)
+        * (CASE 
+             WHEN ex.role='TEAM LEADER' THEN mr.t_leader * p_rate_value
+             WHEN ex.role='CHECKER' THEN mr.checker * p_rate_value
+             ELSE mr.examiner * p_rate_value
+           END) / ec.no_of_examiners * p_tax) AS net_pay,
+        ex.bank,
+        ex.branch,
+        p_subject_code,
+        p_subject_name,
+        p_paper_no,
+        ex.belt_no,
+        p_session_year,
+        CONCAT(p_session_year,' ',p_session_name) AS session_name
+    FROM examiner ex
+    INNER JOIN examiners_claim ec
+        ON ex.subject_code = ec.subject_code
+        AND ex.paper_no = ec.paper_no
+        AND ex.belt_no = ec.belt_no
+        AND ex.marking_centre = ec.marking_centre
+    INNER JOIN marking_rates mr
+        ON ex.subject_code = mr.subject_code
+        AND ex.paper_no = mr.paper_no
+    WHERE ex.attendance = 1
+      AND ex.role IN ('EXAMINER','TEAM LEADER','CHECKER')
+      AND ex.subject_code = p_subject_code
+      AND ex.paper_no = p_paper_no
+      AND ex.belt_no = p_belt_no
+      AND ex.marking_centre = p_marking_centre_code;
 
 END$$
 
@@ -283,13 +301,13 @@ CREATE TABLE `apportionment` (
 --
 
 CREATE TABLE `belted_examiners` (
-  `examiner_number` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject_code` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `examiner_number` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `subject_code` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `paper_no` int NOT NULL,
   `belt_no` int NOT NULL,
-  `uploaded_by` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uploaded_by` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `date_uploaded` datetime NOT NULL,
-  `marking_centre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+  `marking_centre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -937,10 +955,10 @@ INSERT INTO `belted_examiners` (`examiner_number`, `subject_code`, `paper_no`, `
 --
 
 CREATE TABLE `centre` (
-  `centre_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `centre_type` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `centre_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `centre_type` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `centre`
@@ -971,35 +989,35 @@ INSERT INTO `centre` (`centre_code`, `name`, `centre_type`) VALUES
 
 CREATE TABLE `data_entry_claims` (
   `id` int NOT NULL,
-  `marking_centre_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `marking_centre_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nrc` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `examiner_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tpin` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `full_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `phone_number` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `province` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `district` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `position` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `marking_centre_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `marking_centre_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nrc` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `examiner_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `tpin` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `full_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `phone_number` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `province` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `district` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `position` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `no_of_scripts` int NOT NULL,
-  `sortcode` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `account_no` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `net_rate` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `grossed_up_rate` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `gross_pay` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `15_wht` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `net_pay` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `bank` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `branch` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject_code` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sortcode` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `account_no` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `net_rate` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `grossed_up_rate` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `gross_pay` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `15_wht` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `net_pay` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `bank` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `branch` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `subject_code` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `subject_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `paper_no` int NOT NULL,
-  `belt_no` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `belt_no` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `date_claimed` date NOT NULL,
-  `session_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `session_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `session_year` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `data_entry_claims`
@@ -1029,33 +1047,33 @@ CREATE TABLE `documents` (
 
 CREATE TABLE `examiner` (
   `id` int NOT NULL,
-  `examiner_number` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nrc` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tpin` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `first_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `last_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone_number` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `district` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `province` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `gender` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `role` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `examiner_number` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nrc` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `tpin` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `first_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `last_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `phone_number` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `district` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `province` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `gender` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `role` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `belt_no` int DEFAULT NULL,
-  `attendance` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `attendance` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0',
   `no_of_days` int DEFAULT NULL,
-  `marking_centre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `subject_code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `marking_centre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `subject_code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `paper_no` int DEFAULT NULL,
-  `bank` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `branch` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `sortcode` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `account_no` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `session` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bank` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `branch` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `sortcode` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `account_no` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `session` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `activation_status` int NOT NULL DEFAULT '1',
   `login_status` int NOT NULL DEFAULT '0',
-  `session_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `session_token` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `examiner`
@@ -1717,75 +1735,75 @@ DELIMITER ;
 
 CREATE TABLE `examiner_claim` (
   `id` int NOT NULL,
-  `marking_centre_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `marking_centre_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nrc` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `examiner_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tpin` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `full_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `province` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `district` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `position` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `marking_centre_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `marking_centre_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nrc` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `examiner_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `tpin` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `full_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `province` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `district` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `position` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `no_of_scripts` int NOT NULL,
-  `sortcode` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `account_no` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `net_rate` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `grossed_up_rate` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `gross_pay` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `15_wht` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `net_pay` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `bank` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `branch` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject_code` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sortcode` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `account_no` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `net_rate` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `grossed_up_rate` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `gross_pay` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `15_wht` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `net_pay` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `bank` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `branch` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `subject_code` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `subject_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `paper_no` int NOT NULL,
   `belt_no` int NOT NULL,
   `session` int NOT NULL,
-  `session_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `session_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `examiner_claim`
 --
 
 INSERT INTO `examiner_claim` (`id`, `marking_centre_code`, `marking_centre_name`, `nrc`, `examiner_number`, `tpin`, `full_name`, `address`, `province`, `district`, `position`, `no_of_scripts`, `sortcode`, `account_no`, `net_rate`, `grossed_up_rate`, `gross_pay`, `15_wht`, `net_pay`, `bank`, `branch`, `subject_code`, `subject_name`, `paper_no`, `belt_no`, `session`, `session_name`) VALUES
-(226, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '186003/42/1', 'eadtest3', '1004297412', 'F. LAZAROUS SINKALA', 'Y3 Mukuba Natwange', 'COPPERBELT', 'Kitwe', 'CHIEF EXAMINER', 7, '580224', '3051224457901', '12.00', '14.1176470588236', '1411.76470588236', '211.76470588235398', '1200.000000000006', 'NATSAVE BANK', 'Kitwe', '1121', 'ENGLISH LANGUAGE', 1, 0, 2024, '2024 GENERAL CERTIFICATE'),
-(227, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '208721/76/1', '1121/102201', '1001481923', 'CONSTANT MWEEBO', 'Mukobeko \r\nsecondary school', 'CENTRAL', 'Kabwe', 'DEPUTY CHIEF EXAMINER', 7, '10862', '0503650100171', '11.50', '13.52941176470595', '1352.9411764705949', '202.94117647058923', '1150.0000000000057', 'ZANACO', 'Kasama', '1121', 'ENGLISH LANGUAGE', 1, 0, 2024, '2024 GENERAL CERTIFICATE'),
-(228, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '244636/73/1', '1121/101379', '1013173478', 'FLORENCE SILUKUNI', 'BF 3/11 C5 kafue Estates', 'LUSAKA', 'Kafue', 'EXAMINER', 68, '13458', '0607775100179', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'ZANACO', 'Kafue', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
-(229, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '243538/73/1', '1121/103627', '1008693217', 'BRIGHT SINYONWA', 'KANAKANTAPA DAY P.O BOX 820074, CHISAMBA', 'CENTRAL', 'Chisamba', 'EXAMINER', 68, '580906', '2041405777301', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'NATSAVE BANK', 'Kabwe', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
-(230, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '342729/61/1', '1121/100680', '1007162167', 'MUKUKA LILLIAN FULILA', 'Plot 1541 old ibolelo compound', 'CENTRAL', 'Serenje', 'EXAMINER', 68, '092230', '0301020001339', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'INDO ZAMBIA BANK LTD', 'Serenje Branch', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
-(231, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '322857/33/1', '1121/102346', '1009570028', 'BAXTER MWANGILWA', 'Box 730147', 'LUAPULA', 'Kawambwa', 'EXAMINER', 68, '12104', '9340010660158', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'ZANACO', 'Kawambwa', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
-(232, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '261546/64/1', '1121/100357', '1008324693', 'ANTHONY SIMUKONDE', 'House Number 74 - 90 Section', 'CENTRAL', 'Shibuyunji', 'EXAMINER', 80, '60017', '0101614687700', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'STANDARD CHARTERED BANK', 'Lusaka Main', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
 (233, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '110979/19/1', '1121/100447', '1016403112', 'BASHIR BANDA', 'Chavuma Boarding Teacher\'s Compound P.O. Box 60.', 'NORTH-WESTERN', 'Chavuma', 'EXAMINER', 62, '583032', '3131414910201', '8.00', '9.4117647058824', '104.57516339869332', '15.686274509803997', '88.88888888888933', 'NATSAVE BANK', 'Zambezi', '1121', 'ENGLISH LANGUAGE', 1, 3, 2024, '2024 GENERAL CERTIFICATE'),
-(234, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '221410/83/1', '1121/100472', '1012391451', 'NAMUKOLO SIMONA', 'Nangweshi Boarding Secondary school p.o.box 920202 Sioma', 'WESTERN', 'Sioma', 'EXAMINER', 68, '15181', '1038713100173', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'ZANACO', 'Senanga', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
-(235, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '416522/61/1', '1121/100523', '1003324830', 'OSCAR MULIOKELA', 'CHAVUMA BOARDING SECONDARY TEACHERS COMPOUND,HOUSE NO 10.', 'NORTH-WESTERN', 'CHAVUMA', 'EXAMINER', 80, '353056', '0456006964010', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'ACCESS BANK ZAMBIA LIMITED', 'Zambezi', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
-(236, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '870031/11/1', '1121/100684', '1006922998', 'WILLET TEMBO', 'LUNGA DAY SECONDARY SCHOOL P. O. BOX 160011 MWINILUNGA', 'NORTH-WESTERN', 'MWINILUNGA', 'CHECKER', 68, '260006', '63051824514', '9.00', '10.5882352941177', '96.2566844919791', '14.438502673796865', '81.81818181818224', 'FNB', 'Electronic Banking Branch', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
 (237, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '194194/68/1', '1121/100735', '1002810609', 'MARY KUNDA', 'Plot 554 Kamenza East  Chililabombwe', 'COPPERBELT', 'Chililabombwe', 'EXAMINER', 62, '200443', '0435898690018', '8.00', '9.4117647058824', '104.57516339869332', '15.686274509803997', '88.88888888888933', 'ATLAS MARA ZAMBIA', 'Chililabombwe', '1121', 'ENGLISH LANGUAGE', 1, 3, 2024, '2024 GENERAL CERTIFICATE'),
 (238, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '953541/11/1', '1121/100823', '1008830764', 'AARON MAIKISA PANGANI', 'Lambwe chomba teachers compound', 'LUAPULA', 'Chienge', 'EXAMINER', 62, '12104', '1646711100191', '8.00', '9.4117647058824', '104.57516339869332', '15.686274509803997', '88.88888888888933', 'ZANACO', 'Kawambwa', '1121', 'ENGLISH LANGUAGE', 1, 3, 2024, '2024 GENERAL CERTIFICATE'),
 (239, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '112853/10/1', '1121/100887', '1006409088', 'TWAMBO HAMATANGA', 'MTENDERE C', 'LUSAKA', 'LUSAKA', 'CHECKER', 62, '60017', '0101675272900', '9.00', '10.5882352941177', '117.64705882353002', '17.647058823529502', '100.00000000000051', 'STANDARD CHARTERED BANK', 'Lusaka Main', '1121', 'ENGLISH LANGUAGE', 1, 3, 2024, '2024 GENERAL CERTIFICATE'),
-(240, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '193114/45/1', '1121/100991', '1006141727', 'BERNARD MWABA', 'CHANDAWEYAYA MUNGWI', 'NORTHERN', 'Mungwi', 'EXAMINER', 80, '11865', '1262470100169', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'ZANACO', 'Mpika', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
-(241, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '958244/11/1', '1121/101010', '1009096040', 'LUDIA TEMBO', 'Nseluka', 'NORTHERN', 'Mungwi', 'EXAMINER', 80, '020832', '0208321158048', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'ABSA', 'Kasama', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
 (242, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '611237/11/1', '1121/101347', '1016961169', 'LYDIA ILUKENA', 'Mwense', 'LUAPULA', 'Mwense', 'EXAMINER', 62, '586338', '3201411403402', '8.00', '9.4117647058824', '104.57516339869332', '15.686274509803997', '88.88888888888933', 'NATSAVE BANK', 'Mwense', '1121', 'ENGLISH LANGUAGE', 1, 3, 2024, '2024 GENERAL CERTIFICATE'),
-(243, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '176064/81/1', '1121/101360', '1005006147', 'GRACE NASILELE MULOWA', 'YETA PLOTS, MONGU', 'WESTERN', 'Mitete', 'EXAMINER', 68, '63148', '0101858547700', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'STANDARD CHARTERED BANK', 'Mongu', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
-(244, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '281250/16/1', '1121/101451', '1009201252', 'RABECCA LILANDA', 'Plot no 1079, high cost, mkushi', 'CENTRAL', 'Mkushi', 'EXAMINER', 80, '042308', '9130000941011', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'STANBIC BANK ZAMBIA LTD', 'Mkushi', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
-(245, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '233185/68/1', '1121/101620', '1001559578', 'MAAMBO MILAMBO', 'Chikupili secondary school Box 840007,luano', 'CENTRAL', 'Luano', 'EXAMINER', 68, '200925', '0255949644028', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'ATLAS MARA ZAMBIA', 'Kabwe', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
 (246, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '202131/83/1', '1121/101726', '1000822385', 'CAROLINE CHISANGA', 'Plot 1737, Meanwood, Ndeke Airport. Lusaka', 'LUSAKA', 'Lusaka', 'EXAMINER', 62, '10050', '1183105100192', '8.00', '9.4117647058824', '104.57516339869332', '15.686274509803997', '88.88888888888933', 'ZANACO', 'Government Business Centre', '1121', 'ENGLISH LANGUAGE', 1, 3, 2024, '2024 GENERAL CERTIFICATE'),
-(247, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '279989/73/1', '1121/101976', '1004376327', 'NGANDU SIACHINGILI', 'MOCHIPAPA ROAD', 'SOUTHERN', 'Choma', 'EXAMINER', 68, '261238', '62894204462', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'FNB', 'Choma Branch', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
-(248, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '253805/43/1', '1121/101995', '1009340283', 'ANDREW CHEWE', 'Mporokoso Secondary School Trs Compound', 'NORTHERN', 'Mporokoso', 'EXAMINER', 80, '10862', '5916409100147', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'ZANACO', 'Kasama', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
-(249, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '276693/16/1', '1121/102102', '1008630271', 'KATE MUSUKWA', 'Kapiri Girls Teacher\'s Compound', 'CENTRAL', 'Kapiri', 'TEAM LEADER', 80, '10946', '0569610100171', '11.00', '12.9411764705883', '117.64705882353', '17.6470588235295', '100.00000000000051', 'ZANACO', 'Kabwe', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
-(250, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '152776/35/1', '1121/102315', '1016798078', 'RICHARD CHAMA', 'CHINAMBI', 'EASTERN', 'Nyimba', 'EXAMINER', 80, '11160', '5409114100185', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'ZANACO', 'Chipata', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
 (251, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '238461/43/1', '1121/102403', '1000670064', 'CHIPASHA PUREEN SALIMU', 'Mukulumpe Street Kasama', 'NORTHERN', 'Kasama', 'EXAMINER', 62, '350814', '0140200000313', '8.00', '9.4117647058824', '104.57516339869332', '15.686274509803997', '88.88888888888933', 'ACCESS BANK ZAMBIA LIMITED', 'Kasama Central', '1121', 'ENGLISH LANGUAGE', 1, 3, 2024, '2024 GENERAL CERTIFICATE'),
-(252, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '203709/72/1', '1121/103218', '1002763545', 'BRIGHT HANKUBA', 'SIMUNZELE PRIMARY AND SECONDARY SCHOOL, P.O.BOX 630035, MBABALA,CHOMA', 'SOUTHERN', 'CHOMA', 'TEAM LEADER', 68, '021205', '0212051038630', '11.00', '12.9411764705883', '117.64705882353', '17.6470588235295', '100.00000000000051', 'ABSA', 'Choma', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
-(253, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '207814/76/1', '1121/103277', '1001549181', 'MWANANGOMBE MBUYE', 'Kawanda', 'NORTH-WESTERN', 'Manyinga', 'EXAMINER', 68, '202919', '0190111295004', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'ATLAS MARA ZAMBIA', 'Kabompo', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
 (254, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '179576/45/1', '1121/103688', '1012986337', 'SUSAN MBEWE', 'CHIMANIMANI EXT.Hno1541/352', 'CENTRAL', 'Kabwe', 'EXAMINER', 62, '10946', '0474665100139', '8.00', '9.4117647058824', '104.57516339869332', '15.686274509803997', '88.88888888888933', 'ZANACO', 'Kabwe', '1121', 'ENGLISH LANGUAGE', 1, 3, 2024, '2024 GENERAL CERTIFICATE'),
 (255, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '325191/67/1', '1121/103730', '1004998166', 'ROSEMARY CHILESHE', 'House number 17 Kabulonga boys secondary school', 'LUSAKA', 'Lusaka', 'EXAMINER', 62, '200001', '0010106783000', '8.00', '9.4117647058824', '104.57516339869332', '15.686274509803997', '88.88888888888933', 'ATLAS MARA ZAMBIA', 'Lusaka Main', '1121', 'ENGLISH LANGUAGE', 1, 3, 2024, '2024 GENERAL CERTIFICATE'),
-(256, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '881658/11/1', '1121/103827', '1008512200', 'GRACE K. KAPUNGWE', 'CHANJOWE DAY SECONDARY SCHOOL, P.O.BOX 520097, CHADIZA', 'EASTERN', 'Chadiza', 'EXAMINER', 80, '020016', '0200161447552', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'ABSA', 'Lusaka Business Centre', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
 (257, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '347544/74/1', '1121/109110', '1002952961', 'GEORGE KANYAMA', '26 CHOMA SECONDARY SCHOOL', 'SOUTHERN', 'CHOMA', 'TEAM LEADER', 62, '021205', '0212051052803', '11.00', '12.9411764705883', '143.79084967320333', '21.568627450980497', '122.22222222222283', 'ABSA', 'Choma', '1121', 'ENGLISH LANGUAGE', 1, 3, 2024, '2024 GENERAL CERTIFICATE'),
-(258, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '126491/49/1', '1121/109230', '1002960586', 'DAVID LESA', 'RAPHAEL KOMBE NEW TEACHER\'S COMPOUND, HOUSE 33, KABWE', 'CENTRAL', 'KABWE', 'CHECKER', 80, '040922', '9130002661539', '9.00', '10.5882352941177', '96.2566844919791', '14.438502673796865', '81.81818181818224', 'STANBIC BANK ZAMBIA LTD', 'Kabwe', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
-(259, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '267036/16/1', '1121/109299', '1000654406', 'CYNTHIA CHILEMBE', 'Bb 4520 kasanda mine compound', 'CENTRAL', 'Kabwe', 'EXAMINER', 80, '10946', '0612690100182', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'ZANACO', 'Kabwe', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
-(260, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '249823/68/1', '1121/109382', '1007369975', 'NOAH LUNGU', 'Luwingu Day Secondary School, P.O Box 460077, Luwingu.', 'NORTHERN', 'Luwingu', 'EXAMINER', 80, '586926', '3071404442601', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'NATSAVE BANK', 'Luwingu', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
-(261, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '215545/84/1', '1121/103681', '1019167986', 'AKAKULUBELWA AKAKANDELWA', 'Kabulonga', 'LUSAKA', 'Lusaka', 'EXAMINER', 68, '090023', '0231020001012', '8.00', '9.4117647058824', '85.56149732620362', '12.834224598930543', '72.72727272727307', 'INDO ZAMBIA BANK LTD', 'Crossroads', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE');
+(292, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '186003/42/1', 'eadtest3', '1004297412', 'F. LAZAROUS SINKALA', 'Y3 Mukuba Natwange', 'COPPERBELT', 'Kitwe', 'CHIEF EXAMINER', 7, '580224', '3051224457901', '12.00', '14.11765200', '1411.765200000000', '211.7647800000000000', '1200.0004200000000000', 'NATSAVE BANK', 'Kitwe', '1121', 'ENGLISH LANGUAGE', 1, 0, 2024, '2024 GENERAL CERTIFICATE'),
+(293, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '208721/76/1', '1121/102201', '1001481923', 'CONSTANT MWEEBO', 'Mukobeko \r\nsecondary school', 'CENTRAL', 'Kabwe', 'DEPUTY CHIEF EXAMINER', 7, '10862', '0503650100171', '11.50', '13.52941650', '1352.941650000000', '202.9412475000000000', '1150.0004025000000000', 'ZANACO', 'Kasama', '1121', 'ENGLISH LANGUAGE', 1, 0, 2024, '2024 GENERAL CERTIFICATE'),
+(340, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '244636/73/1', '1121/101379', '1013173478', 'FLORENCE SILUKUNI', 'BF 3/11 C5 kafue Estates', 'LUSAKA', 'Kafue', 'EXAMINER', 68, '13458', '0607775100179', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'ZANACO', 'Kafue', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
+(341, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '243538/73/1', '1121/103627', '1008693217', 'BRIGHT SINYONWA', 'KANAKANTAPA DAY P.O BOX 820074, CHISAMBA', 'CENTRAL', 'Chisamba', 'EXAMINER', 68, '580906', '2041405777301', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'NATSAVE BANK', 'Kabwe', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
+(342, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '342729/61/1', '1121/100680', '1007162167', 'MUKUKA LILLIAN FULILA', 'Plot 1541 old ibolelo compound', 'CENTRAL', 'Serenje', 'EXAMINER', 68, '092230', '0301020001339', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'INDO ZAMBIA BANK LTD', 'Serenje Branch', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
+(343, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '322857/33/1', '1121/102346', '1009570028', 'BAXTER MWANGILWA', 'Box 730147', 'LUAPULA', 'Kawambwa', 'EXAMINER', 68, '12104', '9340010660158', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'ZANACO', 'Kawambwa', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
+(344, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '221410/83/1', '1121/100472', '1012391451', 'NAMUKOLO SIMONA', 'Nangweshi Boarding Secondary school p.o.box 920202 Sioma', 'WESTERN', 'Sioma', 'EXAMINER', 68, '15181', '1038713100173', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'ZANACO', 'Senanga', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
+(345, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '870031/11/1', '1121/100684', '1006922998', 'WILLET TEMBO', 'LUNGA DAY SECONDARY SCHOOL P. O. BOX 160011 MWINILUNGA', 'NORTH-WESTERN', 'MWINILUNGA', 'CHECKER', 68, '260006', '63051824514', '9.00', '10.58823529411770000', '96.256684491979090909090909090', '14.4385026737968636363636363635000', '81.8181818181822272727272727265000', 'FNB', 'Electronic Banking Branch', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
+(346, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '176064/81/1', '1121/101360', '1005006147', 'GRACE NASILELE MULOWA', 'YETA PLOTS, MONGU', 'WESTERN', 'Mitete', 'EXAMINER', 68, '63148', '0101858547700', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'STANDARD CHARTERED BANK', 'Mongu', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
+(347, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '233185/68/1', '1121/101620', '1001559578', 'MAAMBO MILAMBO', 'Chikupili secondary school Box 840007,luano', 'CENTRAL', 'Luano', 'EXAMINER', 68, '200925', '0255949644028', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'ATLAS MARA ZAMBIA', 'Kabwe', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
+(348, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '279989/73/1', '1121/101976', '1004376327', 'NGANDU SIACHINGILI', 'MOCHIPAPA ROAD', 'SOUTHERN', 'Choma', 'EXAMINER', 68, '261238', '62894204462', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'FNB', 'Choma Branch', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
+(349, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '203709/72/1', '1121/103218', '1002763545', 'BRIGHT HANKUBA', 'SIMUNZELE PRIMARY AND SECONDARY SCHOOL, P.O.BOX 630035, MBABALA,CHOMA', 'SOUTHERN', 'CHOMA', 'TEAM LEADER', 68, '021205', '0212051038630', '11.00', '12.94117647058830000', '117.647058823530000000000000000', '17.6470588235295000000000000000000', '100.0000000000005000000000000000000', 'ABSA', 'Choma', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
+(350, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '207814/76/1', '1121/103277', '1001549181', 'MWANANGOMBE MBUYE', 'Kawanda', 'NORTH-WESTERN', 'Manyinga', 'EXAMINER', 68, '202919', '0190111295004', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'ATLAS MARA ZAMBIA', 'Kabompo', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
+(351, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '215545/84/1', '1121/103681', '1019167986', 'AKAKULUBELWA AKAKANDELWA', 'Kabulonga', 'LUSAKA', 'Lusaka', 'EXAMINER', 68, '090023', '0231020001012', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'INDO ZAMBIA BANK LTD', 'Crossroads', '1121', 'ENGLISH LANGUAGE', 1, 1, 2024, '2024 GENERAL CERTIFICATE'),
+(355, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '261546/64/1', '1121/100357', '1008324693', 'ANTHONY SIMUKONDE', 'House Number 74 - 90 Section', 'CENTRAL', 'Shibuyunji', 'EXAMINER', 80, '60017', '0101614687700', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'STANDARD CHARTERED BANK', 'Lusaka Main', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
+(356, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '416522/61/1', '1121/100523', '1003324830', 'OSCAR MULIOKELA', 'CHAVUMA BOARDING SECONDARY TEACHERS COMPOUND,HOUSE NO 10.', 'NORTH-WESTERN', 'CHAVUMA', 'EXAMINER', 80, '353056', '0456006964010', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'ACCESS BANK ZAMBIA LIMITED', 'Zambezi', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
+(357, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '193114/45/1', '1121/100991', '1006141727', 'BERNARD MWABA', 'CHANDAWEYAYA MUNGWI', 'NORTHERN', 'Mungwi', 'EXAMINER', 80, '11865', '1262470100169', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'ZANACO', 'Mpika', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
+(358, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '958244/11/1', '1121/101010', '1009096040', 'LUDIA TEMBO', 'Nseluka', 'NORTHERN', 'Mungwi', 'EXAMINER', 80, '020832', '0208321158048', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'ABSA', 'Kasama', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
+(359, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '281250/16/1', '1121/101451', '1009201252', 'RABECCA LILANDA', 'Plot no 1079, high cost, mkushi', 'CENTRAL', 'Mkushi', 'EXAMINER', 80, '042308', '9130000941011', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'STANBIC BANK ZAMBIA LTD', 'Mkushi', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
+(360, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '253805/43/1', '1121/101995', '1009340283', 'ANDREW CHEWE', 'Mporokoso Secondary School Trs Compound', 'NORTHERN', 'Mporokoso', 'EXAMINER', 80, '10862', '5916409100147', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'ZANACO', 'Kasama', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
+(361, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '276693/16/1', '1121/102102', '1008630271', 'KATE MUSUKWA', 'Kapiri Girls Teacher\'s Compound', 'CENTRAL', 'Kapiri', 'TEAM LEADER', 80, '10946', '0569610100171', '11.00', '12.94117647058830000', '117.647058823530000000000000000', '17.6470588235295000000000000000000', '100.0000000000005000000000000000000', 'ZANACO', 'Kabwe', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
+(362, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '152776/35/1', '1121/102315', '1016798078', 'RICHARD CHAMA', 'CHINAMBI', 'EASTERN', 'Nyimba', 'EXAMINER', 80, '11160', '5409114100185', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'ZANACO', 'Chipata', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
+(363, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '881658/11/1', '1121/103827', '1008512200', 'GRACE K. KAPUNGWE', 'CHANJOWE DAY SECONDARY SCHOOL, P.O.BOX 520097, CHADIZA', 'EASTERN', 'Chadiza', 'EXAMINER', 80, '020016', '0200161447552', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'ABSA', 'Lusaka Business Centre', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
+(364, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '126491/49/1', '1121/109230', '1002960586', 'DAVID LESA', 'RAPHAEL KOMBE NEW TEACHER\'S COMPOUND, HOUSE 33, KABWE', 'CENTRAL', 'KABWE', 'CHECKER', 80, '040922', '9130002661539', '9.00', '10.58823529411770000', '96.256684491979090909090909090', '14.4385026737968636363636363635000', '81.8181818181822272727272727265000', 'STANBIC BANK ZAMBIA LTD', 'Kabwe', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
+(365, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '267036/16/1', '1121/109299', '1000654406', 'CYNTHIA CHILEMBE', 'Bb 4520 kasanda mine compound', 'CENTRAL', 'Kabwe', 'EXAMINER', 80, '10946', '0612690100182', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'ZANACO', 'Kabwe', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE'),
+(366, '240e720af8d71909cfe0872a14ab6be3', 'ZAMBIA AIR SERVICES TRAINING INSTITUTE (ZASTI)', '249823/68/1', '1121/109382', '1007369975', 'NOAH LUNGU', 'Luwingu Day Secondary School, P.O Box 460077, Luwingu.', 'NORTHERN', 'Luwingu', 'EXAMINER', 80, '586926', '3071404442601', '8.00', '9.41176470588240000', '85.561497326203636363636363636', '12.8342245989305454545454545454000', '72.7272727272730909090909090906000', 'NATSAVE BANK', 'Luwingu', '1121', 'ENGLISH LANGUAGE', 1, 2, 2024, '2024 GENERAL CERTIFICATE');
 
 -- --------------------------------------------------------
 
@@ -1798,11 +1816,11 @@ CREATE TABLE `group_apportion` (
 ,`date_created` datetime
 ,`id` varchar(135)
 ,`marking_centre` varchar(100)
-,`min(username)` varchar(100)
 ,`no_of_centres` bigint
-,`no_of_scripts` decimal(42,0)
+,`no_of_scripts` bigint unsigned
 ,`paper` int
 ,`subject` varchar(10)
+,`username` varchar(100)
 );
 
 -- --------------------------------------------------------
@@ -1814,10 +1832,10 @@ CREATE TABLE `group_apportion` (
 CREATE TABLE `marking_centre` (
   `id` int NOT NULL,
   `sen` int NOT NULL,
-  `subject` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `subject` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `paper` int NOT NULL DEFAULT '1',
-  `centre_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `centre_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `marking_centre`
@@ -1885,7 +1903,7 @@ INSERT INTO `marking_centre` (`id`, `sen`, `subject`, `paper`, `centre_code`) VA
 
 CREATE TABLE `marking_rates` (
   `id` int NOT NULL,
-  `subject_code` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject_code` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `paper_no` int NOT NULL,
   `chief_examiner` decimal(4,2) NOT NULL,
   `deputy_c_examiner` decimal(4,2) NOT NULL,
@@ -1893,7 +1911,7 @@ CREATE TABLE `marking_rates` (
   `examiner` decimal(4,2) NOT NULL,
   `checker` decimal(4,2) NOT NULL,
   `data_entry` decimal(4,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `marking_rates`
@@ -1954,24 +1972,24 @@ INSERT INTO `marking_rates` (`id`, `subject_code`, `paper_no`, `chief_examiner`,
 --
 
 CREATE TABLE `marks` (
-  `centre_code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exam_no` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `first_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `last_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `centre_code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `exam_no` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `first_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `last_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `subject_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `paper_no` int NOT NULL,
-  `mark` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mark` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `status` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `sen` int NOT NULL DEFAULT '0',
   `improvised_mark` int NOT NULL DEFAULT '0',
   `belt_no` int NOT NULL DEFAULT '0',
-  `id_group` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'none',
-  `entered_by` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'none',
-  `date_entered` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'none',
-  `marking_centre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'none',
+  `id_group` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'none',
+  `entered_by` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'none',
+  `date_entered` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'none',
+  `marking_centre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'none',
   `valid` int NOT NULL DEFAULT '0',
   `disable` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `marks`
@@ -116971,21 +116989,21 @@ DELIMITER ;
 --
 
 CREATE TABLE `marks_audit_trail` (
-  `centre_code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exam_no` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `centre_code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `exam_no` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `subject_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `paper_no` int NOT NULL,
-  `old_mark` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `old_status` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `new_mark` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `old_mark` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `old_status` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `new_mark` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `status` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `sen` int DEFAULT NULL,
   `improvised_mark` int NOT NULL DEFAULT '0',
-  `entered_by` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `action` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date_entered` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `marking_centre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `entered_by` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `action` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `date_entered` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `marking_centre` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `marks_audit_trail`
@@ -117221,10 +117239,10 @@ INSERT INTO `marks_audit_trail` (`centre_code`, `exam_no`, `subject_code`, `pape
 
 CREATE TABLE `paper` (
   `1d` int NOT NULL,
-  `subject_code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `subject_code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `paper_no` int NOT NULL,
   `max_mark` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `paper`
@@ -117291,10 +117309,10 @@ INSERT INTO `paper` (`1d`, `subject_code`, `paper_no`, `max_mark`) VALUES
 --
 
 CREATE TABLE `school` (
-  `centre_code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `centre_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `centre_type` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `centre_code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `centre_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `centre_type` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `school`
@@ -118052,11 +118070,11 @@ INSERT INTO `school` (`centre_code`, `centre_name`, `centre_type`) VALUES
 --
 
 CREATE TABLE `sen_exam_no` (
-  `exam_no` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exam_no` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `subject_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `paper_no` int NOT NULL,
   `date_time` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -118065,12 +118083,12 @@ CREATE TABLE `sen_exam_no` (
 --
 
 CREATE TABLE `session` (
-  `id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `year` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `level` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '9',
-  `type` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `year` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `level` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '9',
+  `type` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `session`
@@ -118086,9 +118104,9 @@ INSERT INTO `session` (`id`, `name`, `year`, `level`, `type`) VALUES
 --
 
 CREATE TABLE `subjects` (
-  `subject_code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `subject_code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `subject_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `subjects`
@@ -118146,7 +118164,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `group_apportion`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `group_apportion`  AS SELECT `a`.`group_id` AS `id`, `a`.`subject` AS `subject`, `a`.`paper` AS `paper`, `a`.`belt_no` AS `belt_no`, count(`a`.`school`) AS `no_of_centres`, sum(`a`.`script_no`) AS `no_of_scripts`, `a`.`marking_centre` AS `marking_centre`, min(`a`.`username`) AS `min(username)`, min(`a`.`date_apportioned`) AS `date_created` FROM (select `apportionment`.`id` AS `id`,`apportionment`.`school` AS `school`,`apportionment`.`script_no` AS `script_no`,`apportionment`.`group_id` AS `group_id`,`apportionment`.`subject` AS `subject`,`apportionment`.`paper` AS `paper`,`apportionment`.`sen` AS `sen`,`apportionment`.`belt_no` AS `belt_no`,`apportionment`.`marking_centre` AS `marking_centre`,`apportionment`.`username` AS `username`,`apportionment`.`date_apportioned` AS `date_apportioned` from `apportionment`) AS `a` GROUP BY `a`.`group_id`, `a`.`subject`, `a`.`paper`, `a`.`belt_no`, `a`.`marking_centre``marking_centre`  ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `group_apportion`  AS SELECT `a`.`group_id` AS `id`, `a`.`subject` AS `subject`, `a`.`paper` AS `paper`, `a`.`belt_no` AS `belt_no`, count(`a`.`school`) AS `no_of_centres`, cast(sum(`a`.`script_no`) as unsigned) AS `no_of_scripts`, `a`.`marking_centre` AS `marking_centre`, min(`a`.`username`) AS `username`, min(`a`.`date_apportioned`) AS `date_created` FROM `apportionment` AS `a` GROUP BY `a`.`group_id`, `a`.`subject`, `a`.`paper`, `a`.`belt_no`, `a`.`marking_centre``marking_centre`  ;
 
 --
 -- Indexes for dumped tables
@@ -118157,7 +118175,9 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 ALTER TABLE `belted_examiners`
   ADD UNIQUE KEY `examiner_number` (`examiner_number`,`subject_code`,`paper_no`,`uploaded_by`,`date_uploaded`,`marking_centre`),
-  ADD UNIQUE KEY `examiner_number_2` (`examiner_number`,`subject_code`,`paper_no`,`uploaded_by`,`date_uploaded`,`marking_centre`);
+  ADD UNIQUE KEY `examiner_number_2` (`examiner_number`,`subject_code`,`paper_no`,`uploaded_by`,`date_uploaded`,`marking_centre`),
+  ADD KEY `subject_code` (`subject_code`),
+  ADD KEY `marking_centre` (`marking_centre`);
 
 --
 -- Indexes for table `centre`
@@ -118287,7 +118307,8 @@ ALTER TABLE `school`
 -- Indexes for table `sen_exam_no`
 --
 ALTER TABLE `sen_exam_no`
-  ADD PRIMARY KEY (`exam_no`);
+  ADD PRIMARY KEY (`exam_no`),
+  ADD KEY `subject_code` (`subject_code`);
 
 --
 -- Indexes for table `session`
@@ -118325,24 +118346,51 @@ ALTER TABLE `examiner`
 -- AUTO_INCREMENT for table `examiner_claim`
 --
 ALTER TABLE `examiner_claim`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=289;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=370;
 
 --
 -- Constraints for dumped tables
 --
 
 --
+-- Constraints for table `belted_examiners`
+--
+ALTER TABLE `belted_examiners`
+  ADD CONSTRAINT `belted_examiners_ibfk_1` FOREIGN KEY (`subject_code`) REFERENCES `subjects` (`subject_code`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `belted_examiners_ibfk_2` FOREIGN KEY (`marking_centre`) REFERENCES `centre` (`centre_code`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `data_entry_claims`
+--
+ALTER TABLE `data_entry_claims`
+  ADD CONSTRAINT `data_entry_claims_ibfk_1` FOREIGN KEY (`marking_centre_code`) REFERENCES `centre` (`centre_code`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `examiner`
 --
 ALTER TABLE `examiner`
-  ADD CONSTRAINT `examiner_ibfk_1` FOREIGN KEY (`session`) REFERENCES `session` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `examiner_ibfk_2` FOREIGN KEY (`marking_centre`) REFERENCES `centre` (`centre_code`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `examiner_ibfk_1` FOREIGN KEY (`marking_centre`) REFERENCES `centre` (`centre_code`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `examiner_ibfk_2` FOREIGN KEY (`session`) REFERENCES `session` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `examiner_claim`
+--
+ALTER TABLE `examiner_claim`
+  ADD CONSTRAINT `examiner_claim_ibfk_1` FOREIGN KEY (`marking_centre_code`) REFERENCES `centre` (`centre_code`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `examiner_claim_ibfk_2` FOREIGN KEY (`subject_code`) REFERENCES `subjects` (`subject_code`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `marking_centre`
 --
 ALTER TABLE `marking_centre`
-  ADD CONSTRAINT `marking_centre_ibfk_1` FOREIGN KEY (`centre_code`) REFERENCES `centre` (`centre_code`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `marking_centre_ibfk_1` FOREIGN KEY (`centre_code`) REFERENCES `centre` (`centre_code`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `marking_centre_ibfk_2` FOREIGN KEY (`subject`) REFERENCES `subjects` (`subject_code`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `marking_rates`
+--
+ALTER TABLE `marking_rates`
+  ADD CONSTRAINT `marking_rates_ibfk_1` FOREIGN KEY (`subject_code`) REFERENCES `subjects` (`subject_code`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `marks`
@@ -118350,6 +118398,18 @@ ALTER TABLE `marking_centre`
 ALTER TABLE `marks`
   ADD CONSTRAINT `marks_ibfk_1` FOREIGN KEY (`centre_code`) REFERENCES `school` (`centre_code`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `marks_ibfk_2` FOREIGN KEY (`subject_code`) REFERENCES `subjects` (`subject_code`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `paper`
+--
+ALTER TABLE `paper`
+  ADD CONSTRAINT `paper_ibfk_1` FOREIGN KEY (`subject_code`) REFERENCES `subjects` (`subject_code`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `sen_exam_no`
+--
+ALTER TABLE `sen_exam_no`
+  ADD CONSTRAINT `sen_exam_no_ibfk_1` FOREIGN KEY (`subject_code`) REFERENCES `subjects` (`subject_code`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

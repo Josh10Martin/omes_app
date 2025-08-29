@@ -79,7 +79,7 @@ if((isset($_SESSION['user_type']) && $_SESSION['user_type']  == 'ADMIN') || (iss
             </div>
             <div class="col-md-6">
               <label for="belt">Belt No.</label>
-              <select name="app_belt_no" class="form-control" id="belt" required>
+              <select name="sub_belt_no" class="form-control" id="belt" required>
                 <!-- <option value="" disabled selected>Select Belt No.</option> -->
                 <!-- Dynamic options loaded via script -->
               </select>
@@ -299,28 +299,28 @@ if((isset($_SESSION['user_type']) && $_SESSION['user_type']  == 'ADMIN') || (iss
             });
           }
         });
-        get_apportioned_belts(subject_code);
+        get_submitted_belts(subject_code);
       });
     }
 
-    function get_apportioned_belts(subject_code) {
+    function get_submitted_belts(subject_code) {
       $('select[name=paper]').change(function () {
         var paper = $(this).val(),
         marking_centre_code =  $('select[name=marking_centre]').val();
         $.ajax({
-          url: 'php/get_apportioned_belts.php',
+          url: 'php/get_submitted_belts.php',
           method: 'POST',
           data: { subject_code: subject_code, paper: paper, marking_centre_code:marking_centre_code },
           dataType: 'json',
           success: function (data) {
-            $('select[name=app_belt_no] option').remove();
+            $('select[name=sub_belt_no] option').remove();
            
-                $('select[name=app_belt_no]').append(
-                  '<option value="" selected disabled>Select belt</option>'+
-                  '<option value="0">0</option>'
+                $('select[name=sub_belt_no]').append(
+                  '<option value="" selected disabled>Select belt</option>'
+                  
                 );
               $.each(data, function () {
-                $('select[name=app_belt_no]').append(
+                $('select[name=sub_belt_no]').append(
                   '<option value="' + this["belt_no"] + '">' + this["belt_no"] + '</option>'
                 );
               });

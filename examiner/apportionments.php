@@ -139,7 +139,7 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header p-2 bg-success">
-                                <div class="modal-title text-white h5 text-center">Confirm Apportionment</div>
+                                <div class="modal-title text-white h5 text-center">Examiner claim submission</div>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>t
@@ -165,6 +165,16 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                                 </select>
                                             </div>
                                         </div>
+                                       
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Belt No.:</label>
+                                                <select class="select" name="apportioned_belt" required>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                       
                                         <input type="hidden" name="marking_centre_code" value="<?php echo $_SESSION['marking_centre_code']; ?>">
                                     </div>
                                     <div class="modal-footer">
@@ -535,9 +545,39 @@ if ($_SESSION['user_type']  == 'ADMIN') {
                                 });
                             }
                         });
-                   
+                    get_apportioned_belts(subject_code);
                 });
             }
+
+              function get_apportioned_belts(subject_code) {
+                $('select[name=paper]').change(function(){
+                    var paper_no = $(this).val();
+                
+                $.ajax({
+                    url: 'php/get_apportioned_belts.php',
+                    method: 'POST',
+                    data: {subject_code:subject_code,paper:paper_no},
+                    dataType: 'json',
+                    success: function(data) {
+                        $('select[name=apportioned_belt] option').remove();
+
+                        $('select[name=apportioned_belt]').append(
+                            '<option value="" selected disabled>Select Belt</option>'+
+                            '<option value="0">BELT 0 [Chief / Deputy chief Examiner]</option>'
+                        );
+
+                      
+                        $.each(data, function() {
+                            $('select[name=apportioned_belt]').append(
+                                '<option value="' + this["belt_no"] + '">BELT ' + this["belt_no"] + '</option>'
+                            );
+                        });
+                      
+                    }
+                });
+                });
+            }
+
             function search_in_belt(){
                 $('#search_apportionment').submit(function(e){
                     e.preventDefault();

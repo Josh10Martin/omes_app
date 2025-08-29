@@ -19,5 +19,5 @@
 ?>
 
 
-   <script src="js/session_count.js"></script>  
+   <!-- <script src="js/session_count.js"></script>   -->
    
