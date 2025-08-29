@@ -30,7 +30,7 @@ if(isset($_SESSION['user_type'])){
                                                         AND m.entered_by =:username
                                                         AND ex.examiner_number =:examiner_number
                                                         AND ex.role = "DATA ENTRY OFFICER"
-                                                        GROUP BY ex.first_name,ex.last_name,ex.phone_number, ex.bank, ex.branch,ex.account_no,mr.data_entry,ex.nrc,ex.phone_number,su.subject_code,su.subject_name,pa.paper_no,mr.data_entry
+                                                        GROUP BY ex.first_name,ex.last_name,ex.phone_number,ex.address,ex.province,ex.district, ex.bank, ex.branch,ex.sortcode,ex.tpin,ex.account_no,mr.data_entry,ex.nrc,ex.phone_number,su.subject_code,su.subject_name,pa.paper_no,mr.data_entry
                 ');
                 $sql->execute(array(
                         ':examiner_number'=>$_SESSION['username'],
