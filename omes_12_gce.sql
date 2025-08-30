@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 30, 2025 at 09:24 AM
+-- Generation Time: Aug 30, 2025 at 09:40 AM
 -- Server version: 8.0.36
 -- PHP Version: 8.1.11
 
@@ -116988,7 +116988,7 @@ $$
 DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `marks_audit_trail_trigger` AFTER UPDATE ON `marks` FOR EACH ROW BEGIN
-  IF (old.marking_centre != 'none') AND (old.disable = 0 AND new.disable = 1) AND new.status != 'L'
+  IF old.marking_centre != 'none' AND (old.disable = 0 AND new.disable = 1)
   THEN
     INSERT INTO marks_audit_trail (
       centre_code,
