@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 30, 2025 at 09:40 AM
+-- Generation Time: Aug 30, 2025 at 06:51 PM
 -- Server version: 8.0.36
 -- PHP Version: 8.1.11
 
@@ -25,7 +25,7 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_chief_examiner_claim` (IN `p_subject_code` VARCHAR(10), IN `p_subject_name` VARCHAR(100), IN `p_paper_no` INT, IN `p_belt_no` INT, IN `p_rate_value` DECIMAL(16,15), IN `p_tax` DECIMAL(10,6), IN `p_session_year` VARCHAR(10), IN `p_session_name` VARCHAR(50), IN `p_marking_centre_code` VARCHAR(100), IN `p_marking_centre_name` VARCHAR(100))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_chief_examiner_claim` (IN `p_subject_code` VARCHAR(10), IN `p_subject_name` VARCHAR(100), IN `p_paper_no` INT, IN `p_belt_no` INT, IN `p_rate_value` DECIMAL(16,15), IN `p_tax` DECIMAL(3.2), IN `p_session_year` VARCHAR(10), IN `p_session_name` VARCHAR(50), IN `p_marking_centre_code` VARCHAR(100), IN `p_marking_centre_name` VARCHAR(100))   BEGIN
     REPLACE INTO examiner_claim (
         marking_centre_code,
         marking_centre_name,
@@ -227,7 +227,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_data_entry_claim` (IN `p_exa
              su.subject_code, su.subject_name, pa.paper_no, mr.data_entry;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_examiner_claims` (IN `p_subject_code` VARCHAR(10), IN `p_subject_name` VARCHAR(100), IN `p_paper_no` INT, IN `p_belt_no` INT, IN `p_rate_value` DECIMAL(16,15), IN `p_tax` DECIMAL(16,15), IN `p_session_year` VARCHAR(10), IN `p_session_name` VARCHAR(20), IN `p_marking_centre_code` VARCHAR(100), IN `p_marking_centre_name` VARCHAR(100))   BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_examiner_claims` (IN `p_subject_code` VARCHAR(10), IN `p_subject_name` VARCHAR(100), IN `p_paper_no` INT, IN `p_belt_no` INT, IN `p_rate_value` DECIMAL(16,15), IN `p_tax` DECIMAL(3.2), IN `p_session_year` VARCHAR(10), IN `p_session_name` VARCHAR(20), IN `p_marking_centre_code` VARCHAR(100), IN `p_marking_centre_name` VARCHAR(100))   BEGIN
 
     REPLACE INTO examiner_claim (
         marking_centre_code,
