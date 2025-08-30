@@ -11,9 +11,9 @@
 <script src="../assets/plugins/jquery.mask.js"></script>
 
 <?php if(isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'DEO'){ ?>
- <script src="js/active_status.js"></script>
+ <!-- <script src="js/active_status.js"></script>
  <script src="js/session_token.js"></script>  
-  <script src="js/session_time.js"></script> 
+  <script src="js/session_time.js"></script>  -->
   <?php 
 }
 ?>

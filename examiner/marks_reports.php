@@ -120,9 +120,9 @@ if($_SESSION['user_type'] == 'ADMIN'){
                     if($_SESSION['user_type'] == 'DEO'){
                 ?>
                         <div class="col-md-6">
-                          <?php
-                            echo $_SESSION['username'].' - '.$_SESSION['first_name'].' '.$_SESSION['last_name'];
-                          ?>
+                          <!-- <?php
+                            echo $_SESSION['username'].' - '.$_SESSION['first_name'].' '.$_SESSION['last_name'].' '.$_SESSION['marking_centre_code'];
+                          ?> -->
                         <a href="#" id="submit_data_entry_claim" class="btn btn-white"><i class="fa fa-check" aria-hidden="true"></i> Submit Claim</a>
                             
                                <a href="javascript:void(0)" data-toggle="modal" data-target="#data_entry_modal"><div> Data Entry Officer Statistics (Yours)</div></a> 
@@ -688,7 +688,7 @@ if($_SESSION['user_type'] == 'ADMIN'){
 <!-- Audit trail -->
 <div class="modal fade" id="audit_trail"  role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-  <form action="reports/audit_trail.php" target="_blank" method="post" id="audit_form" style="width:100%;">
+  <form method="post" id="audit_form" style="width:100%;">
     <div class="modal-content">
       <div class="modal-header bg-success p-1 d-flex justify-content-center">
         <div class="modal-title h4 text-white text-center " id="exampleModalLongTitle">Audit Trail</div>
@@ -711,6 +711,15 @@ if($_SESSION['user_type'] == 'ADMIN'){
             <select name="paper" class="select" id="paper" required>
             <option value="" selected> Select Papert</option>
               <option value="0">paper 1</option>
+            </select>
+            </p>
+          </div>
+          <div class="col-md-12" id="by_paper_opt">
+            <p>Format
+            <select name="format" class="select" id="paper" required>
+            <option value="" selected disabled> Select Format</option>
+              <option value="pdf">PDF</option>
+              <option value="csv">CSV</option>
             </select>
             </p>
           </div>
@@ -1104,6 +1113,7 @@ $('#export2').dialog({
   get_attendance();
   attendance_format();
   get_schools_improvised();
+  format();
   data_entry_claim();
   data_entry_statisticts();
   cnsolidated_claims();
@@ -1205,6 +1215,19 @@ $('#export2').dialog({
   });
 	}
 
+  function format(){
+    $('select[name=format]').change(function(){
+      var format = $(this).val(),
+      action = format == 'pdf' ? 'reports/audit_trail.php' : (format == 'csv' ? 'export/audit_trail.php' : ''),
+      target = format == 'pdf' ? '_blank' : '';
+
+      $('form#audit_form').attr({
+        'action':action,
+        'target':target
+      });
+
+    });
+  }
   function get_schools(){
     $.ajax({
       url: 'php/get_schools.php',
