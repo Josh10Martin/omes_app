@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 30, 2025 at 06:51 PM
+-- Generation Time: Sep 02, 2025 at 10:10 PM
 -- Server version: 8.0.36
 -- PHP Version: 8.1.11
 
@@ -118388,7 +118388,7 @@ ALTER TABLE `school`
 -- Indexes for table `sen_exam_no`
 --
 ALTER TABLE `sen_exam_no`
-  ADD PRIMARY KEY (`exam_no`),
+  ADD UNIQUE KEY `exam_no` (`exam_no`,`subject_code`,`paper_no`,`date_time`),
   ADD KEY `subject_code` (`subject_code`);
 
 --

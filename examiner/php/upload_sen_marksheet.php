@@ -20,7 +20,7 @@ if(isset($_FILES['myFile']['name'])){
                             SET date_time =:date_time
                         ');
 
-    $sql->execute(array(
+    $sql->execute(array( 
         ':path'=>$path,
         ':date_time'=> $_SESSION['date_time']
     ));

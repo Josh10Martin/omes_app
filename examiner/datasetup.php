@@ -1270,7 +1270,7 @@ function align_sen_subjects(){
       $('.feedback1').text('Aligning subjects / paper to respective marking centre(s)...');
     },
     success:function(data){
-       generate_csv(data);
+      // generate_csv(data);
       if(data.status == '200'){
         $('button[id=save]').attr('disabled',false).removeClass('bg_att');
             $('button[id=close]').attr('disabled',false);
