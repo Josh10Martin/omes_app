@@ -5,16 +5,7 @@ include '../../config.php';
 include '../../functions.php';
 $data_array = array();
 try{
-$sql = $db_12_gce->prepare('UPDATE marks m
-                        INNER JOIN (SELECT sen, subject,paper,centre_code FROM marking_centre) mc
-                        ON (m.subject_code = mc.subject)
-                        SET m.marking_centre = mc.centre_code
-                        WHERE m.subject_code = mc.subject
-                        AND m.paper_no = mc.paper 
-                        AND m.marking_centre = "none"
-                        AND m.exam_no NOT IN (SELECT exam_no FROM sen_exam_no)
-                        AND mc.sen = 0
-
+$sql = $db_12_gce->prepare('CALL align_subjects()
                         ');
                 
 $sql->execute();

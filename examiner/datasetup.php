@@ -60,9 +60,7 @@ if($_SESSION['user_type'] == 'ECZ'){
                         <div class="col-md-4">
                               <a href="" data-toggle="modal" data-target="#upload-marksheet-modal"><div><i class="fa fa-upload" aria-hidden="true"></i> UPLOAD MARKSHEETS:</div></a>  
                         </div>
-                        <div class="col-md-4">
-                              <a href="" data-toggle="modal" data-target="#upload-sen-marksheet-modal"><div><i class="fa fa-upload" aria-hidden="true"></i> UPLOAD SEN / OTHER MARKSHEETS:</div></a>  
-                        </div>
+                       
                         <div class="col-md-4">
                                <a href="" data-toggle="modal" data-target="#extract-marksheets-modal"><div><i class="fa fa-download" aria-hidden="true"></i> EXTRACT MARKS:</div></a> 
                         </div>
@@ -512,34 +510,6 @@ if($_SESSION['user_type'] == 'ECZ'){
 
 
 
-
-<!-- upload examiners -->
-<div class="modal fade" id="upload-examiners-modal" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-        <form action="" style="width:100%;" id="upload_examiners_form" enctype="multipart/form-data">
-          <div class="modal-content">
-            <div class="modal-header bg-success p-1">
-              <h5 class="modal-title h4 text-white" id="exampleModalLongTitle">Upload Examiners</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <label>CSV to upload</label> 
-                <input type="file" accept=".csv"class="form-control" placeholder="choose file to upload" id="myFile" name="myFile" required>
-            </div>
-            <div class="modal-footer">
-              <button type="button" id="close" class="btn btn-secondary mr-auto" data-dismiss="modal">Close</button>
-              <img class="loading" src="../images/loading.gif" style="transform: translateX(100%); display:none;"/>
-              <button type="submit" id="save" class="btn btn-primary float-right">Upload</button>
-            </div>
-          </div>
-
-        </form>
-        </div>
-      </div>
-
-
 <!-- Upload marksheets -->
       <div class="modal fade" id="upload-marksheet-modal" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -581,63 +551,6 @@ if($_SESSION['user_type'] == 'ECZ'){
         </form>
         </div>
       </div>
-<!-- end upload marksheet -->
-
-
-<!-- Upload sen marksheets -->
-      <div class="modal fade" id="upload-sen-marksheet-modal" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-        
-        <form action="" style="width:100%;" id="upload_sen_form" enctype="multipart/form-data">
-           <div class="sen1"></div>
-        <div class="modal-content">
-            <div class="modal-header bg-success p-1">
-              <h5 class="modal-title h4 text-white" id="exampleModalLongTitle">Upload sen / other Marksheet (exam number(s))</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <label>CSV to upload</label> <a href="documents/sample_sen_marksheet.csv" style="margin-left: 10px;"> download template</a>
-                <input type="file" accept=".csv"class="form-control" placeholder="choose file to upload" id="myFile" name="myFile" required>
-                <div class="alert alert-info d-none" id="info-div">
-                  <div class="row">
-                    <div class="col-sm-12">
-                      <div class="feedback1 "></div>
-                    </div>
-                     <!-- <div class="col-md-12">
-                        <div class="form-group mx-2">
-                        <label>Status</label>
-                        <select class="select" name="status" required>
-                        </select>
-                         <option value="" selected disabled>Select target status </option>
-                         <option value="L">Missing</option>
-                         <option value="X">Absent</option>
-                        </div>
-                    </div> -->
-                    <div class="col-sm-12 mt-1">
-                      <div class="feedback2 text-success" ></div>
-                    </div>
-                    
-                    
-                  </div>
-                  
-                </div>
-                
-              </div>
-            <div class="modal-footer">
-              
-              <button type="button" id="close" class="btn btn-secondary mr-auto" data-dismiss="modal">Close</button>
-              <!-- <div class="feedback3" style="display:block; width:100%;"></div> -->
-              <img class="loading" src="../images/loading.gif" style="transform: translateX(100%); display:none;"/>
-              <button type="submit" id="save" class="btn btn-primary float-right">Upload</button>
-            </div>
-          </div>
-
-        </form>
-        </div>
-      </div>
-<!-- end upload sen marksheet -->
 
       <!-- search apportionment modal -->
        <div class="modal fade" id="SearchApportionment" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -750,7 +663,7 @@ if($_SESSION['user_type'] == 'ECZ'){
 <script>
 $(document).ready(function(){
   upload_marksheet();
-  upload_sen_marksheet();
+
   get_all_subject();
   get_all_papers();
   upload_schools();
@@ -831,37 +744,7 @@ function hideMarkingCenterDiv(){
         ]
     });
 
-  $('.sen1').dialog({
-        title: 'REQUEST RESPONSE',
-        width: '450',
-        height: '150',
-        modal: true,
-        draggable: false,
-        resizable: false,
-        closeOnEscape: false,
-        appendTo: '#upload-sen-marksheet-modal',
-        autoOpen: false,
-        create: function(e){
-            $(e.target).parent().css({
-                'position':'fixed'
-            }); 
-            
-        },
-        buttons: [
-            // {
-            //     text: 'login',
-            //     click: function(){
-            //         location.href="/orvs";
-            //     }
-            // },
-            {
-                text: 'OK',
-                click: function(){
-                    $(this).dialog('close');
-                }
-            }
-        ]
-    });
+
   $('.dialog1').dialog({
         title: 'REQUEST RESPONSE',
         width: '450',
@@ -1140,93 +1023,7 @@ function hideMarkingCenterDiv(){
     });
   }
 
-  function upload_sen_marksheet(){
-    $('#upload_sen_form').submit(function(e){
-      e.preventDefault();
-      $.ajax({
-        url: 'php/upload_sen_marksheet.php',
-        method: 'POST',
-        data: new FormData(this),
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        cache: false,
-        beforeSend: function(data){
-            $('button[id=save]').attr('disabled',true).addClass('bg_att');
-            $('button[id=close]').attr('disabled',true);
-            $('img.loading').css('display','block');
-            $('#info-div').removeClass('d-none')
-            $('.feedback2').text('Uploading marksheet ...');
-        },
-        success:function(data){
-          if(data.status == '200'){
-            // $('button[id=save]').attr('disabled',false).removeClass('bg_att');
-            // $('button[id=close]').attr('disabled',false)
-            // $('img.loading').css('display','none');
-            // $('#upload_form').trigger('reset');
-            // $('.dialog').text(data.response_msg).dialog('open');
-            $('.feedback2').text(data.response_msg);
-            align_sen_subjects();
-          }else{
-            $('button[id=save]').attr('disabled',false).removeClass('bg_att');
-            $('button[id=close]').attr('disabled',false);
-            $('img.loading').css('display','none');
-            $('.sen1').text(data.response_msg).dialog('open');
-            $('.feedback1').text(' ');
-            $('.feedback2').text(' ');
-          }
-        }
-      });
-    });
-  }
-// function align_centres(){
-//   $.ajax({
-//     url: 'php/align_centres.php',
-//     method: 'POST',
-//     dataType: 'json',
-//     success:function(data){
-//       if(data.status == '200'){
-//         // $('button[id=save]').attr('disabled',false).removeClass('bg_att');
-//         //     $('button[id=close]').attr('disabled',false)
-//         //     $('img.loading').css('display','none');
-//         //     $('#upload_form').trigger('reset');
-//         //     $('.dialog').text(data.response_msg).dialog('open');
-//         align_provinces();
-//       }else{
-//         $('button[id=save]').attr('disabled',false).removeClass('bg_att');
-//             $('button[id=close]').attr('disabled',false);
-//             $('img.loading').css('display','none');
-//             $('#upload_form').trigger('reset');
-//             $('.dialog').text(data.response_msg).dialog('open');
-//       }
-//     }
-//   });
-// }
 
-// function align_provinces(){
-//   $.ajax({
-//     url: 'php/align_provinces.php',
-//     method: 'POST',
-//     dataType: 'json',
-//     success:function(data){
-//       if(data.status == '200'){
-//         // $('button[id=save]').attr('disabled',false).removeClass('bg_att');
-//         //     $('button[id=close]').attr('disabled',false)
-//         //     $('img.loading').css('display','none');
-//         //     $('#upload_form').trigger('reset');
-//         //     $('.dialog').text(data.response_msg).dialog('open');
-//         align_subjects();
-       
-//       }else{
-//         $('button[id=save]').attr('disabled',false).removeClass('bg_att');
-//             $('button[id=close]').attr('disabled',false);
-//             $('img.loading').css('display','none');
-//             $('#upload_form').trigger('reset');
-//             $('.dialog').text(data.response_msg).dialog('open');
-//       }
-//     }
-//   });
-// }
 function align_subjects(){
   $.ajax({
     url: 'php/align_subjects.php',
@@ -1261,77 +1058,7 @@ function align_subjects(){
   });
 }
 
-function align_sen_subjects(){
-  $.ajax({
-    url: 'php/align_sen_subjects.php',
-    method: 'POST',
-    dataType: 'json',
-    beforeSend:function(){
-      $('.feedback1').text('Aligning subjects / paper to respective marking centre(s)...');
-    },
-    success:function(data){
-      // generate_csv(data);
-      if(data.status == '200'){
-        $('button[id=save]').attr('disabled',false).removeClass('bg_att');
-            $('button[id=close]').attr('disabled',false);
-            $('img.loading').css('display','none');
-            $('#upload_sen_form').trigger('reset');
-        //     $('.dialog').text(data.response_msg).dialog('open');
-      //  populate_null_subjects_paper();
-    
-          
-            // $('.feedback1').text(' ');
-            // $('.feedback2').text(' ');
-      // $('.feedback2').text(data.response_msg);
-      // make_question_numbers()
-      generate_csv();
-       
-      }else{
-        $('button[id=save]').attr('disabled',false).removeClass('bg_att');
-            $('button[id=close]').attr('disabled',false);
-            $('img.loading').css('display','none');
-            $('#upload_sen_form').trigger('reset');
-            $('.dialog').text(data.response_msg).dialog('open');
-            $('.feedback1').text(' ');
-            $('.feedback2').text(' ');
-      }
-    }
-  });
-}
 
-function generate_csv() {
-    $('.feedback1').text('Checking if CSV needs generation...');
-
-    // First, check if there is data to download
-    $.ajax({
-        method: 'POST',
-        url: 'php/generate_csv.php',
-        data: { check_only: true }, // flag to only check
-        success: function(response) {
-            if (response === 'has_data') {
-                // Now trigger the actual CSV download using a hidden <a>
-                const a = document.createElement('a');
-                a.href = 'php/generate_csv.php';
-                a.download = 'exam_no_not_exist.csv';
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                $('.feedback1').text('CSV downloaded successfully.');
-                
-            $('.feedback2').text(' ');
-                  $('.sen1').text('CSV downloaded successful. Check data not worked on').dialog('open');
-            } else {
-                $('.feedback1').text('No data found to generate CSV.');
-                   $('.sen1').text('Upload successfull.').dialog('open');
-                 
-            $('.feedback2').text(' ');
-            }
-        },
-        error: function(xhr, status, error) {
-            alert('AJAX error: ' + error);
-        }
-    });
-}
 
 
 
